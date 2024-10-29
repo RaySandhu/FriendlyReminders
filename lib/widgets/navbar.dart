@@ -3,7 +3,7 @@ import 'package:friendlyreminder/screens/contacts_screen.dart';
 import 'package:friendlyreminder/screens/counter_screen.dart';
 import 'package:friendlyreminder/screens/groups_screen.dart';
 import 'package:friendlyreminder/screens/reminders_screen.dart';
-import 'package:friendlyreminder/screens/db_screen.dart';
+import 'package:friendlyreminder/screens/database_screen.dart';
 
 class NavigationBarApp extends StatefulWidget {
   const NavigationBarApp({super.key});
