@@ -3,6 +3,7 @@ import 'package:friendlyreminder/screens/contacts_screen.dart';
 import 'package:friendlyreminder/screens/counter_screen.dart';
 import 'package:friendlyreminder/screens/groups_screen.dart';
 import 'package:friendlyreminder/screens/reminders_screen.dart';
+import 'package:friendlyreminder/screens/db_screen.dart';
 
 class NavigationBarApp extends StatefulWidget {
   const NavigationBarApp({super.key});
@@ -42,13 +43,18 @@ class _NavigationBarAppState extends State<NavigationBarApp> {
               icon: Icon(Icons.bug_report),
               label: 'Testing',
             ),
+            NavigationDestination(
+              icon: Icon(Icons.storage),
+              label: 'Database',
+            ),
           ],
         ),
         body: [
           ContactsScreen(),
           RemindersScreen(),
           GroupsScreen(),
-          CounterScreen(title: 'Flutter Demo Home Page')
+          CounterScreen(title: 'Flutter Demo Home Page'),
+          PostList()
         ][currentPageIndex]);
   }
 }
