@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:friendlyreminder/screens/contacts_screen.dart';
 import 'package:friendlyreminder/screens/counter_screen.dart';
+import 'package:friendlyreminder/screens/groups_screen.dart';
+import 'package:friendlyreminder/screens/reminders_screen.dart';
 
 class NavigationBarApp extends StatefulWidget {
   const NavigationBarApp({super.key});
@@ -37,15 +40,15 @@ class _NavigationBarAppState extends State<NavigationBarApp> {
             ),
             NavigationDestination(
               icon: Icon(Icons.bug_report),
-              label: 'Groups',
+              label: 'Testing',
             ),
           ],
         ),
         body: [
-          CounterScreen(),
-          CounterScreen(),
-          CounterScreen(),
-          CounterScreen()
+          ContactsScreen(),
+          RemindersScreen(),
+          GroupsScreen(),
+          CounterScreen(title: 'Flutter Demo Home Page')
         ][currentPageIndex]);
   }
 }
