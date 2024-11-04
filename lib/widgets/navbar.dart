@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:friendlyreminder/screens/contacts_screen.dart';
-import 'package:friendlyreminder/screens/counter_screen.dart';
-import 'package:friendlyreminder/screens/groups_screen.dart';
-import 'package:friendlyreminder/screens/reminders_screen.dart';
-import 'package:friendlyreminder/screens/database_screen.dart';
+import 'package:friendlyreminder/screens/ContactScreen.dart';
+import 'package:friendlyreminder/screens/CounterScreen.dart';
+import 'package:friendlyreminder/screens/GroupScreen.dart';
+import 'package:friendlyreminder/screens/ReminderScreen.dart';
+import 'package:friendlyreminder/screens/DatabaseScreen.dart';
 
 class NavigationBarApp extends StatefulWidget {
   const NavigationBarApp({super.key});

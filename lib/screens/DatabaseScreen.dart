@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:friendlyreminder/models/post.dart';
-import 'package:friendlyreminder/services/database_service.dart';
+import 'package:friendlyreminder/services/DatabaseService.dart';
 
 class PostList extends StatefulWidget {
   @override

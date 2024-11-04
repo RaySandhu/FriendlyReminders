@@ -16,9 +16,11 @@ class _RemindersScreenState extends State<RemindersScreen> {
             style: Theme.of(context).textTheme.headlineMedium),
         backgroundColor: Theme.of(context).colorScheme.inversePrimary,
       ),
-      body: Center(
-          child: Text("Content",
-              style: Theme.of(context).textTheme.headlineMedium)),
+      body: SafeArea(
+        child: Center(
+            child: Text("Content",
+                style: Theme.of(context).textTheme.headlineMedium)),
+      ),
     );
   }
 }
