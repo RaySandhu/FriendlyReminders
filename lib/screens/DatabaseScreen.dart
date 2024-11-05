@@ -1,39 +1,84 @@
 import 'package:flutter/material.dart';
-import 'package:friendlyreminder/models/post.dart';
-import 'package:friendlyreminder/services/DatabaseService.dart';
+import 'package:friendlyreminder/models/ContactModel.dart';
+import 'package:friendlyreminder/services/ContactService.dart';
 
-class PostList extends StatefulWidget {
+class DatabaseScreen extends StatefulWidget {
+  const DatabaseScreen({super.key});
+
   @override
-  _PostListState createState() => _PostListState();
+  State<DatabaseScreen> createState() => _DatabaseScreenState();
 }
 
-class _PostListState extends State<PostList> {
-  List<Post> _posts = [];
-
-  @override
-  void initState() {
-    super.initState();
-    _loadPosts();
-  }
-
-  Future<void> _loadPosts() async {
-    final posts = await loadPosts();
-    setState(() {
-      _posts = posts;
-    });
-  }
+class _DatabaseScreenState extends State<DatabaseScreen> {
+  final ContactService contactService = ContactService();
 
   @override
   Widget build(BuildContext context) {
-    return ListView.builder(
-      itemCount: _posts.length,
-      itemBuilder: (context, index) {
-        final post = _posts[index];
-        return ListTile(
-          title: Text(post.username),
-          subtitle: Text(post.text),
-        );
-      },
+    return Scaffold(
+      appBar: AppBar(
+        title:
+            Text("Contacts", style: Theme.of(context).textTheme.headlineMedium),
+        backgroundColor: Theme.of(context).colorScheme.inversePrimary,
+      ),
+      body: SafeArea(
+          child: Center(
+        child: Column(
+          children: [
+            FilledButton(
+              onPressed: () {
+                ContactModel newContact = ContactModel(
+                    id: 1,
+                    name: "Alice",
+                    phone: "(123)-456-7890",
+                    email: "alice@gmail.com",
+                    notes: "Hello");
+                contactService.createContact(newContact);
+              },
+              child: Text("Create"),
+              style: ButtonStyle(
+                backgroundColor:
+                    MaterialStateProperty.all(Colors.blue), // Background color
+              ),
+            ),
+            FilledButton(
+              onPressed: () async {
+                print(await contactService.getContacts());
+              },
+              child: Text("Get"),
+              style: ButtonStyle(
+                backgroundColor:
+                    MaterialStateProperty.all(Colors.red), // Background color
+              ),
+            ),
+            FilledButton(
+              onPressed: () {
+                ContactModel newContact = ContactModel(
+                    id: 1,
+                    name: "Bob",
+                    phone: "(123)-456-7890",
+                    email: "alice@gmail.com",
+                    notes: "Hello");
+                contactService.updateContact(newContact);
+              },
+              child: Text("Update"),
+              style: ButtonStyle(
+                backgroundColor: MaterialStateProperty.all(
+                    Colors.purple), // Background color
+              ),
+            ),
+            FilledButton(
+              onPressed: () {
+                contactService.deleteContact(1);
+              },
+              child: Text("Delete"),
+              style: ButtonStyle(
+                backgroundColor:
+                    MaterialStateProperty.all(Colors.green), // Background color
+              ),
+            ),
+          ],
+        ),
+      )),
     );
   }
 }
