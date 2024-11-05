@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:friendlyreminder/widgets/GroupCard.dart';
 
 class GroupsScreen extends StatefulWidget {
   const GroupsScreen({super.key});
@@ -17,10 +18,17 @@ class _GroupsScreenState extends State<GroupsScreen> {
         backgroundColor: Theme.of(context).colorScheme.inversePrimary,
       ),
       body: SafeArea(
-        child: Center(
-            child: Text("Content",
-                style: Theme.of(context).textTheme.headlineMedium)),
-      ),
+          child: Column(
+        children: [
+          GroupCard(name: "Art", numMembers: 10, onTap: () => print("Hello")),
+          GroupCard(
+              name: "(Test)", numMembers: 100, onTap: () => print("Hello")),
+          GroupCard(
+              name: "Billy Sutton",
+              numMembers: 100,
+              onTap: () => print("Hello")),
+        ],
+      )),
     );
   }
 }

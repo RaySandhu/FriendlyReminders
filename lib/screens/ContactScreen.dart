@@ -17,10 +17,19 @@ class _ContactsScreenState extends State<ContactsScreen> {
               style: Theme.of(context).textTheme.headlineMedium),
           backgroundColor: Theme.of(context).colorScheme.inversePrimary,
         ),
-        body: const SafeArea(
+        body: SafeArea(
           child: Center(
               child: Column(
-            children: [ContactCard(fname: "John", lname: "Doe")],
+            children: [
+              ContactCard(
+                name: "John Doe",
+                onTap: () => print("Clicked"),
+              ),
+              ContactCard(
+                name: "*Black",
+                onTap: () => print("Clicked"),
+              ),
+            ],
           )),
         ));
   }
