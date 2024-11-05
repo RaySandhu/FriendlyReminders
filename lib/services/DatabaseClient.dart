@@ -46,6 +46,8 @@ class DatabaseClient {
         ''');
       },
     );
+
+    // REM
     final Batch batch = database.batch();
 
     batch.insert('contacts', {
