@@ -1,6 +1,6 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:friendlyreminder/utilities/utils.dart';
 
 class GroupCard extends StatelessWidget {
   const GroupCard(
@@ -12,16 +12,12 @@ class GroupCard extends StatelessWidget {
   final int numMembers;
   final VoidCallback onTap;
 
-  bool isAlpha(String str) {
-    return RegExp(r'^[a-zA-Z]+$').hasMatch(str);
-  }
-
   @override
   Widget build(BuildContext context) {
     return ListTile(
       leading: CircleAvatar(
         backgroundColor: Theme.of(context).colorScheme.secondaryContainer,
-        child: isAlpha(name[0])
+        child: utils.isAlpha(name[0])
             ? Text('${name[0].toUpperCase()}')
             : Icon(Icons.group),
       ),
