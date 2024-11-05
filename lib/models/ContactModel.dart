@@ -1,5 +1,5 @@
 class ContactModel {
-  final int id;
+  final int? id;
   final String name;
   final String phone;
   final String email;
@@ -8,7 +8,7 @@ class ContactModel {
   final String notes;
 
   const ContactModel({
-    required this.id,
+    this.id,
     required this.name,
     required this.phone,
     required this.email,
@@ -19,7 +19,7 @@ class ContactModel {
 
   factory ContactModel.fromMap(Map<String, dynamic> map) {
     return ContactModel(
-      id: map['id'] as int,
+      id: map['id'] as int?,
       name: map['name'] as String,
       phone: map['phone'] as String,
       email: map['email'] as String,
@@ -29,7 +29,7 @@ class ContactModel {
 
   Map<String, Object?> toMap() {
     return {
-      'id': id,
+      'id': id, // This will be null for new records
       'name': name,
       'phone': phone,
       'email': email,

@@ -27,7 +27,6 @@ class _DatabaseScreenState extends State<DatabaseScreen> {
             FilledButton(
               onPressed: () {
                 ContactModel newContact = ContactModel(
-                    id: 1,
                     name: "Alice",
                     phone: "(123)-456-7890",
                     email: "alice@gmail.com",

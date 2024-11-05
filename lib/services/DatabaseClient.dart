@@ -37,7 +37,7 @@ class DatabaseClient {
       onCreate: (database, version) {
         database.execute('''
         CREATE TABLE $contactsTblName (
-          $_contactsIdColName INTEGER PRIMARY KEY,
+          $_contactsIdColName INTEGER PRIMARY KEY AUTOINCREMENT,
           $_contactsNameColName TEXT NOT NULL,
           $_contactsPhoneColName TEXT,
           $_contactsEmailColName TEXT,
@@ -46,6 +46,32 @@ class DatabaseClient {
         ''');
       },
     );
+    final Batch batch = database.batch();
+
+    batch.insert('contacts', {
+      'name': 'Bob',
+      'phone': '(123)-456-7890',
+      'email': 'bob@gmail.com',
+      'notes': 'Hello'
+    });
+
+    batch.insert('contacts', {
+      'name': 'Alice',
+      'phone': '(987)-654-3210',
+      'email': 'alice@gmail.com',
+      'notes': 'Hi there'
+    });
+
+    batch.insert('contacts', {
+      'name': 'Charlie',
+      'phone': '(555)-123-4567',
+      'email': 'charlie@gmail.com',
+      'notes': 'Nice to meet you'
+    });
+
+    // Commit the batch
+    await batch.commit(noResult: true);
+
     return database;
   }
 }
