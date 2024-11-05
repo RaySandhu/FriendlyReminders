@@ -27,7 +27,7 @@ class ContactModel {
     );
   }
 
-  Map<String, Object?> toMap() {
+  Map<String, dynamic> toMap() {
     return {
       'id': id, // This will be null for new records
       'name': name,
