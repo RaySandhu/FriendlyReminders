@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:friendlyreminder/screens/ContactScreen.dart';
 import 'package:friendlyreminder/screens/CounterScreen.dart';
+import 'package:friendlyreminder/screens/DatabaseScreen.dart';
 import 'package:friendlyreminder/screens/GroupScreen.dart';
 import 'package:friendlyreminder/screens/ReminderScreen.dart';
-import 'package:friendlyreminder/screens/DatabaseScreen.dart';
 
 class NavigationBarApp extends StatefulWidget {
   const NavigationBarApp({super.key});
@@ -54,7 +54,7 @@ class _NavigationBarAppState extends State<NavigationBarApp> {
           RemindersScreen(),
           GroupsScreen(),
           CounterScreen(title: 'Flutter Demo Home Page'),
-          PostList()
+          DatabaseScreen()
         ][currentPageIndex]);
   }
 }
