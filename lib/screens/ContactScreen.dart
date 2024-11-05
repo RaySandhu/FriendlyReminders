@@ -20,7 +20,7 @@ class _ContactsScreenState extends State<ContactsScreen> {
         body: const SafeArea(
           child: Center(
               child: Column(
-            children: [ContactCard()],
+            children: [ContactCard(fname: "John", lname: "Doe")],
           )),
         ));
   }
