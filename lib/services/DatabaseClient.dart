@@ -8,7 +8,7 @@ class DatabaseClient {
 
   final String contactsTblName = "contacts";
   final String _contactsIdColName = "id";
-  final String _contactsNameColName = "name";
+  final String contactsNameColName = "name";
   final String _contactsPhoneColName = "phone";
   final String _contactsEmailColName = "email";
   final String _contactsNotesColName = "notes";
@@ -38,7 +38,7 @@ class DatabaseClient {
         database.execute('''
         CREATE TABLE $contactsTblName (
           $_contactsIdColName INTEGER PRIMARY KEY AUTOINCREMENT,
-          $_contactsNameColName TEXT NOT NULL,
+          $contactsNameColName TEXT NOT NULL,
           $_contactsPhoneColName TEXT,
           $_contactsEmailColName TEXT,
           $_contactsNotesColName TEXT

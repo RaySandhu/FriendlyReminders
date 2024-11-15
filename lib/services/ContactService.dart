@@ -16,8 +16,9 @@ class ContactService {
 
   Future<List<ContactModel>> getContacts() async {
     final db = await _dbClient.database;
-    final List<Map<String, dynamic>> maps =
-        await db.query(_dbClient.contactsTblName);
+    final List<Map<String, dynamic>> maps = await db.query(
+        _dbClient.contactsTblName,
+        orderBy: '${_dbClient.contactsNameColName} ASC');
     return List.generate(maps.length, (i) {
       return ContactModel.fromMap(maps[i]);
     });
