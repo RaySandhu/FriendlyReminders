@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:friendlyreminder/utilities/utils.dart';
+import 'package:friendlyreminder/utilities/Utils.dart';
 
 class ContactCard extends StatelessWidget {
   const ContactCard({super.key, required this.name, required this.onTap});
