@@ -16,8 +16,9 @@ class _DatabaseScreenState extends State<DatabaseScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        centerTitle: true,
         title:
-            Text("Contacts", style: Theme.of(context).textTheme.headlineMedium),
+            Text("Contacts", style: Theme.of(context).textTheme.headlineSmall),
         backgroundColor: Theme.of(context).colorScheme.inversePrimary,
       ),
       body: SafeArea(

@@ -13,8 +13,9 @@ class _RemindersScreenState extends State<RemindersScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
+          centerTitle: true,
           title: Text("Reminders",
-              style: Theme.of(context).textTheme.headlineMedium),
+              style: Theme.of(context).textTheme.headlineSmall),
           backgroundColor: Theme.of(context).colorScheme.inversePrimary,
         ),
         body: SafeArea(

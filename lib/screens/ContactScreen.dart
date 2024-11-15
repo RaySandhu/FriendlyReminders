@@ -3,6 +3,7 @@ import 'package:flutter/widgets.dart';
 import 'package:provider/provider.dart';
 import 'package:friendlyreminder/widgets/ContactCard.dart';
 import 'package:friendlyreminder/viewmodels/ContactViewModel.dart';
+import 'package:friendlyreminder/screens/CreateContactScreen.dart';
 
 class ContactsScreen extends StatefulWidget {
   const ContactsScreen({Key? key}) : super(key: key);
@@ -23,6 +24,7 @@ class _ContactsScreenState extends State<ContactsScreen> {
         builder: (context, viewModel, child) {
           return Scaffold(
             appBar: AppBar(
+              centerTitle: true,
               title: _isSearching
                   ? TextField(
                       controller: _searchController,
@@ -49,31 +51,29 @@ class _ContactsScreenState extends State<ContactsScreen> {
                             .filterContacts(value);
                       },
                     )
-                  : Row(
-                      children: [
-                        Text("Contacts",
-                            style: Theme.of(context).textTheme.headlineMedium),
-                        Spacer(),
-                        IconButton(
-                            icon: Icon(Icons.search),
-                            onPressed: () {
-                              setState(() {
-                                _isSearching = !_isSearching;
-                              });
-                            }),
-                        IconButton(icon: Icon(Icons.add), onPressed: () => ())
-                      ],
-                    ),
+                  : Text("Contacts",
+                      style: Theme.of(context).textTheme.headlineSmall),
+              actions: _isSearching
+                  ? []
+                  : [
+                      IconButton(
+                          icon: Icon(Icons.search),
+                          onPressed: () {
+                            setState(() {
+                              _isSearching = !_isSearching;
+                            });
+                          }),
+                      IconButton(
+                          icon: Icon(Icons.add),
+                          onPressed: () {
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) =>
+                                        CreateContactScreen()));
+                          })
+                    ],
               backgroundColor: Theme.of(context).colorScheme.inversePrimary,
-              // actions: [
-              //   IconButton(
-              //     icon: Icon(_isSearching ? Icons.close : Icons.search),
-              //     onPressed: () {
-
-              //     },
-              //   ),
-              //   IconButton(icon: Icon(Icons.add), onPressed: () => ())
-              // ],
             ),
             body: SafeArea(
               child: Column(
