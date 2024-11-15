@@ -1,8 +1,15 @@
 import 'package:flutter/material.dart';
 import 'widgets/NavBar.dart';
+import 'package:provider/provider.dart';
+import 'package:friendlyreminder/viewmodels/ContactViewModel.dart';
 
 void main() {
-  runApp(const MyApp());
+  runApp(
+    ChangeNotifierProvider(
+      create: (context) => ContactsViewModel()..loadContacts(),
+      child: const MyApp(),
+    ),
+  );
 }
 
 class MyApp extends StatelessWidget {

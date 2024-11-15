@@ -19,12 +19,56 @@ class ContactsViewModel extends ChangeNotifier {
     _isLoading = true;
     _error = null;
     notifyListeners();
-
     try {
       _contacts = await _contactService.getContacts();
       _filteredContacts = []; // Reset filtered contacts
     } catch (e) {
       _error = e.toString();
+    } finally {
+      _isLoading = false;
+      notifyListeners();
+    }
+  }
+
+  Future<void> createContact(ContactModel contact) async {
+    _isLoading = true;
+    _error = null;
+    notifyListeners();
+    try {
+      await _contactService.createContact(contact);
+      await loadContacts(); // Refresh the contacts list after creating a new contact
+    } catch (e) {
+      _error = "Failed to create contact: ${e.toString()}";
+    } finally {
+      _isLoading = false;
+      notifyListeners();
+    }
+  }
+
+  Future<void> updateContact(ContactModel contact) async {
+    _isLoading = true;
+    _error = null;
+    notifyListeners();
+    try {
+      await _contactService.updateContact(contact);
+      await loadContacts(); // Refresh the contacts list after updating
+    } catch (e) {
+      _error = "Failed to update contact: ${e.toString()}";
+    } finally {
+      _isLoading = false;
+      notifyListeners();
+    }
+  }
+
+  Future<void> deleteContact(int id) async {
+    _isLoading = true;
+    _error = null;
+    notifyListeners();
+    try {
+      await _contactService.deleteContact(id);
+      await loadContacts(); // Refresh the contacts list after deleting
+    } catch (e) {
+      _error = "Failed to delete contact: ${e.toString()}";
     } finally {
       _isLoading = false;
       notifyListeners();
