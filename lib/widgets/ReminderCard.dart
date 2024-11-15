@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
-import 'package:friendlyreminder/utilities/utils.dart';
+import 'package:friendlyreminder/utilities/Utils.dart';
 
 class ReminderCard extends StatelessWidget {
   const ReminderCard(
