@@ -11,7 +11,7 @@ class StyledTextField extends StatefulWidget {
       required this.controller,
       required this.hintText,
       required this.prefixIcon,
-      this.maxLines});
+      this.maxLines = 1});
 
   @override
   State<StyledTextField> createState() => _StyledTextFieldState();
@@ -31,9 +31,6 @@ class _StyledTextFieldState extends State<StyledTextField> {
                 widget.controller.text.isEmpty;
               }),
               maxLines: widget.maxLines,
-              textInputAction: widget.maxLines == null
-                  ? TextInputAction.newline
-                  : TextInputAction.done,
               decoration: InputDecoration(
                 prefixIcon: Icon(widget.prefixIcon),
                 suffixIcon: widget.controller.text.isEmpty
