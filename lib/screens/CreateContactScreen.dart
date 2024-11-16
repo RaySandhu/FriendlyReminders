@@ -4,6 +4,7 @@ import 'package:provider/provider.dart';
 import 'package:friendlyreminder/viewmodels/ContactViewModel.dart';
 import 'package:friendlyreminder/models/ContactModel.dart';
 import 'package:friendlyreminder/widgets/StyledTextField.dart';
+import 'package:friendlyreminder/utilities/PhoneNumberFormatter.dart';
 
 class CreateContactScreen extends StatefulWidget {
   const CreateContactScreen({super.key});
@@ -82,6 +83,7 @@ class _CreateContactScreenState extends State<CreateContactScreen> {
               keyboardType: TextInputType.phone,
               focusNode: _phoneFocusNode,
               nextFocusNode: _emailFocusNode,
+              inputFormatters: [PhoneNumberFormatter()],
             ),
             StyledTextField(
               controller: _emailController,

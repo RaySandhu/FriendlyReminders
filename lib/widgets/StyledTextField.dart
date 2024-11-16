@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:friendlyreminder/utilities/PhoneNumberFormatter.dart';
+import 'package:flutter/services.dart';
 
 class StyledTextField extends StatefulWidget {
   final TextEditingController controller;
@@ -8,6 +8,7 @@ class StyledTextField extends StatefulWidget {
   final TextInputType? keyboardType;
   final FocusNode? focusNode;
   final FocusNode? nextFocusNode;
+  final List<TextInputFormatter>? inputFormatters;
   final int? maxLines;
 
   const StyledTextField(
@@ -18,6 +19,7 @@ class StyledTextField extends StatefulWidget {
       this.keyboardType = TextInputType.text,
       this.focusNode,
       this.nextFocusNode,
+      this.inputFormatters,
       this.maxLines = 1});
 
   @override
@@ -60,7 +62,7 @@ class _StyledTextFieldState extends State<StyledTextField> {
               textInputAction: widget.nextFocusNode != null
                   ? TextInputAction.next
                   : TextInputAction.done,
-              inputFormatters: [PhoneNumberFormatter()],
+              inputFormatters: widget.inputFormatters,
               onSubmitted: (value) {
                 if (widget.nextFocusNode != null) {
                   FocusScope.of(context).requestFocus(widget.nextFocusNode);
