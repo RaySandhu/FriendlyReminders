@@ -1,17 +1,26 @@
 import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
+import 'package:friendlyreminder/services/DatabaseInitializer.dart';
 
 class DatabaseClient {
   static final DatabaseClient _instance =
       DatabaseClient._internal(); // Singleton
   static Database? _db;
 
-  final String contactsTblName = "contacts";
-  final String _contactsIdColName = "id";
-  final String contactsNameColName = "name";
-  final String _contactsPhoneColName = "phone";
-  final String _contactsEmailColName = "email";
-  final String _contactsNotesColName = "notes";
+  final String contactTblName = "Contact";
+  final String contactIdColName = "ContactId";
+  final String contactNameColName = "ContactName";
+  final String contactPhoneColName = "ContactPhone";
+  final String contactEmailColName = "ContactEmail";
+  final String contactNotesColName = "ContactNotes";
+
+  final String interestCategoryTblName = 'InterestCategory';
+  final String categoryIdColName = 'CategoryId';
+  final String categoryNameColName = 'CategoryName';
+
+  final String interestBadgeTblName = 'InterestBadge';
+  final String badgeIdColName = 'BadgeId';
+  final String badgeNameColName = 'BadgeName';
 
   // final String _groupsTblName = "groups";
   // final String _remindersTblName = "reminders";
@@ -36,43 +45,33 @@ class DatabaseClient {
       version: 1,
       onCreate: (database, version) {
         database.execute('''
-        CREATE TABLE $contactsTblName (
-          $_contactsIdColName INTEGER PRIMARY KEY AUTOINCREMENT,
-          $contactsNameColName TEXT NOT NULL,
-          $_contactsPhoneColName TEXT,
-          $_contactsEmailColName TEXT,
-          $_contactsNotesColName TEXT
-        )
+        CREATE TABLE $contactTblName (
+          $contactIdColName INTEGER PRIMARY KEY AUTOINCREMENT,
+          $contactNameColName TEXT NOT NULL,
+          $contactPhoneColName TEXT,
+          $contactEmailColName TEXT,
+          $contactNotesColName TEXT
+        )        
         ''');
+        database.execute('''
+        CREATE TABLE $interestCategoryTblName (
+          $categoryIdColName INTEGER PRIMARY KEY AUTOINCREMENT,
+          $categoryNameColName TEXT NOT NULL
+        )       
+        ''');
+        database.execute('''
+        CREATE TABLE $interestBadgeTblName (
+          $badgeIdColName INTEGER PRIMARY KEY AUTOINCREMENT,
+          $badgeNameColName TEXT NOT NULL,
+          $categoryIdColName INTEGER NOT NULL,
+          FOREIGN KEY ($categoryIdColName) REFERENCES $interestCategoryTblName($categoryIdColName)
+        )    
+        ''');
+
+        // Initialize data after creating tables
+        DatabaseInitializer(database).initializeDatabase();
       },
     );
-
-    // REM
-    final Batch batch = database.batch();
-
-    batch.insert('contacts', {
-      'name': 'Bob',
-      'phone': '(123)-456-7890',
-      'email': 'bob@gmail.com',
-      'notes': 'Hello'
-    });
-
-    batch.insert('contacts', {
-      'name': 'Alice',
-      'phone': '(987)-654-3210',
-      'email': 'alice@gmail.com',
-      'notes': 'Hi there'
-    });
-
-    batch.insert('contacts', {
-      'name': 'Charlie',
-      'phone': '(555)-123-4567',
-      'email': 'charlie@gmail.com',
-      'notes': 'Nice to meet you'
-    });
-
-    // Commit the batch
-    await batch.commit(noResult: true);
 
     return database;
   }
