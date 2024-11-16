@@ -4,6 +4,7 @@ import 'package:provider/provider.dart';
 import 'package:friendlyreminder/viewmodels/ContactViewModel.dart';
 import 'package:friendlyreminder/models/ContactModel.dart';
 import 'package:friendlyreminder/widgets/StyledTextField.dart';
+import 'package:friendlyreminder/utilities/PhoneNumberFormatter.dart';
 
 class CreateContactScreen extends StatefulWidget {
   const CreateContactScreen({super.key});
@@ -19,6 +20,10 @@ class _CreateContactScreenState extends State<CreateContactScreen> {
   final TextEditingController _tagController = TextEditingController();
   final TextEditingController _reminderController = TextEditingController();
   final TextEditingController _noteController = TextEditingController();
+
+  final FocusNode _nameFocusNode = FocusNode();
+  final FocusNode _phoneFocusNode = FocusNode();
+  final FocusNode _emailFocusNode = FocusNode();
 
   @override
   Widget build(BuildContext context) {
@@ -65,17 +70,28 @@ class _CreateContactScreenState extends State<CreateContactScreen> {
         child: Column(
           children: [
             StyledTextField(
-                controller: _nameController,
-                hintText: "Name",
-                prefixIcon: Icons.people),
+              controller: _nameController,
+              hintText: "Name",
+              prefixIcon: Icons.people,
+              focusNode: _nameFocusNode,
+              nextFocusNode: _phoneFocusNode,
+            ),
             StyledTextField(
-                controller: _phoneController,
-                hintText: "Phone",
-                prefixIcon: Icons.phone),
+              controller: _phoneController,
+              hintText: "Phone",
+              prefixIcon: Icons.phone,
+              keyboardType: TextInputType.phone,
+              focusNode: _phoneFocusNode,
+              nextFocusNode: _emailFocusNode,
+              inputFormatters: [PhoneNumberFormatter()],
+            ),
             StyledTextField(
-                controller: _emailController,
-                hintText: "Email",
-                prefixIcon: Icons.email),
+              controller: _emailController,
+              hintText: "Email",
+              prefixIcon: Icons.email,
+              keyboardType: TextInputType.emailAddress,
+              focusNode: _emailFocusNode,
+            ),
             StyledTextField(
                 controller: _tagController,
                 hintText: "Tags",
