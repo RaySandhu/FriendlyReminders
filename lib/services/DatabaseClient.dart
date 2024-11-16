@@ -14,13 +14,12 @@ class DatabaseClient {
   final String contactEmailColName = "ContactEmail";
   final String contactNotesColName = "ContactNotes";
 
-  final String interestCategoryTblName = 'InterestCategory';
-  final String categoryIdColName = 'CategoryId';
-  final String categoryNameColName = 'CategoryName';
+  final String interestTblName = 'Interest';
+  final String interestIdColName = 'InterestId';
+  final String interestNameColName = 'InterestName';
 
-  final String interestBadgeTblName = 'InterestBadge';
-  final String badgeIdColName = 'BadgeId';
-  final String badgeNameColName = 'BadgeName';
+  final String interestTagTblName = 'InterestTag';
+  final String tagIdColName = 'TagId';
 
   // final String _groupsTblName = "groups";
   // final String _remindersTblName = "reminders";
@@ -54,17 +53,18 @@ class DatabaseClient {
         )        
         ''');
         database.execute('''
-        CREATE TABLE $interestCategoryTblName (
-          $categoryIdColName INTEGER PRIMARY KEY AUTOINCREMENT,
-          $categoryNameColName TEXT NOT NULL
-        )       
+        CREATE TABLE $interestTblName (
+          $interestIdColName INTEGER PRIMARY KEY AUTOINCREMENT,
+          $interestNameColName TEXT NOT NULL
+        )    
         ''');
         database.execute('''
-        CREATE TABLE $interestBadgeTblName (
-          $badgeIdColName INTEGER PRIMARY KEY AUTOINCREMENT,
-          $badgeNameColName TEXT NOT NULL,
-          $categoryIdColName INTEGER NOT NULL,
-          FOREIGN KEY ($categoryIdColName) REFERENCES $interestCategoryTblName($categoryIdColName)
+        CREATE TABLE $interestTagTblName (
+          $tagIdColName INTEGER PRIMARY KEY AUTOINCREMENT,
+          $contactIdColName INTEGER NOT NULL,
+          $interestIdColName INTEGER NOT NULL,
+          FOREIGN KEY ($contactIdColName) REFERENCES $contactTblName($contactIdColName),
+          FOREIGN KEY ($interestIdColName) REFERENCES $interestTblName($interestIdColName)
         )    
         ''');
 
