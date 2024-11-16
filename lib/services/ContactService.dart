@@ -29,7 +29,7 @@ class ContactService {
     await db.update(
       _dbClient.contactTblName,
       contact.toMap(),
-      where: 'id = ?',
+      where: '${_dbClient.contactIdColName} = ?',
       whereArgs: [contact.id],
     );
   }
@@ -38,7 +38,7 @@ class ContactService {
     final db = await _dbClient.database;
     await db.delete(
       _dbClient.contactTblName,
-      where: 'id = ?',
+      where: '${_dbClient.contactIdColName} = ?',
       whereArgs: [id],
     );
   }
