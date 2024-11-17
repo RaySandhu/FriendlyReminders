@@ -71,19 +71,19 @@ class DatabaseInitializer {
       dbClient.interestNameColName: '🎮 Video games',
     });
 
-    batch.insert(dbClient.interestTagTblName, {
+    batch.insert(dbClient.contactInterestTblName, {
       dbClient.contactIdColName: 1,
       dbClient.interestIdColName: 1,
     });
-    batch.insert(dbClient.interestTagTblName, {
+    batch.insert(dbClient.contactInterestTblName, {
       dbClient.contactIdColName: 2,
       dbClient.interestIdColName: 1,
     });
-    batch.insert(dbClient.interestTagTblName, {
+    batch.insert(dbClient.contactInterestTblName, {
       dbClient.contactIdColName: 3,
       dbClient.interestIdColName: 2,
     });
-    batch.insert(dbClient.interestTagTblName, {
+    batch.insert(dbClient.contactInterestTblName, {
       dbClient.contactIdColName: 2,
       dbClient.interestIdColName: 2,
     });

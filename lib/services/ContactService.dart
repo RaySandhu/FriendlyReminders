@@ -1,18 +1,12 @@
-import 'package:friendlyreminder/models/ContactModel.dart';
+import 'package:friendlyreminder/models/ContactWithInterestsModel.dart';
+import 'package:friendlyreminder/models/InterestModel.dart';
 import 'package:sqflite/sqflite.dart';
+import 'package:friendlyreminder/models/ContactModel.dart';
+
 import 'package:friendlyreminder/services/DatabaseClient.dart';
 
 class ContactService {
   final DatabaseClient _dbClient = DatabaseClient();
-
-  Future<void> createContact(ContactModel contact) async {
-    final db = await _dbClient.database;
-    await db.insert(
-      _dbClient.contactTblName,
-      contact.toMap(),
-      conflictAlgorithm: ConflictAlgorithm.replace,
-    );
-  }
 
   Future<List<ContactModel>> getContacts() async {
     final db = await _dbClient.database;
@@ -22,6 +16,16 @@ class ContactService {
     return List.generate(maps.length, (i) {
       return ContactModel.fromMap(maps[i]);
     });
+  }
+
+  Future<int> createContact(ContactModel contact) async {
+    final db = await _dbClient.database;
+    int contactId = await db.insert(
+      _dbClient.contactTblName,
+      contact.toMap(),
+      conflictAlgorithm: ConflictAlgorithm.replace,
+    );
+    return contactId;
   }
 
   Future<void> updateContact(ContactModel contact) async {

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:friendlyreminder/models/ContactModel.dart';
 import 'package:friendlyreminder/services/ContactService.dart';
+import 'package:friendlyreminder/services/ContactInterestService.dart';
 
 class DatabaseScreen extends StatefulWidget {
   const DatabaseScreen({super.key});
@@ -11,6 +12,8 @@ class DatabaseScreen extends StatefulWidget {
 
 class _DatabaseScreenState extends State<DatabaseScreen> {
   final ContactService contactService = ContactService();
+  final ContactInterestService contactInterestService =
+      ContactInterestService();
 
   @override
   Widget build(BuildContext context) {
@@ -75,6 +78,18 @@ class _DatabaseScreenState extends State<DatabaseScreen> {
               style: ButtonStyle(
                 backgroundColor:
                     MaterialStateProperty.all(Colors.green), // Background color
+              ),
+            ),
+            Text("Contact Interests CRUD",
+                style: Theme.of(context).textTheme.bodyLarge),
+            FilledButton(
+              onPressed: () async {
+                print(await contactInterestService.getContactWithInterests());
+              },
+              child: Text("Get"),
+              style: ButtonStyle(
+                backgroundColor:
+                    MaterialStateProperty.all(Colors.red), // Background color
               ),
             ),
           ],

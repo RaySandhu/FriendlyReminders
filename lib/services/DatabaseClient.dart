@@ -18,8 +18,7 @@ class DatabaseClient {
   final String interestIdColName = 'InterestId';
   final String interestNameColName = 'InterestName';
 
-  final String interestTagTblName = 'InterestTag';
-  final String tagIdColName = 'TagId';
+  final String contactInterestTblName = 'ContactInterest';
 
   // final String _groupsTblName = "groups";
   // final String _remindersTblName = "reminders";
@@ -59,10 +58,10 @@ class DatabaseClient {
         )    
         ''');
         database.execute('''
-        CREATE TABLE $interestTagTblName (
-          $tagIdColName INTEGER PRIMARY KEY AUTOINCREMENT,
+        CREATE TABLE $contactInterestTblName (
           $contactIdColName INTEGER NOT NULL,
           $interestIdColName INTEGER NOT NULL,
+          PRIMARY KEY ($contactIdColName, $interestIdColName),
           FOREIGN KEY ($contactIdColName) REFERENCES $contactTblName($contactIdColName),
           FOREIGN KEY ($interestIdColName) REFERENCES $interestTblName($interestIdColName)
         )    
