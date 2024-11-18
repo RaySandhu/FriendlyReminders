@@ -132,6 +132,7 @@ class ContactsViewModel extends ChangeNotifier {
   }
 
   void onContactTap(ContactWithInterestsModel contactWithInterests) {
-    print("Clicked ${contactWithInterests.contact.name}");
+    print(
+        "Clicked ${contactWithInterests.contact.name} with interests: ${contactWithInterests.interests..join(', ')}");
   }
 }
