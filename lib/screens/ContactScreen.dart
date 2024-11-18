@@ -14,6 +14,7 @@ class ContactsScreen extends StatefulWidget {
 
 class _ContactsScreenState extends State<ContactsScreen> {
   bool _isSearching = false;
+  bool _isFilterOpen = false;
   final TextEditingController _searchController = TextEditingController();
 
   @override
@@ -76,6 +77,47 @@ class _ContactsScreenState extends State<ContactsScreen> {
           body: SafeArea(
             child: Column(
               children: [
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Row(children: [
+                    FilledButton.icon(
+                      onPressed: () {
+                        setState(() {
+                          _isFilterOpen = !_isFilterOpen;
+                        });
+                      },
+                      icon: Icon(Icons.arrow_drop_down),
+                      label: Text("FILTER"),
+                      style: FilledButton.styleFrom(
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                        padding:
+                            EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+                        minimumSize: Size(0, 0),
+                      ),
+                    ),
+                  ]),
+                ),
+                if (_isFilterOpen)
+                  Wrap(
+                    spacing: 8.0, // gap between adjacent chips
+                    runSpacing: 4.0, // gap between lines
+                    children: contactVM
+                        .getAllUniqueInterests(contactVM.contacts)
+                        .map((interest) {
+                      return FilterChip(
+                        label: Text(interest),
+                        // selected: contactVM.selectedInterests.contains(interest),
+                        onSelected: (bool selected) {
+                          // contactVM.toggleInterestSelection(interest);
+                        },
+                        selectedColor: Theme.of(context).colorScheme.secondary,
+                        checkmarkColor:
+                            Theme.of(context).colorScheme.onSecondary,
+                      );
+                    }).toList(),
+                  ),
                 Expanded(
                   child: contactVM.isLoading
                       ? const Center(child: CircularProgressIndicator())

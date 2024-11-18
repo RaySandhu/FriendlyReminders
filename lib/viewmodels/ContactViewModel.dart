@@ -44,6 +44,18 @@ class ContactsViewModel extends ChangeNotifier {
     }
   }
 
+  List<String> getAllUniqueInterests(List<ContactWithInterestsModel> contacts) {
+    Set<String> uniqueInterests = {};
+
+    for (var contact in contacts) {
+      for (var interest in contact.interests) {
+        uniqueInterests.addAll({interest.name});
+      }
+    }
+
+    return uniqueInterests.toList()..sort();
+  }
+
   Future<void> createContact(
       ContactModel contact, List<InterestModel> interests) async {
     _isLoading = true;
