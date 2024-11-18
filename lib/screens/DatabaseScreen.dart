@@ -18,13 +18,14 @@ class _DatabaseScreenState extends State<DatabaseScreen> {
       appBar: AppBar(
         centerTitle: true,
         title:
-            Text("Contacts", style: Theme.of(context).textTheme.headlineSmall),
+            Text("Database", style: Theme.of(context).textTheme.headlineSmall),
         backgroundColor: Theme.of(context).colorScheme.inversePrimary,
       ),
       body: SafeArea(
           child: Center(
         child: Column(
           children: [
+            Text("Contacts CRUD", style: Theme.of(context).textTheme.bodyLarge),
             FilledButton(
               onPressed: () {
                 ContactModel newContact = ContactModel(
@@ -42,7 +43,7 @@ class _DatabaseScreenState extends State<DatabaseScreen> {
             ),
             FilledButton(
               onPressed: () async {
-                print(await contactService.getContacts());
+                print(await contactService.getAllContacts());
               },
               child: Text("Get"),
               style: ButtonStyle(

@@ -1,16 +1,21 @@
 import 'package:flutter/material.dart';
 import 'package:friendlyreminder/models/ContactModel.dart';
+import 'package:friendlyreminder/models/InterestModel.dart';
+import 'package:friendlyreminder/models/ContactWithInterestsModel.dart';
 import 'package:friendlyreminder/services/ContactService.dart';
+import 'package:friendlyreminder/services/InterestService.dart';
 
 class ContactsViewModel extends ChangeNotifier {
   final ContactService _contactService = ContactService();
-  List<ContactModel> _contacts = [];
-  List<ContactModel> _filteredContacts = [];
+  final InterestService _interestService = InterestService();
+
+  List<ContactWithInterestsModel> _contacts = [];
+  List<ContactWithInterestsModel> _filteredContacts = [];
   bool _isLoading = false;
   bool _isSearching = false;
   String? _error;
 
-  List<ContactModel> get contacts =>
+  List<ContactWithInterestsModel> get contacts =>
       _isSearching ? _filteredContacts : _contacts;
   bool get isLoading => _isLoading;
   String? get error => _error;
@@ -20,7 +25,16 @@ class ContactsViewModel extends ChangeNotifier {
     _error = null;
     notifyListeners();
     try {
-      _contacts = await _contactService.getContacts();
+      final contacts = await _contactService.getAllContacts();
+      final List<ContactWithInterestsModel> contactsWithInterests = [];
+      for (var contact in contacts) {
+        final interests =
+            await _interestService.getInterestsForContact(contact.id!);
+        contactsWithInterests.add(
+            ContactWithInterestsModel(contact: contact, interests: interests));
+      }
+      _contacts = contactsWithInterests;
+      print(_contacts);
       _filteredContacts = []; // Reset filtered contacts
     } catch (e) {
       _error = e.toString();
@@ -30,12 +44,17 @@ class ContactsViewModel extends ChangeNotifier {
     }
   }
 
-  Future<void> createContact(ContactModel contact) async {
+  Future<void> createContact(
+      ContactModel contact, List<InterestModel> interests) async {
     _isLoading = true;
     _error = null;
     notifyListeners();
     try {
-      await _contactService.createContact(contact);
+      final contactId = await _contactService.createContact(contact);
+      for (var interest in interests) {
+        final interestId = await _interestService.getOrCreateInterest(interest);
+        await _interestService.addInterestToContact(contactId, interestId);
+      }
       await loadContacts(); // Refresh the contacts list after creating a new contact
     } catch (e) {
       _error = "Failed to create contact: ${e.toString()}";
@@ -45,12 +64,33 @@ class ContactsViewModel extends ChangeNotifier {
     }
   }
 
-  Future<void> updateContact(ContactModel contact) async {
+  Future<void> updateContact(
+      ContactModel contact, List<InterestModel> interests) async {
     _isLoading = true;
     _error = null;
     notifyListeners();
     try {
+      // Update contact
       await _contactService.updateContact(contact);
+      final currentInterests =
+          await _interestService.getInterestsForContact(contact.id!);
+
+      // Remove interests
+      for (var currentInterest in currentInterests) {
+        if (!interests.contains(currentInterest)) {
+          await _interestService.removeInterestFromContact(contact.id!);
+        }
+      }
+
+      // Add new interests
+      for (var interest in interests) {
+        if (!currentInterests.contains(interest)) {
+          final interestId =
+              await _interestService.getOrCreateInterest(interest);
+          await _interestService.addInterestToContact(contact.id!, interestId);
+        }
+      }
+
       await loadContacts(); // Refresh the contacts list after updating
     } catch (e) {
       _error = "Failed to update contact: ${e.toString()}";
@@ -60,12 +100,13 @@ class ContactsViewModel extends ChangeNotifier {
     }
   }
 
-  Future<void> deleteContact(int id) async {
+  Future<void> deleteContact(int contactId) async {
     _isLoading = true;
     _error = null;
     notifyListeners();
     try {
-      await _contactService.deleteContact(id);
+      await _interestService.removeInterestFromContact(contactId);
+      await _contactService.deleteContact(contactId);
       await loadContacts(); // Refresh the contacts list after deleting
     } catch (e) {
       _error = "Failed to delete contact: ${e.toString()}";
@@ -82,14 +123,16 @@ class ContactsViewModel extends ChangeNotifier {
     } else {
       _isSearching = true;
       _filteredContacts = _contacts
-          .where((contact) =>
-              contact.name.toLowerCase().contains(query.toLowerCase()))
+          .where((contactWithInterests) => contactWithInterests.contact.name
+              .toLowerCase()
+              .contains(query.toLowerCase()))
           .toList();
     }
     notifyListeners();
   }
 
-  void onContactTap(ContactModel contact) {
-    print("Clicked ${contact.name}");
+  void onContactTap(ContactWithInterestsModel contactWithInterests) {
+    print(
+        "Clicked ${contactWithInterests.contact.name} with interests: ${contactWithInterests.interests..join(', ')}");
   }
 }

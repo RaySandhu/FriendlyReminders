@@ -86,11 +86,12 @@ class _ContactsScreenState extends State<ContactsScreen> {
                               : ListView.builder(
                                   itemCount: contactVM.contacts.length,
                                   itemBuilder: (context, index) {
-                                    final contact = contactVM.contacts[index];
+                                    final contactWithInterests =
+                                        contactVM.contacts[index];
                                     return ContactCard(
-                                      name: contact.name,
-                                      onTap: () =>
-                                          contactVM.onContactTap(contact),
+                                      name: contactWithInterests.contact.name,
+                                      onTap: () => contactVM
+                                          .onContactTap(contactWithInterests),
                                     );
                                   },
                                 ),

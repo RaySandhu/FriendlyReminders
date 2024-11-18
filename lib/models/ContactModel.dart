@@ -19,26 +19,26 @@ class ContactModel {
 
   factory ContactModel.fromMap(Map<String, dynamic> map) {
     return ContactModel(
-      id: map['id'] as int?,
-      name: map['name'] as String,
-      phone: map['phone'] as String,
-      email: map['email'] as String,
-      notes: map['notes'] as String,
+      id: map['ContactId'] as int?,
+      name: map['ContactName'] as String,
+      phone: map['ContactPhone'] as String,
+      email: map['ContactEmail'] as String,
+      notes: map['ContactNotes'] as String,
     );
   }
 
   Map<String, dynamic> toMap() {
     return {
-      'id': id, // This will be null for new records
-      'name': name,
-      'phone': phone,
-      'email': email,
-      'notes': notes,
+      'ContactId': id, // This will be null for new records
+      'ContactName': name,
+      'ContactPhone': phone,
+      'ContactEmail': email,
+      'ContactNotes': notes,
     };
   }
 
   @override
   String toString() {
-    return 'Contact{id: $id, name: $name, phone: $phone, email: $email, notes: $notes}';
+    return 'Contact{ContactId: $id, ContactName: $name, ContactPhone: $phone, ContactEmail: $email, ContactNotes: $notes}';
   }
 }
