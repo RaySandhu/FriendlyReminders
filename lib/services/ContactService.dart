@@ -1,14 +1,11 @@
-import 'package:friendlyreminder/models/ContactWithInterestsModel.dart';
-import 'package:friendlyreminder/models/InterestModel.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:friendlyreminder/models/ContactModel.dart';
-
 import 'package:friendlyreminder/services/DatabaseClient.dart';
 
 class ContactService {
   final DatabaseClient _dbClient = DatabaseClient();
 
-  Future<List<ContactModel>> getContacts() async {
+  Future<List<ContactModel>> getAllContacts() async {
     final db = await _dbClient.database;
     final List<Map<String, dynamic>> maps = await db.query(
         _dbClient.contactTblName,
@@ -16,6 +13,19 @@ class ContactService {
     return List.generate(maps.length, (i) {
       return ContactModel.fromMap(maps[i]);
     });
+  }
+
+  Future<ContactModel> getContact(int contactId) async {
+    final db = await _dbClient.database;
+    final List<Map<String, dynamic>> maps = await db.query(
+      _dbClient.contactTblName,
+      where: '${_dbClient.contactIdColName} = ?',
+      whereArgs: [contactId],
+    );
+    if (maps.isNotEmpty) {
+      return ContactModel.fromMap(maps.first);
+    }
+    throw Exception('ContactService - Contact not found');
   }
 
   Future<int> createContact(ContactModel contact) async {
@@ -38,12 +48,12 @@ class ContactService {
     );
   }
 
-  Future<void> deleteContact(int id) async {
+  Future<void> deleteContact(int contactId) async {
     final db = await _dbClient.database;
     await db.delete(
       _dbClient.contactTblName,
       where: '${_dbClient.contactIdColName} = ?',
-      whereArgs: [id],
+      whereArgs: [contactId],
     );
   }
 }

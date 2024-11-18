@@ -46,7 +46,7 @@ class _CreateContactScreenState extends State<CreateContactScreen> {
                       phone: _phoneController.text,
                       email: _emailController.text,
                       notes: _noteController.text);
-                  contactVM.createContact(newContact);
+                  contactVM.createContact(newContact, []); // REM
                   _nameController.clear();
                   _phoneController.clear();
                   _emailController.clear();

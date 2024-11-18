@@ -1,8 +1,9 @@
 import 'package:friendlyreminder/models/ContactModel.dart';
+import 'package:friendlyreminder/models/InterestModel.dart';
 
 class ContactWithInterestsModel {
   final ContactModel contact;
-  final List<String> interests;
+  final List<InterestModel> interests;
 
   const ContactWithInterestsModel({
     required this.contact,
