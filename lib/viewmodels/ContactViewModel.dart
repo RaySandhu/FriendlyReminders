@@ -12,13 +12,17 @@ class ContactsViewModel extends ChangeNotifier {
   List<ContactWithInterestsModel> _contacts = [];
   List<ContactWithInterestsModel> _filteredContacts = [];
   bool _isLoading = false;
-  bool _isSearching = false;
+  bool _isFiltered = false;
   String? _error;
 
+  String _searchQuery = '';
+  List<String> _selectedInterests = [];
+
   List<ContactWithInterestsModel> get contacts =>
-      _isSearching ? _filteredContacts : _contacts;
+      _isFiltered ? _filteredContacts : _contacts;
   bool get isLoading => _isLoading;
   String? get error => _error;
+  List<String> get selectedInterests => _selectedInterests;
 
   Future<void> loadContacts() async {
     _isLoading = true;
@@ -128,19 +132,61 @@ class ContactsViewModel extends ChangeNotifier {
     }
   }
 
-  void filterContacts(String query) {
-    if (query.isEmpty) {
-      _isSearching = false;
+  // void filterContacts(String query) {
+  //   if (query.isEmpty) {
+  //     _isFiltered = false;
+  //     _filteredContacts.clear();
+  //   } else {
+  //     _isFiltered = true;
+  //     _filteredContacts = _contacts
+  //         .where((contactWithInterests) => contactWithInterests.contact.name
+  //             .toLowerCase()
+  //             .contains(query.toLowerCase()))
+  //         .toList();
+  //   }
+  //   notifyListeners();
+  // }
+
+  void filterContacts({String? query, List<String>? interests}) {
+    _searchQuery = query ?? _searchQuery;
+    _selectedInterests = interests ?? _selectedInterests;
+
+    _isFiltered = _searchQuery.isNotEmpty || _selectedInterests.isNotEmpty;
+
+    if (!_isFiltered) {
       _filteredContacts.clear();
     } else {
-      _isSearching = true;
-      _filteredContacts = _contacts
-          .where((contactWithInterests) => contactWithInterests.contact.name
-              .toLowerCase()
-              .contains(query.toLowerCase()))
-          .toList();
+      _filteredContacts = _contacts.where((contactWithInterests) {
+        bool matchesQuery = _searchQuery.isEmpty ||
+            contactWithInterests.contact.name
+                .toLowerCase()
+                .contains(_searchQuery.toLowerCase());
+
+        bool matchesInterests = _selectedInterests.isEmpty ||
+            _selectedInterests.every((interest) => contactWithInterests
+                .interests
+                .map((i) => i.name.toLowerCase())
+                .contains(interest.toLowerCase()));
+
+        return matchesQuery && matchesInterests;
+      }).toList();
     }
     notifyListeners();
+  }
+
+  void clearFilters() {
+    _searchQuery = '';
+    _selectedInterests.clear();
+    filterContacts();
+  }
+
+  void toggleInterestFilter(String interest) {
+    if (_selectedInterests.contains(interest)) {
+      _selectedInterests.remove(interest);
+    } else {
+      _selectedInterests.add(interest);
+    }
+    filterContacts();
   }
 
   void onContactTap(ContactWithInterestsModel contactWithInterests) {

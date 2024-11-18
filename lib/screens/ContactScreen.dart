@@ -38,7 +38,7 @@ class _ContactsScreenState extends State<ContactsScreen> {
                               _searchController.clear();
                               Provider.of<ContactsViewModel>(context,
                                       listen: false)
-                                  .filterContacts(''); // Reset filter
+                                  .filterContacts(query: ''); // Reset filter
                             });
                           }),
                       contentPadding: EdgeInsets.all(10),
@@ -48,7 +48,7 @@ class _ContactsScreenState extends State<ContactsScreen> {
                     ),
                     onChanged: (value) {
                       Provider.of<ContactsViewModel>(context, listen: false)
-                          .filterContacts(value);
+                          .filterContacts(query: value);
                     },
                   )
                 : Text("Contacts",
@@ -77,46 +77,59 @@ class _ContactsScreenState extends State<ContactsScreen> {
           body: SafeArea(
             child: Column(
               children: [
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Row(children: [
-                    FilledButton.icon(
-                      onPressed: () {
-                        setState(() {
-                          _isFilterOpen = !_isFilterOpen;
-                        });
-                      },
-                      icon: Icon(Icons.arrow_drop_down),
-                      label: Text("FILTER"),
-                      style: FilledButton.styleFrom(
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(10),
+                Container(
+                  color: Theme.of(context).colorScheme.primaryContainer,
+                  child: Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Row(children: [
+                      FilledButton.icon(
+                        onPressed: () {
+                          setState(() {
+                            _isFilterOpen = !_isFilterOpen;
+                          });
+                        },
+                        icon: Icon(Icons.arrow_drop_down),
+                        label: Text("FILTER"),
+                        style: FilledButton.styleFrom(
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                          padding:
+                              EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+                          minimumSize: Size(0, 0),
                         ),
-                        padding:
-                            EdgeInsets.symmetric(horizontal: 10, vertical: 4),
-                        minimumSize: Size(0, 0),
                       ),
-                    ),
-                  ]),
+                    ]),
+                  ),
                 ),
                 if (_isFilterOpen)
-                  Wrap(
-                    spacing: 8.0, // gap between adjacent chips
-                    runSpacing: 4.0, // gap between lines
-                    children: contactVM
-                        .getAllUniqueInterests(contactVM.contacts)
-                        .map((interest) {
-                      return FilterChip(
-                        label: Text(interest),
-                        // selected: contactVM.selectedInterests.contains(interest),
-                        onSelected: (bool selected) {
-                          // contactVM.toggleInterestSelection(interest);
-                        },
-                        selectedColor: Theme.of(context).colorScheme.secondary,
-                        checkmarkColor:
-                            Theme.of(context).colorScheme.onSecondary,
-                      );
-                    }).toList(),
+                  Container(
+                    width: double.infinity,
+                    color: Theme.of(context).colorScheme.primaryContainer,
+                    child: Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Wrap(
+                        spacing: 8.0, // gap between adjacent chips
+                        runSpacing: 4.0, // gap between lines
+                        children: contactVM
+                            .getAllUniqueInterests(contactVM.contacts)
+                            .map((interest) {
+                          return FilterChip(
+                            label: Text(interest),
+                            side: BorderSide.none, // This removes the outline
+                            showCheckmark: false,
+                            selected:
+                                contactVM.selectedInterests.contains(interest),
+                            onSelected: (bool selected) {
+                              contactVM.toggleInterestFilter(interest);
+                            },
+                            selectedColor:
+                                Colors.blue.shade100, // Custom selected color
+                            // backgroundColor: Colors.grey.shade200,
+                          );
+                        }).toList(),
+                      ),
+                    ),
                   ),
                 Expanded(
                   child: contactVM.isLoading
