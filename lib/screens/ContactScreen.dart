@@ -88,7 +88,9 @@ class _ContactsScreenState extends State<ContactsScreen> {
                             _isFilterOpen = !_isFilterOpen;
                           });
                         },
-                        icon: Icon(Icons.arrow_drop_down),
+                        icon: Icon(_isFilterOpen
+                            ? Icons.arrow_drop_up
+                            : Icons.arrow_drop_down),
                         label: Text("FILTER"),
                         style: FilledButton.styleFrom(
                           shape: RoundedRectangleBorder(
@@ -96,7 +98,28 @@ class _ContactsScreenState extends State<ContactsScreen> {
                           ),
                           padding:
                               EdgeInsets.symmetric(horizontal: 10, vertical: 4),
-                          minimumSize: Size(0, 0),
+                          minimumSize: Size(0, 32),
+                        ),
+                      ),
+                      SizedBox(
+                        width: 5,
+                      ),
+                      OutlinedButton(
+                        onPressed: () {
+                          contactVM.clearFilters();
+                          setState(() {
+                            _isSearching = false;
+                            _searchController.clear();
+                          });
+                        },
+                        child: Text("CLEAR"),
+                        style: OutlinedButton.styleFrom(
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                          padding:
+                              EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+                          minimumSize: Size(0, 32),
                         ),
                       ),
                     ]),
@@ -131,6 +154,22 @@ class _ContactsScreenState extends State<ContactsScreen> {
                       ),
                     ),
                   ),
+                Container(
+                  width: double.infinity,
+                  child: Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Wrap(
+                      spacing: 8.0,
+                      children: contactVM.selectedInterests.map((interest) {
+                        return Chip(
+                          label: Text(interest),
+                          deleteIcon: Icon(Icons.close),
+                          onDeleted: () => contactVM.removeFilter(interest),
+                        );
+                      }).toList(),
+                    ),
+                  ),
+                ),
                 Expanded(
                   child: contactVM.isLoading
                       ? const Center(child: CircularProgressIndicator())

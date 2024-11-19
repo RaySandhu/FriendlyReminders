@@ -17,6 +17,16 @@ class ContactModel {
     required this.notes,
   });
 
+  update({String? name, String? phone, String? email, String? notes}) {
+    return ContactModel(
+      id: this.id, // id stays the same
+      name: name ?? this.name,
+      phone: phone ?? this.phone,
+      email: email ?? this.email,
+      notes: notes ?? this.notes,
+    );
+  }
+
   factory ContactModel.fromMap(Map<String, dynamic> map) {
     return ContactModel(
       id: map['ContactId'] as int?,
