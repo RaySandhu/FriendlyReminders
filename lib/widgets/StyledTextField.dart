@@ -8,6 +8,7 @@ class StyledTextField extends StatefulWidget {
   final TextInputType? keyboardType;
   final FocusNode? focusNode;
   final FocusNode? nextFocusNode;
+  final TextCapitalization textCapitalization;
   final List<TextInputFormatter>? inputFormatters;
   final int? maxLines;
 
@@ -19,6 +20,7 @@ class StyledTextField extends StatefulWidget {
       this.keyboardType = TextInputType.text,
       this.focusNode,
       this.nextFocusNode,
+      this.textCapitalization = TextCapitalization.none,
       this.inputFormatters,
       this.maxLines = 1});
 
@@ -59,6 +61,7 @@ class _StyledTextFieldState extends State<StyledTextField> {
               maxLines: widget.maxLines,
               focusNode: widget.focusNode,
               keyboardType: widget.keyboardType,
+              textCapitalization: widget.textCapitalization,
               textInputAction: widget.nextFocusNode != null
                   ? TextInputAction.next
                   : TextInputAction.done,

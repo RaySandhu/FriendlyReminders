@@ -14,6 +14,13 @@ class InterestModel {
     );
   }
 
+  update({String? name}) {
+    return InterestModel(
+      id: this.id, // id stays the same
+      name: name ?? this.name,
+    );
+  }
+
   Map<String, dynamic> toMap() {
     return {
       'InterestId': id, // This will be null for new records

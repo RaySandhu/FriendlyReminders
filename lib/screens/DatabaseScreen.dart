@@ -58,7 +58,9 @@ class _DatabaseScreenState extends State<DatabaseScreen> {
                     name: "Bob",
                     phone: "(123)-456-7890",
                     email: "alice@gmail.com",
-                    notes: "Hello");
+                    notes: "CHANGE");
+                newContact = newContact.update(name: "Joe");
+                print('printing ${newContact}');
                 contactService.updateContact(newContact);
               },
               child: Text("Update"),

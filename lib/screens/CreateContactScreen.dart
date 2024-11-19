@@ -75,6 +75,7 @@ class _CreateContactScreenState extends State<CreateContactScreen> {
               prefixIcon: Icons.people,
               focusNode: _nameFocusNode,
               nextFocusNode: _phoneFocusNode,
+              textCapitalization: TextCapitalization.words,
             ),
             StyledTextField(
               controller: _phoneController,

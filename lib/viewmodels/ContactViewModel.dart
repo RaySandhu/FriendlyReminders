@@ -22,7 +22,7 @@ class ContactsViewModel extends ChangeNotifier {
       _isFiltered ? _filteredContacts : _contacts;
   bool get isLoading => _isLoading;
   String? get error => _error;
-  List<String> get selectedInterests => _selectedInterests;
+  List<String> get selectedInterests => _selectedInterests..sort();
 
   Future<void> loadContacts() async {
     _isLoading = true;
@@ -34,11 +34,11 @@ class ContactsViewModel extends ChangeNotifier {
       for (var contact in contacts) {
         final interests =
             await _interestService.getInterestsForContact(contact.id!);
+        print('contact: $contact interest: $interests\n');
         contactsWithInterests.add(
             ContactWithInterestsModel(contact: contact, interests: interests));
       }
       _contacts = contactsWithInterests;
-      print(_contacts);
       _filteredContacts = []; // Reset filtered contacts
     } catch (e) {
       _error = e.toString();
@@ -132,21 +132,6 @@ class ContactsViewModel extends ChangeNotifier {
     }
   }
 
-  // void filterContacts(String query) {
-  //   if (query.isEmpty) {
-  //     _isFiltered = false;
-  //     _filteredContacts.clear();
-  //   } else {
-  //     _isFiltered = true;
-  //     _filteredContacts = _contacts
-  //         .where((contactWithInterests) => contactWithInterests.contact.name
-  //             .toLowerCase()
-  //             .contains(query.toLowerCase()))
-  //         .toList();
-  //   }
-  //   notifyListeners();
-  // }
-
   void filterContacts({String? query, List<String>? interests}) {
     _searchQuery = query ?? _searchQuery;
     _selectedInterests = interests ?? _selectedInterests;
@@ -186,6 +171,11 @@ class ContactsViewModel extends ChangeNotifier {
     } else {
       _selectedInterests.add(interest);
     }
+    filterContacts();
+  }
+
+  void removeFilter(String interest) {
+    _selectedInterests.remove(interest);
     filterContacts();
   }
 
