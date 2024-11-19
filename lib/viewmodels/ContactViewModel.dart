@@ -34,7 +34,6 @@ class ContactsViewModel extends ChangeNotifier {
       for (var contact in contacts) {
         final interests =
             await _interestService.getInterestsForContact(contact.id!);
-        print('contact: $contact interest: $interests\n');
         contactsWithInterests.add(
             ContactWithInterestsModel(contact: contact, interests: interests));
       }

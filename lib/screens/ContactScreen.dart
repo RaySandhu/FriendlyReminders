@@ -16,6 +16,28 @@ class _ContactsScreenState extends State<ContactsScreen> {
   bool _isSearching = false;
   bool _isFilterOpen = false;
   final TextEditingController _searchController = TextEditingController();
+  final ScrollController _scrollController = ScrollController();
+
+  @override
+  void initState() {
+    super.initState();
+    _scrollController.addListener(_scrollListener);
+  }
+
+  @override
+  void dispose() {
+    _scrollController.removeListener(_scrollListener);
+    _scrollController.dispose();
+    super.dispose();
+  }
+
+  void _scrollListener() {
+    if (_scrollController.offset > 0 && _isFilterOpen) {
+      setState(() {
+        _isFilterOpen = false;
+      });
+    }
+  }
 
   @override
   Widget build(BuildContext context) {

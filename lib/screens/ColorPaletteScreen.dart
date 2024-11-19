@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:friendlyreminder/models/ContactModel.dart';
-import 'package:friendlyreminder/services/ContactService.dart';
 
 class ColorPaletteScreen extends StatefulWidget {
   const ColorPaletteScreen({super.key});
@@ -10,8 +8,6 @@ class ColorPaletteScreen extends StatefulWidget {
 }
 
 class _ColorPaletteScreenState extends State<ColorPaletteScreen> {
-  final ContactService contactService = ContactService();
-
   @override
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
