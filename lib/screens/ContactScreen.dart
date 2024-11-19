@@ -159,7 +159,8 @@ class _ContactsScreenState extends State<ContactsScreen> {
                   child: Padding(
                     padding: const EdgeInsets.all(8.0),
                     child: Wrap(
-                      spacing: 8.0,
+                      spacing: 8.0, // gap between adjacent chips
+                      runSpacing: 4.0, // gap between lines
                       children: contactVM.selectedInterests.map((interest) {
                         return Chip(
                           label: Text(interest),

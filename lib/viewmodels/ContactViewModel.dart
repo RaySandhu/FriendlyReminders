@@ -132,21 +132,6 @@ class ContactsViewModel extends ChangeNotifier {
     }
   }
 
-  // void filterContacts(String query) {
-  //   if (query.isEmpty) {
-  //     _isFiltered = false;
-  //     _filteredContacts.clear();
-  //   } else {
-  //     _isFiltered = true;
-  //     _filteredContacts = _contacts
-  //         .where((contactWithInterests) => contactWithInterests.contact.name
-  //             .toLowerCase()
-  //             .contains(query.toLowerCase()))
-  //         .toList();
-  //   }
-  //   notifyListeners();
-  // }
-
   void filterContacts({String? query, List<String>? interests}) {
     _searchQuery = query ?? _searchQuery;
     _selectedInterests = interests ?? _selectedInterests;
