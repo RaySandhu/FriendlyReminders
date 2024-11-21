@@ -159,7 +159,7 @@ class ContactsViewModel extends ChangeNotifier {
   }
 
   void clearFilters() {
-    _searchQuery = '';
+    // _searchQuery = '';
     _selectedInterests.clear();
     filterContacts();
   }
