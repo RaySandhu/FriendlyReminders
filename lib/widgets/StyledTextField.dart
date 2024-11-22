@@ -53,47 +53,41 @@ class _StyledTextFieldState extends State<StyledTextField> {
 
   @override
   Widget build(BuildContext context) {
-    return Row(
-      children: [
-        Expanded(
-          child: Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: TextField(
-              controller: widget.controller,
-              maxLines: widget.maxLines,
-              focusNode: widget.focusNode,
-              keyboardType: widget.keyboardType,
-              textCapitalization: widget.textCapitalization,
-              textInputAction: widget.nextFocusNode != null
-                  ? TextInputAction.next
-                  : TextInputAction.done,
-              inputFormatters: widget.inputFormatters,
-              onSubmitted: (value) {
-                if (widget.nextFocusNode != null) {
-                  FocusScope.of(context).requestFocus(widget.nextFocusNode);
-                }
-              },
-              onChanged: widget.onChanged,
-              decoration: InputDecoration(
-                prefixIcon: Icon(widget.prefixIcon),
-                suffixIcon: isEmpty
-                    ? null
-                    : IconButton(
-                        icon: Icon(Icons.close),
-                        onPressed: () {
-                          widget.controller.clear();
-                        },
-                      ),
-                hintText: widget.hintText,
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(15),
+    return Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: TextField(
+        controller: widget.controller,
+        maxLines: widget.maxLines,
+        focusNode: widget.focusNode,
+        keyboardType: widget.keyboardType,
+        textCapitalization: widget.textCapitalization,
+        textInputAction: widget.nextFocusNode != null
+            ? TextInputAction.next
+            : TextInputAction.done,
+        inputFormatters: widget.inputFormatters,
+        onSubmitted: (value) {
+          if (widget.nextFocusNode != null) {
+            FocusScope.of(context).requestFocus(widget.nextFocusNode);
+          }
+        },
+        onChanged: widget.onChanged,
+        decoration: InputDecoration(
+          prefixIcon: Icon(widget.prefixIcon),
+          suffixIcon: isEmpty
+              ? null
+              : IconButton(
+                  icon: Icon(Icons.close),
+                  onPressed: () {
+                    widget.controller.clear();
+                  },
                 ),
-                contentPadding: EdgeInsets.all(10),
-              ),
-            ),
+          hintText: widget.hintText,
+          border: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(15),
           ),
+          contentPadding: EdgeInsets.all(10),
         ),
-      ],
+      ),
     );
   }
 }

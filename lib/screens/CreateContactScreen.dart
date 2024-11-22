@@ -1,10 +1,10 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:provider/provider.dart';
 import 'package:friendlyreminder/viewmodels/ContactViewModel.dart';
 import 'package:friendlyreminder/models/ContactModel.dart';
 import 'package:friendlyreminder/widgets/StyledTextField.dart';
+import 'package:friendlyreminder/widgets/SuggestionTextField.dart';
 import 'package:friendlyreminder/utilities/PhoneNumberFormatter.dart';
 
 class CreateContactScreen extends StatefulWidget {
@@ -32,49 +32,6 @@ class _CreateContactScreenState extends State<CreateContactScreen> {
   @override
   Widget build(BuildContext context) {
     final contactVM = Provider.of<ContactsViewModel>(context, listen: false);
-
-    void _hideOverlay() {
-      widget._overlayEntry?.remove();
-      widget._overlayEntry = null;
-    }
-
-    OverlayEntry _createOverlayEntry() {
-      return OverlayEntry(
-        builder: (context) => Positioned(
-          width: 300,
-          child: CompositedTransformFollower(
-            link: widget._layerLink,
-            showWhenUnlinked: false,
-            offset: Offset(0, 50),
-            child: Material(
-              elevation: 4.0,
-              child: ListView.builder(
-                shrinkWrap: true,
-                itemCount: widget._suggestions.length,
-                itemBuilder: (context, index) {
-                  return ListTile(
-                    title: Text(widget._suggestions[index]),
-                    onTap: () {
-                      setState(() {
-                        _tagController.text = widget._suggestions[index];
-                        _hideOverlay();
-                      });
-                    },
-                  );
-                },
-              ),
-            ),
-          ),
-        ),
-      );
-    }
-
-    void _showOverlay() {
-      if (widget._overlayEntry == null) {
-        widget._overlayEntry = _createOverlayEntry();
-        Overlay.of(context).insert(widget._overlayEntry!);
-      }
-    }
 
     return Scaffold(
       appBar: AppBar(
@@ -140,60 +97,12 @@ class _CreateContactScreenState extends State<CreateContactScreen> {
               keyboardType: TextInputType.emailAddress,
               focusNode: _emailFocusNode,
             ),
-            // StyledTextField(
-            //   controller: _tagController,
-            //   hintText: "Tags",
-            //   prefixIcon: Icons.label,
-            //   onChanged: (text) {
-            //     setState(() {
-            //       widget._suggestions = contactVM
-            //           .getAllUniqueInterests(contactVM.contacts)
-            //           .where((interest) =>
-            //               interest.toLowerCase().contains(text.toLowerCase()))
-            //           .toList();
-            //       print(widget._suggestions);
-            //       _tagController.text.isNotEmpty;
-            //     });
-            //   },
-            // ),
-            // if (widget._suggestions.isNotEmpty)
-            //   Expanded(
-            //     child: ListView.builder(
-            //       itemCount: widget._suggestions.length,
-            //       itemBuilder: (context, index) {
-            //         return ListTile(
-            //           title: Text(widget._suggestions[index]),
-            //           onTap: () {
-            //             setState(() {
-            //               _tagController.text = widget._suggestions[index];
-            //               widget._suggestions.clear();
-            //             });
-            //           },
-            //         );
-            //       },
-            //     ),
-            //   ),
-            CompositedTransformTarget(
-              link: widget._layerLink,
-              child: StyledTextField(
-                controller: _tagController,
-                hintText: "Tags",
-                prefixIcon: Icons.label,
-                onChanged: (text) {
-                  setState(() {
-                    widget._suggestions = contactVM
-                        .getAllUniqueInterests(contactVM.contacts)
-                        .where((interest) =>
-                            interest.toLowerCase().contains(text.toLowerCase()))
-                        .toList();
-                    if (widget._suggestions.isNotEmpty && text.isNotEmpty) {
-                      _showOverlay();
-                    } else {
-                      _hideOverlay();
-                    }
-                  });
-                },
-              ),
+            SuggestionTextField(
+              controller: _tagController,
+              hintText: "Tags",
+              prefixIcon: Icons.label,
+              allSuggestions:
+                  contactVM.getAllUniqueInterests(contactVM.contacts),
             ),
             StyledTextField(
                 controller: _reminderController,
