@@ -39,9 +39,22 @@ class _SuggestionTextFieldState extends State<SuggestionTextField> {
   List<String> suggestions = [];
 
   @override
+  void initState() {
+    super.initState();
+    widget.controller.addListener(_onControllerChanged);
+  }
+
+  @override
   void dispose() {
+    widget.controller.removeListener(_onControllerChanged);
     _hideOverlay();
     super.dispose();
+  }
+
+  void _onControllerChanged() {
+    if (widget.controller.text.isEmpty) {
+      _hideOverlay();
+    }
   }
 
   void _hideOverlay() {
@@ -60,8 +73,8 @@ class _SuggestionTextFieldState extends State<SuggestionTextField> {
     var size = renderBox.size;
     var offset = renderBox.localToGlobal(Offset.zero);
 
-    return OverlayEntry(
-      builder: (context) => Positioned(
+    return OverlayEntry(builder: (context) {
+      return Positioned(
         top: offset.dy + size.height,
         left: offset.dx,
         width: size.width,
@@ -84,8 +97,8 @@ class _SuggestionTextFieldState extends State<SuggestionTextField> {
             },
           ),
         ),
-      ),
-    );
+      );
+    });
   }
 
   void _showOverlay() {
