@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:provider/provider.dart';
 import 'package:friendlyreminder/viewmodels/ContactViewModel.dart';
+import 'package:friendlyreminder/models/InterestModel.dart';
 import 'package:friendlyreminder/models/ContactModel.dart';
 import 'package:friendlyreminder/widgets/StyledTextField.dart';
 import 'package:friendlyreminder/widgets/SuggestionTextField.dart';
@@ -10,9 +11,6 @@ import 'package:friendlyreminder/utilities/PhoneNumberFormatter.dart';
 class CreateContactScreen extends StatefulWidget {
   CreateContactScreen({super.key});
 
-  OverlayEntry? _overlayEntry;
-  final LayerLink _layerLink = LayerLink();
-  List<String> _suggestions = [];
   @override
   State<CreateContactScreen> createState() => _CreateContactScreenState();
 }
@@ -28,6 +26,8 @@ class _CreateContactScreenState extends State<CreateContactScreen> {
   final FocusNode _nameFocusNode = FocusNode();
   final FocusNode _phoneFocusNode = FocusNode();
   final FocusNode _emailFocusNode = FocusNode();
+
+  final List<InterestModel> _selectedInterests = [];
 
   @override
   Widget build(BuildContext context) {
@@ -50,7 +50,7 @@ class _CreateContactScreenState extends State<CreateContactScreen> {
                       phone: _phoneController.text,
                       email: _emailController.text,
                       notes: _noteController.text);
-                  contactVM.createContact(newContact, []); // REM
+                  contactVM.createContact(newContact, _selectedInterests);
                   _nameController.clear();
                   _phoneController.clear();
                   _emailController.clear();
@@ -103,7 +103,36 @@ class _CreateContactScreenState extends State<CreateContactScreen> {
               prefixIcon: Icons.label,
               allSuggestions:
                   contactVM.getAllUniqueInterests(contactVM.contacts),
+              excludedSuggestions:
+                  _selectedInterests.map((interest) => interest.name).toList(),
+              onSelect: (text) {
+                setState(() {
+                  _selectedInterests.add(InterestModel(name: text));
+                });
+              },
             ),
+            if (_selectedInterests.isNotEmpty)
+              Container(
+                width: double.infinity,
+                child: Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Wrap(
+                    spacing: 8.0, // gap between adjacent chips
+                    runSpacing: 4.0, // gap between lines
+                    children: _selectedInterests.map((interest) {
+                      return Chip(
+                        label: Text(interest.name),
+                        deleteIcon: Icon(Icons.close),
+                        onDeleted: () {
+                          setState(() {
+                            _selectedInterests.remove(interest);
+                          });
+                        },
+                      );
+                    }).toList(),
+                  ),
+                ),
+              ),
             StyledTextField(
                 controller: _reminderController,
                 hintText: "Reminders",

@@ -155,16 +155,6 @@ class DatabaseInitializer {
       dbClient.interestNameColName: '🎮 Video games',
     });
 
-// Bob
-    batch.insert(dbClient.contactInterestTblName, {
-      dbClient.contactIdColName: 1,
-      dbClient.interestIdColName: 1, // Photography
-    });
-    batch.insert(dbClient.contactInterestTblName, {
-      dbClient.contactIdColName: 1,
-      dbClient.interestIdColName: 7, // Board games
-    });
-
 // Alice
     batch.insert(dbClient.contactInterestTblName, {
       dbClient.contactIdColName: 2,
@@ -173,6 +163,15 @@ class DatabaseInitializer {
     batch.insert(dbClient.contactInterestTblName, {
       dbClient.contactIdColName: 2,
       dbClient.interestIdColName: 6, // Baking
+    });
+// Bob
+    batch.insert(dbClient.contactInterestTblName, {
+      dbClient.contactIdColName: 1,
+      dbClient.interestIdColName: 1, // Photography
+    });
+    batch.insert(dbClient.contactInterestTblName, {
+      dbClient.contactIdColName: 1,
+      dbClient.interestIdColName: 7, // Board games
     });
 
 // Charlie

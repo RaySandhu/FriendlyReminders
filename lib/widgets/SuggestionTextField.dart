@@ -5,6 +5,7 @@ import 'package:friendlyreminder/widgets/StyledTextField.dart';
 class SuggestionTextField extends StatefulWidget {
   final TextEditingController controller;
   final List<String> allSuggestions;
+  final List<String>? excludedSuggestions;
   final String hintText;
   final IconData prefixIcon;
   final TextInputType? keyboardType;
@@ -13,12 +14,13 @@ class SuggestionTextField extends StatefulWidget {
   final TextCapitalization textCapitalization;
   final List<TextInputFormatter>? inputFormatters;
   final int? maxLines;
-  final void Function(String)? onChanged;
+  final void Function(String)? onSelect;
 
-  SuggestionTextField({
+  const SuggestionTextField({
     Key? key,
     required this.controller,
     required this.allSuggestions,
+    required this.excludedSuggestions,
     required this.hintText,
     required this.prefixIcon,
     this.keyboardType = TextInputType.text,
@@ -27,7 +29,7 @@ class SuggestionTextField extends StatefulWidget {
     this.textCapitalization = TextCapitalization.none,
     this.inputFormatters,
     this.maxLines = 1,
-    this.onChanged,
+    this.onSelect,
   }) : super(key: key);
 
   @override
@@ -88,9 +90,12 @@ class _SuggestionTextFieldState extends State<SuggestionTextField> {
               return ListTile(
                 title: Text(suggestions[index]),
                 onTap: () {
+                  if (widget.onSelect != null) {
+                    widget.onSelect!(suggestions[index]);
+                  }
                   setState(() {
-                    widget.controller.text = suggestions[index];
                     _hideOverlay();
+                    widget.controller.clear();
                   });
                 },
               );
@@ -126,7 +131,8 @@ class _SuggestionTextFieldState extends State<SuggestionTextField> {
         setState(() {
           suggestions = widget.allSuggestions
               .where((suggestion) =>
-                  suggestion.toLowerCase().contains(text.toLowerCase()))
+                  suggestion.toLowerCase().contains(text.toLowerCase()) &&
+                  !widget.excludedSuggestions!.contains(suggestion))
               .toList();
           if (text.isNotEmpty && suggestions.isNotEmpty) {
             _showOverlay();
@@ -134,9 +140,6 @@ class _SuggestionTextFieldState extends State<SuggestionTextField> {
             _hideOverlay();
           }
         });
-        if (widget.onChanged != null) {
-          widget.onChanged!(text);
-        }
       },
     );
   }
