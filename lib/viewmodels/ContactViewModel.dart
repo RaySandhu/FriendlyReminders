@@ -11,6 +11,8 @@ class ContactsViewModel extends ChangeNotifier {
 
   List<ContactWithInterestsModel> _contacts = [];
   List<ContactWithInterestsModel> _filteredContacts = [];
+  List<InterestModel> _interests = [];
+
   bool _isLoading = false;
   bool _isFiltered = false;
   String? _error;
@@ -23,6 +25,7 @@ class ContactsViewModel extends ChangeNotifier {
   bool get isLoading => _isLoading;
   String? get error => _error;
   List<String> get selectedInterests => _selectedInterests..sort();
+  List<InterestModel> get interests => _interests;
 
   Future<void> loadContacts() async {
     _isLoading = true;
@@ -30,6 +33,7 @@ class ContactsViewModel extends ChangeNotifier {
     notifyListeners();
     try {
       final contacts = await _contactService.getAllContacts();
+      _interests = await _interestService.getAllInterests();
       final List<ContactWithInterestsModel> contactsWithInterests = [];
       for (var contact in contacts) {
         final interests =

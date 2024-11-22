@@ -102,7 +102,7 @@ class _CreateContactScreenState extends State<CreateContactScreen> {
               hintText: "Tags",
               prefixIcon: Icons.label,
               allSuggestions:
-                  contactVM.getAllUniqueInterests(contactVM.contacts),
+                  contactVM.interests.map((interest) => interest.name).toList(),
               excludedSuggestions:
                   _selectedInterests.map((interest) => interest.name).toList(),
               onSelect: (text) {
