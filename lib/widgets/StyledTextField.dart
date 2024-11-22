@@ -11,6 +11,7 @@ class StyledTextField extends StatefulWidget {
   final TextCapitalization textCapitalization;
   final List<TextInputFormatter>? inputFormatters;
   final int? maxLines;
+  final void Function(String)? onChanged;
 
   const StyledTextField(
       {super.key,
@@ -22,7 +23,8 @@ class StyledTextField extends StatefulWidget {
       this.nextFocusNode,
       this.textCapitalization = TextCapitalization.none,
       this.inputFormatters,
-      this.maxLines = 1});
+      this.maxLines = 1,
+      this.onChanged});
 
   @override
   State<StyledTextField> createState() => _StyledTextFieldState();
@@ -71,6 +73,7 @@ class _StyledTextFieldState extends State<StyledTextField> {
                   FocusScope.of(context).requestFocus(widget.nextFocusNode);
                 }
               },
+              onChanged: widget.onChanged,
               decoration: InputDecoration(
                 prefixIcon: Icon(widget.prefixIcon),
                 suffixIcon: isEmpty
