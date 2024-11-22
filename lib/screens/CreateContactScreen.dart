@@ -26,6 +26,7 @@ class _CreateContactScreenState extends State<CreateContactScreen> {
   final FocusNode _nameFocusNode = FocusNode();
   final FocusNode _phoneFocusNode = FocusNode();
   final FocusNode _emailFocusNode = FocusNode();
+  final FocusNode _tagFocusNode = FocusNode();
 
   final List<InterestModel> _selectedInterests = [];
 
@@ -71,78 +72,84 @@ class _CreateContactScreenState extends State<CreateContactScreen> {
         backgroundColor: Theme.of(context).colorScheme.inversePrimary,
       ),
       body: SafeArea(
-        child: Column(
-          children: [
-            StyledTextField(
-              controller: _nameController,
-              hintText: "Name",
-              prefixIcon: Icons.people,
-              focusNode: _nameFocusNode,
-              nextFocusNode: _phoneFocusNode,
-              textCapitalization: TextCapitalization.words,
-            ),
-            StyledTextField(
-              controller: _phoneController,
-              hintText: "Phone",
-              prefixIcon: Icons.phone,
-              keyboardType: TextInputType.phone,
-              focusNode: _phoneFocusNode,
-              nextFocusNode: _emailFocusNode,
-              inputFormatters: [PhoneNumberFormatter()],
-            ),
-            StyledTextField(
-              controller: _emailController,
-              hintText: "Email",
-              prefixIcon: Icons.email,
-              keyboardType: TextInputType.emailAddress,
-              focusNode: _emailFocusNode,
-            ),
-            SuggestionTextField(
-              controller: _tagController,
-              hintText: "Tags",
-              prefixIcon: Icons.label,
-              allSuggestions:
-                  contactVM.interests.map((interest) => interest.name).toList(),
-              excludedSuggestions:
-                  _selectedInterests.map((interest) => interest.name).toList(),
-              onSelect: (text) {
-                setState(() {
-                  _selectedInterests.add(InterestModel(name: text));
-                });
-              },
-            ),
-            if (_selectedInterests.isNotEmpty)
-              Container(
-                width: double.infinity,
-                child: Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Wrap(
-                    spacing: 8.0, // gap between adjacent chips
-                    runSpacing: 4.0, // gap between lines
-                    children: _selectedInterests.map((interest) {
-                      return Chip(
-                        label: Text(interest.name),
-                        deleteIcon: Icon(Icons.close),
-                        onDeleted: () {
-                          setState(() {
-                            _selectedInterests.remove(interest);
-                          });
-                        },
-                      );
-                    }).toList(),
+        child: SingleChildScrollView(
+          child: Column(
+            children: [
+              StyledTextField(
+                controller: _nameController,
+                hintText: "Name",
+                prefixIcon: Icons.people,
+                focusNode: _nameFocusNode,
+                nextFocusNode: _phoneFocusNode,
+                textCapitalization: TextCapitalization.words,
+              ),
+              StyledTextField(
+                controller: _phoneController,
+                hintText: "Phone",
+                prefixIcon: Icons.phone,
+                keyboardType: TextInputType.phone,
+                focusNode: _phoneFocusNode,
+                nextFocusNode: _emailFocusNode,
+                inputFormatters: [PhoneNumberFormatter()],
+              ),
+              StyledTextField(
+                controller: _emailController,
+                hintText: "Email",
+                prefixIcon: Icons.email,
+                keyboardType: TextInputType.emailAddress,
+                focusNode: _emailFocusNode,
+                nextFocusNode: _tagFocusNode,
+              ),
+              SuggestionTextField(
+                controller: _tagController,
+                hintText: "Tags",
+                prefixIcon: Icons.label,
+                focusNode: _tagFocusNode,
+                allSuggestions: contactVM.interests
+                    .map((interest) => interest.name)
+                    .toList(),
+                excludedSuggestions: _selectedInterests
+                    .map((interest) => interest.name)
+                    .toList(),
+                onSelect: (text) {
+                  setState(() {
+                    _selectedInterests.add(InterestModel(name: text));
+                  });
+                },
+              ),
+              if (_selectedInterests.isNotEmpty)
+                Container(
+                  width: double.infinity,
+                  child: Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Wrap(
+                      spacing: 8.0, // gap between adjacent chips
+                      runSpacing: 4.0, // gap between lines
+                      children: _selectedInterests.map((interest) {
+                        return Chip(
+                          label: Text(interest.name),
+                          deleteIcon: Icon(Icons.close),
+                          onDeleted: () {
+                            setState(() {
+                              _selectedInterests.remove(interest);
+                            });
+                          },
+                        );
+                      }).toList(),
+                    ),
                   ),
                 ),
-              ),
-            StyledTextField(
-                controller: _reminderController,
-                hintText: "Reminders",
-                prefixIcon: Icons.schedule),
-            StyledTextField(
-                controller: _noteController,
-                hintText: "Notes",
-                prefixIcon: Icons.description,
-                maxLines: null),
-          ],
+              StyledTextField(
+                  controller: _reminderController,
+                  hintText: "Reminders",
+                  prefixIcon: Icons.schedule),
+              StyledTextField(
+                  controller: _noteController,
+                  hintText: "Notes",
+                  prefixIcon: Icons.description,
+                  maxLines: null),
+            ],
+          ),
         ),
       ),
     );

@@ -120,39 +120,39 @@ class DatabaseInitializer {
 
     batch.insert(dbClient.interestTblName, {
       dbClient.interestIdColName: 1,
-      dbClient.interestNameColName: '📷 Photography',
+      dbClient.interestNameColName: 'Photography 📷',
     });
     batch.insert(dbClient.interestTblName, {
       dbClient.interestIdColName: 2,
-      dbClient.interestNameColName: '🎨 Art',
+      dbClient.interestNameColName: 'Art 🎨',
     });
     batch.insert(dbClient.interestTblName, {
       dbClient.interestIdColName: 3,
-      dbClient.interestNameColName: '💃 Dancing',
+      dbClient.interestNameColName: 'Dancing 💃',
     });
     batch.insert(dbClient.interestTblName, {
       dbClient.interestIdColName: 4,
-      dbClient.interestNameColName: '🎤 Singing',
+      dbClient.interestNameColName: 'Singing 🎤',
     });
     batch.insert(dbClient.interestTblName, {
       dbClient.interestIdColName: 5,
-      dbClient.interestNameColName: '📝 Writing',
+      dbClient.interestNameColName: 'Writing 📝',
     });
     batch.insert(dbClient.interestTblName, {
       dbClient.interestIdColName: 6,
-      dbClient.interestNameColName: '🍰 Baking',
+      dbClient.interestNameColName: 'Baking 🍰',
     });
     batch.insert(dbClient.interestTblName, {
       dbClient.interestIdColName: 7,
-      dbClient.interestNameColName: '🎲 Board games',
+      dbClient.interestNameColName: 'Board games 🎲',
     });
     batch.insert(dbClient.interestTblName, {
       dbClient.interestIdColName: 8,
-      dbClient.interestNameColName: '🍳 Cooking',
+      dbClient.interestNameColName: 'Cooking 🍳',
     });
     batch.insert(dbClient.interestTblName, {
       dbClient.interestIdColName: 9,
-      dbClient.interestNameColName: '🎮 Video games',
+      dbClient.interestNameColName: 'Video games 🎮',
     });
 
 // Alice
