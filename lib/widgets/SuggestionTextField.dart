@@ -8,6 +8,7 @@ class SuggestionTextField extends StatefulWidget {
   final List<String>? excludedSuggestions;
   final String hintText;
   final IconData prefixIcon;
+  final String newText;
   final TextInputType? keyboardType;
   final FocusNode? focusNode;
   final FocusNode? nextFocusNode;
@@ -23,6 +24,7 @@ class SuggestionTextField extends StatefulWidget {
     required this.excludedSuggestions,
     required this.hintText,
     required this.prefixIcon,
+    required this.newText,
     this.keyboardType = TextInputType.text,
     this.focusNode,
     this.nextFocusNode,
@@ -109,7 +111,7 @@ class _SuggestionTextFieldState extends State<SuggestionTextField> {
                   color: Theme.of(context).colorScheme.primary,
                 ),
                 title: Text(
-                  "Create \"${widget.controller.text}\" tag",
+                  "Create \"${widget.controller.text}\" ${widget.newText}",
                   style: TextStyle(
                       color: Theme.of(context).colorScheme.primary,
                       fontWeight: FontWeight.bold),

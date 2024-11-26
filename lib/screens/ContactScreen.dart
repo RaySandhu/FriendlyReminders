@@ -129,10 +129,10 @@ class _ContactsScreenState extends State<ContactsScreen> {
                       OutlinedButton(
                         onPressed: () {
                           contactVM.clearFilters();
-                          // setState(() {
-                          //   _isSearching = false;
-                          //   _searchController.clear();
-                          // });
+                          setState(() {
+                            _isSearching = false;
+                            _searchController.clear();
+                          });
                         },
                         child: Text("CLEAR"),
                         style: OutlinedButton.styleFrom(
@@ -157,16 +157,15 @@ class _ContactsScreenState extends State<ContactsScreen> {
                         spacing: 8.0, // gap between adjacent chips
                         runSpacing: 4.0, // gap between lines
                         children: contactVM
-                            .getAllUniqueInterests(contactVM.contacts)
-                            .map((interest) {
+                            .getAllUniqueGroups(contactVM.contacts)
+                            .map((group) {
                           return FilterChip(
-                            label: Text(interest),
+                            label: Text(group),
                             side: BorderSide.none, // This removes the outline
                             showCheckmark: false,
-                            selected:
-                                contactVM.selectedInterests.contains(interest),
+                            selected: contactVM.selectedGroups.contains(group),
                             onSelected: (bool selected) {
-                              contactVM.toggleInterestFilter(interest);
+                              contactVM.toggleGroupFilter(group);
                             },
                             selectedColor:
                                 Colors.blue.shade100, // Custom selected color
@@ -183,11 +182,11 @@ class _ContactsScreenState extends State<ContactsScreen> {
                     child: Wrap(
                       spacing: 8.0, // gap between adjacent chips
                       runSpacing: 4.0, // gap between lines
-                      children: contactVM.selectedInterests.map((interest) {
+                      children: contactVM.selectedGroups.map((group) {
                         return Chip(
-                          label: Text(interest),
+                          label: Text(group),
                           deleteIcon: Icon(Icons.close),
-                          onDeleted: () => contactVM.removeFilter(interest),
+                          onDeleted: () => contactVM.removeFilter(group),
                         );
                       }).toList(),
                     ),
@@ -203,12 +202,12 @@ class _ContactsScreenState extends State<ContactsScreen> {
                               : ListView.builder(
                                   itemCount: contactVM.contacts.length,
                                   itemBuilder: (context, index) {
-                                    final contactWithInterests =
+                                    final contactWithGroups =
                                         contactVM.contacts[index];
                                     return ContactCard(
-                                      name: contactWithInterests.contact.name,
+                                      name: contactWithGroups.contact.name,
                                       onTap: () => contactVM
-                                          .onContactTap(contactWithInterests),
+                                          .onContactTap(contactWithGroups),
                                     );
                                   },
                                 ),

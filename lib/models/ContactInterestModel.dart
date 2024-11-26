@@ -1,28 +1,28 @@
-class ContactInterestModel {
+class ContactGroupModel {
   final int contactId;
-  final int interestId;
+  final int groupId;
 
-  const ContactInterestModel({
+  const ContactGroupModel({
     required this.contactId,
-    required this.interestId,
+    required this.groupId,
   });
 
-  factory ContactInterestModel.fromMap(Map<String, dynamic> map) {
-    return ContactInterestModel(
+  factory ContactGroupModel.fromMap(Map<String, dynamic> map) {
+    return ContactGroupModel(
       contactId: map['ContactId'] as int,
-      interestId: map['InterestId'] as int,
+      groupId: map['GroupId'] as int,
     );
   }
 
   Map<String, dynamic> toMap() {
     return {
       'ContactId': contactId,
-      'InterestId': interestId,
+      'GroupId': groupId,
     };
   }
 
   @override
   String toString() {
-    return 'ContactInterest{ContactId: $contactId, InterestId: $interestId}';
+    return 'ContactGroupModel{ContactId: $contactId, GroupId: $groupId}';
   }
 }
