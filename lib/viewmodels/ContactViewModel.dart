@@ -1,31 +1,31 @@
 import 'package:flutter/material.dart';
 import 'package:friendlyreminder/models/ContactModel.dart';
 import 'package:friendlyreminder/models/GroupModel.dart';
-import 'package:friendlyreminder/models/ContactWithInterestsModel.dart';
+import 'package:friendlyreminder/models/ContactWithGroupsModel.dart';
 import 'package:friendlyreminder/services/ContactService.dart';
-import 'package:friendlyreminder/services/InterestService.dart';
+import 'package:friendlyreminder/services/GroupService.dart';
 
 class ContactsViewModel extends ChangeNotifier {
   final ContactService _contactService = ContactService();
-  final InterestService _interestService = InterestService();
+  final GroupService _groupService = GroupService();
 
-  List<ContactWithInterestsModel> _contacts = [];
-  List<ContactWithInterestsModel> _filteredContacts = [];
-  List<GroupModel> _interests = [];
+  List<ContactWithGroupsModel> _contacts = [];
+  List<ContactWithGroupsModel> _filteredContacts = [];
+  List<GroupModel> _groups = [];
 
   bool _isLoading = false;
   bool _isFiltered = false;
   String? _error;
 
   String _searchQuery = '';
-  List<String> _selectedInterests = [];
+  List<String> _selectedGroups = [];
 
-  List<ContactWithInterestsModel> get contacts =>
+  List<ContactWithGroupsModel> get contacts =>
       _isFiltered ? _filteredContacts : _contacts;
   bool get isLoading => _isLoading;
   String? get error => _error;
-  List<String> get selectedInterests => _selectedInterests..sort();
-  List<GroupModel> get interests => _interests;
+  List<String> get selectedGroups => _selectedGroups..sort();
+  List<GroupModel> get groups => _groups;
 
   Future<void> loadContacts() async {
     _isLoading = true;
@@ -33,15 +33,14 @@ class ContactsViewModel extends ChangeNotifier {
     notifyListeners();
     try {
       final contacts = await _contactService.getAllContacts();
-      _interests = await _interestService.getAllInterests();
-      final List<ContactWithInterestsModel> contactsWithInterests = [];
+      _groups = await _groupService.getAllGroups();
+      final List<ContactWithGroupsModel> contactsWithGroups = [];
       for (var contact in contacts) {
-        final interests =
-            await _interestService.getInterestsForContact(contact.id!);
-        contactsWithInterests.add(
-            ContactWithInterestsModel(contact: contact, interests: interests));
+        final groups = await _groupService.getGroupsFromContacts(contact.id!);
+        contactsWithGroups
+            .add(ContactWithGroupsModel(contact: contact, groups: groups));
       }
-      _contacts = contactsWithInterests;
+      _contacts = contactsWithGroups;
       _filteredContacts = []; // Reset filtered contacts
     } catch (e) {
       _error = e.toString();
@@ -51,28 +50,28 @@ class ContactsViewModel extends ChangeNotifier {
     }
   }
 
-  List<String> getAllUniqueInterests(List<ContactWithInterestsModel> contacts) {
-    Set<String> uniqueInterests = {};
+  List<String> getAllUniqueGroups(List<ContactWithGroupsModel> contacts) {
+    Set<String> uniqueGroups = {};
 
     for (var contact in contacts) {
-      for (var interest in contact.interests) {
-        uniqueInterests.addAll({interest.name});
+      for (var group in contact.groups) {
+        uniqueGroups.addAll({group.name});
       }
     }
 
-    return uniqueInterests.toList()..sort();
+    return uniqueGroups.toList()..sort();
   }
 
   Future<void> createContact(
-      ContactModel contact, List<GroupModel> interests) async {
+      ContactModel contact, List<GroupModel> groups) async {
     _isLoading = true;
     _error = null;
     notifyListeners();
     try {
       final contactId = await _contactService.createContact(contact);
-      for (var interest in interests) {
-        final interestId = await _interestService.getOrCreateInterest(interest);
-        await _interestService.addInterestToContact(contactId, interestId);
+      for (var group in groups) {
+        final groupId = await _groupService.getOrCreateGroup(group);
+        await _groupService.addGroupToContact(contactId, groupId);
       }
       await loadContacts(); // Refresh the contacts list after creating a new contact
     } catch (e) {
@@ -84,29 +83,28 @@ class ContactsViewModel extends ChangeNotifier {
   }
 
   Future<void> updateContact(
-      ContactModel contact, List<GroupModel> interests) async {
+      ContactModel contact, List<GroupModel> groups) async {
     _isLoading = true;
     _error = null;
     notifyListeners();
     try {
       // Update contact
       await _contactService.updateContact(contact);
-      final currentInterests =
-          await _interestService.getInterestsForContact(contact.id!);
+      final currentGroups =
+          await _groupService.getGroupsFromContacts(contact.id!);
 
-      // Remove interests
-      for (var currentInterest in currentInterests) {
-        if (!interests.contains(currentInterest)) {
-          await _interestService.removeInterestFromContact(contact.id!);
+      // Remove groups
+      for (var currentGroup in currentGroups) {
+        if (!groups.contains(currentGroup)) {
+          await _groupService.removeGroupFromContact(contact.id!);
         }
       }
 
-      // Add new interests
-      for (var interest in interests) {
-        if (!currentInterests.contains(interest)) {
-          final interestId =
-              await _interestService.getOrCreateInterest(interest);
-          await _interestService.addInterestToContact(contact.id!, interestId);
+      // Add new groups
+      for (var group in groups) {
+        if (!currentGroups.contains(group)) {
+          final groupId = await _groupService.getOrCreateGroup(group);
+          await _groupService.addGroupToContact(contact.id!, groupId);
         }
       }
 
@@ -124,7 +122,7 @@ class ContactsViewModel extends ChangeNotifier {
     _error = null;
     notifyListeners();
     try {
-      await _interestService.removeInterestFromContact(contactId);
+      await _groupService.removeGroupFromContact(contactId);
       await _contactService.deleteContact(contactId);
       await loadContacts(); // Refresh the contacts list after deleting
     } catch (e) {
@@ -135,55 +133,54 @@ class ContactsViewModel extends ChangeNotifier {
     }
   }
 
-  void filterContacts({String? query, List<String>? interests}) {
+  void filterContacts({String? query, List<String>? groups}) {
     _searchQuery = query ?? _searchQuery;
-    _selectedInterests = interests ?? _selectedInterests;
+    _selectedGroups = groups ?? _selectedGroups;
 
-    _isFiltered = _searchQuery.isNotEmpty || _selectedInterests.isNotEmpty;
+    _isFiltered = _searchQuery.isNotEmpty || _selectedGroups.isNotEmpty;
 
     if (!_isFiltered) {
       _filteredContacts.clear();
     } else {
-      _filteredContacts = _contacts.where((contactWithInterests) {
+      _filteredContacts = _contacts.where((contactWithGroups) {
         bool matchesQuery = _searchQuery.isEmpty ||
-            contactWithInterests.contact.name
+            contactWithGroups.contact.name
                 .toLowerCase()
                 .contains(_searchQuery.toLowerCase());
 
-        bool matchesInterests = _selectedInterests.isEmpty ||
-            _selectedInterests.every((interest) => contactWithInterests
-                .interests
+        bool matchesGroups = _selectedGroups.isEmpty ||
+            _selectedGroups.every((group) => contactWithGroups.groups
                 .map((i) => i.name.toLowerCase())
-                .contains(interest.toLowerCase()));
+                .contains(group.toLowerCase()));
 
-        return matchesQuery && matchesInterests;
+        return matchesQuery && matchesGroups;
       }).toList();
     }
     notifyListeners();
   }
 
   void clearFilters() {
-    // _searchQuery = '';
-    _selectedInterests.clear();
+    _searchQuery = '';
+    _selectedGroups.clear();
     filterContacts();
   }
 
-  void toggleInterestFilter(String interest) {
-    if (_selectedInterests.contains(interest)) {
-      _selectedInterests.remove(interest);
+  void toggleGroupFilter(String group) {
+    if (_selectedGroups.contains(group)) {
+      _selectedGroups.remove(group);
     } else {
-      _selectedInterests.add(interest);
+      _selectedGroups.add(group);
     }
     filterContacts();
   }
 
-  void removeFilter(String interest) {
-    _selectedInterests.remove(interest);
+  void removeFilter(String group) {
+    _selectedGroups.remove(group);
     filterContacts();
   }
 
-  void onContactTap(ContactWithInterestsModel contactWithInterests) {
+  void onContactTap(ContactWithGroupsModel contactWithGroups) {
     print(
-        "Clicked ${contactWithInterests.contact.name} with interests: ${contactWithInterests.interests..join(', ')}");
+        "Clicked ${contactWithGroups.contact} with groups: ${contactWithGroups.groups..join(', ')}");
   }
 }

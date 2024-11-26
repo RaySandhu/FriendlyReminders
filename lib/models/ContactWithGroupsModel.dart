@@ -1,17 +1,17 @@
 import 'package:friendlyreminder/models/ContactModel.dart';
 import 'package:friendlyreminder/models/GroupModel.dart';
 
-class ContactWithInterestsModel {
+class ContactWithGroupsModel {
   final ContactModel contact;
-  final List<GroupModel> interests;
+  final List<GroupModel> groups;
 
-  const ContactWithInterestsModel({
+  const ContactWithGroupsModel({
     required this.contact,
-    required this.interests,
+    required this.groups,
   });
 
   @override
   String toString() {
-    return 'ContactWithInterestsModel{contact: $contact, interests: $interests}';
+    return 'ContactWithGroupsModel{contact: $contact, groups: $groups}';
   }
 }

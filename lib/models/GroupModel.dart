@@ -30,6 +30,6 @@ class GroupModel {
 
   @override
   String toString() {
-    return 'Group{GroupId: $id, GroupName: $name}';
+    return 'GroupModel{GroupId: $id, GroupName: $name}';
   }
 }

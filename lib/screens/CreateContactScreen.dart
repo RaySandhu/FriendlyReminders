@@ -28,7 +28,7 @@ class _CreateContactScreenState extends State<CreateContactScreen> {
   final FocusNode _emailFocusNode = FocusNode();
   final FocusNode _tagFocusNode = FocusNode();
 
-  final List<GroupModel> _selectedInterests = [];
+  final List<GroupModel> _selectedGroups = [];
 
   @override
   Widget build(BuildContext context) {
@@ -51,7 +51,7 @@ class _CreateContactScreenState extends State<CreateContactScreen> {
                       phone: _phoneController.text,
                       email: _emailController.text,
                       notes: _noteController.text);
-                  contactVM.createContact(newContact, _selectedInterests);
+                  contactVM.createContact(newContact, _selectedGroups);
                   _nameController.clear();
                   _phoneController.clear();
                   _emailController.clear();
@@ -105,19 +105,17 @@ class _CreateContactScreenState extends State<CreateContactScreen> {
                 hintText: "Tags",
                 prefixIcon: Icons.label,
                 focusNode: _tagFocusNode,
-                allSuggestions: contactVM.interests
-                    .map((interest) => interest.name)
-                    .toList(),
-                excludedSuggestions: _selectedInterests
-                    .map((interest) => interest.name)
-                    .toList(),
+                allSuggestions:
+                    contactVM.groups.map((group) => group.name).toList(),
+                excludedSuggestions:
+                    _selectedGroups.map((group) => group.name).toList(),
                 onSelect: (text) {
                   setState(() {
-                    _selectedInterests.add(GroupModel(name: text));
+                    _selectedGroups.add(GroupModel(name: text));
                   });
                 },
               ),
-              if (_selectedInterests.isNotEmpty)
+              if (_selectedGroups.isNotEmpty)
                 Container(
                   width: double.infinity,
                   child: Padding(
@@ -125,13 +123,13 @@ class _CreateContactScreenState extends State<CreateContactScreen> {
                     child: Wrap(
                       spacing: 8.0, // gap between adjacent chips
                       runSpacing: 4.0, // gap between lines
-                      children: _selectedInterests.map((interest) {
+                      children: _selectedGroups.map((group) {
                         return Chip(
-                          label: Text(interest.name),
+                          label: Text(group.name),
                           deleteIcon: Icon(Icons.close),
                           onDeleted: () {
                             setState(() {
-                              _selectedInterests.remove(interest);
+                              _selectedGroups.remove(group);
                             });
                           },
                         );

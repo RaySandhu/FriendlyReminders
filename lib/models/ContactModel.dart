@@ -49,6 +49,6 @@ class ContactModel {
 
   @override
   String toString() {
-    return 'Contact{ContactId: $id, ContactName: $name, ContactPhone: $phone, ContactEmail: $email, ContactNotes: $notes}';
+    return 'ContactModel{ContactId: $id, ContactName: $name, ContactPhone: $phone, ContactEmail: $email, ContactNotes: $notes}';
   }
 }
