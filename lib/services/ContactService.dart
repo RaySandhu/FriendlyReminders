@@ -7,9 +7,8 @@ class ContactService {
 
   Future<List<ContactModel>> getAllContacts() async {
     final db = await _dbClient.database;
-    final List<Map<String, dynamic>> maps = await db.query(
-        _dbClient.contactTblName,
-        orderBy: '${_dbClient.contactNameColName} ASC');
+    final List<Map<String, dynamic>> maps = await db.query(_dbClient.contactTbl,
+        orderBy: '${_dbClient.contactName} ASC');
     return List.generate(maps.length, (i) {
       return ContactModel.fromMap(maps[i]);
     });
@@ -18,8 +17,8 @@ class ContactService {
   Future<ContactModel> getContact(int contactId) async {
     final db = await _dbClient.database;
     final List<Map<String, dynamic>> maps = await db.query(
-      _dbClient.contactTblName,
-      where: '${_dbClient.contactIdColName} = ?',
+      _dbClient.contactTbl,
+      where: '${_dbClient.contactId} = ?',
       whereArgs: [contactId],
     );
     if (maps.isNotEmpty) {
@@ -31,7 +30,7 @@ class ContactService {
   Future<int> createContact(ContactModel contact) async {
     final db = await _dbClient.database;
     int contactId = await db.insert(
-      _dbClient.contactTblName,
+      _dbClient.contactTbl,
       contact.toMap(),
       conflictAlgorithm: ConflictAlgorithm.replace,
     );
@@ -41,9 +40,9 @@ class ContactService {
   Future<void> updateContact(ContactModel contact) async {
     final db = await _dbClient.database;
     await db.update(
-      _dbClient.contactTblName,
+      _dbClient.contactTbl,
       contact.toMap(),
-      where: '${_dbClient.contactIdColName} = ?',
+      where: '${_dbClient.contactId} = ?',
       whereArgs: [contact.id],
     );
   }
@@ -51,8 +50,8 @@ class ContactService {
   Future<void> deleteContact(int contactId) async {
     final db = await _dbClient.database;
     await db.delete(
-      _dbClient.contactTblName,
-      where: '${_dbClient.contactIdColName} = ?',
+      _dbClient.contactTbl,
+      where: '${_dbClient.contactId} = ?',
       whereArgs: [contactId],
     );
   }

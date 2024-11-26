@@ -12,18 +12,18 @@ class DatabaseClient {
       DatabaseClient._internal(); // Singleton
   static Database? _db;
 
-  final String contactTblName = "Contact";
-  final String contactIdColName = "ContactId";
-  final String contactNameColName = "ContactName";
-  final String contactPhoneColName = "ContactPhone";
-  final String contactEmailColName = "ContactEmail";
-  final String contactNotesColName = "ContactNotes";
+  final String contactTbl = "Contact";
+  final String contactId = "ContactId";
+  final String contactName = "ContactName";
+  final String contactPhone = "ContactPhone";
+  final String contactEmail = "ContactEmail";
+  final String contactNotes = "ContactNotes";
 
-  final String groupTblName = '[Group]';
-  final String groupIdColName = 'GroupId';
-  final String groupNameColName = 'GroupName';
+  final String groupTbl = '[Group]';
+  final String groupId = 'GroupId';
+  final String groupName = 'GroupName';
 
-  final String contactGroupTblName = 'ContactGroup';
+  final String contactGroupTbl = 'ContactGroup';
 
   // final String _groupsTblName = "groups";
   // final String _remindersTblName = "reminders";
@@ -61,27 +61,27 @@ class DatabaseClient {
         version: 1,
         onCreate: (database, version) {
           database.execute('''
-        CREATE TABLE $contactTblName (
-          $contactIdColName INTEGER PRIMARY KEY AUTOINCREMENT,
-          $contactNameColName TEXT NOT NULL,
-          $contactPhoneColName TEXT,
-          $contactEmailColName TEXT,
-          $contactNotesColName TEXT
+        CREATE TABLE $contactTbl (
+          $contactId INTEGER PRIMARY KEY AUTOINCREMENT,
+          $contactName TEXT NOT NULL,
+          $contactPhone TEXT,
+          $contactEmail TEXT,
+          $contactNotes TEXT
         )        
         ''');
           database.execute('''
-        CREATE TABLE $groupTblName (
-          $groupIdColName INTEGER PRIMARY KEY AUTOINCREMENT,
-          $groupNameColName TEXT NOT NULL
+        CREATE TABLE $groupTbl (
+          $groupId INTEGER PRIMARY KEY AUTOINCREMENT,
+          $groupName TEXT NOT NULL
         )    
         ''');
           database.execute('''
-        CREATE TABLE $contactGroupTblName (
-          $contactIdColName INTEGER NOT NULL,
-          $groupIdColName INTEGER NOT NULL,
-          PRIMARY KEY ($contactIdColName, $groupIdColName),
-          FOREIGN KEY ($contactIdColName) REFERENCES $contactTblName($contactIdColName),
-          FOREIGN KEY ($groupIdColName) REFERENCES $groupTblName($groupIdColName)
+        CREATE TABLE $contactGroupTbl (
+          $contactId INTEGER NOT NULL,
+          $groupId INTEGER NOT NULL,
+          PRIMARY KEY ($contactId, $groupId),
+          FOREIGN KEY ($contactId) REFERENCES $contactTbl($contactId),
+          FOREIGN KEY ($groupId) REFERENCES $groupTbl($groupId)
         )    
         ''');
 

@@ -6,9 +6,8 @@ class GroupService {
 
   Future<List<GroupModel>> getAllGroups() async {
     final db = await _dbClient.database;
-    final List<Map<String, dynamic>> maps = await db.query(
-        _dbClient.groupTblName,
-        orderBy: '${_dbClient.groupNameColName} ASC');
+    final List<Map<String, dynamic>> maps = await db.query(_dbClient.groupTbl,
+        orderBy: '${_dbClient.groupName} ASC');
     return List.generate(maps.length, (i) {
       return GroupModel.fromMap(maps[i]);
     });
@@ -18,8 +17,8 @@ class GroupService {
     final db = await _dbClient.database;
 
     var result = await db.query(
-      _dbClient.groupTblName,
-      where: '${_dbClient.groupNameColName} = ?',
+      _dbClient.groupTbl,
+      where: '${_dbClient.groupName} = ?',
       whereArgs: [group.name],
     );
 
@@ -27,10 +26,10 @@ class GroupService {
     int groupId;
     if (result.isNotEmpty) {
       // Group already exists
-      groupId = result.first[_dbClient.groupIdColName] as int;
+      groupId = result.first[_dbClient.groupId] as int;
     } else {
       // Group does not exist
-      groupId = await db.insert(_dbClient.groupTblName, group.toMap());
+      groupId = await db.insert(_dbClient.groupTbl, group.toMap());
     }
     return groupId;
   }
@@ -39,9 +38,9 @@ class GroupService {
     final db = await _dbClient.database;
     final List<Map<String, dynamic>> maps = await db.rawQuery('''
     SELECT G.*
-    FROM ${_dbClient.groupTblName} G
-    JOIN ${_dbClient.contactGroupTblName} CG ON (CG.${_dbClient.groupIdColName} = G.${_dbClient.groupIdColName})
-    WHERE CG.${_dbClient.contactIdColName} = $contactId
+    FROM ${_dbClient.groupTbl} G
+    JOIN ${_dbClient.contactGroupTbl} CG ON (CG.${_dbClient.groupId} = G.${_dbClient.groupId})
+    WHERE CG.${_dbClient.contactId} = $contactId
     ''');
     return List.generate(maps.length, (i) {
       return GroupModel.fromMap(maps[i]);
@@ -50,17 +49,17 @@ class GroupService {
 
   Future<void> addGroupToContact(int contactId, int groupId) async {
     final db = await _dbClient.database;
-    await db.insert(_dbClient.contactGroupTblName, {
-      _dbClient.contactIdColName: contactId,
-      _dbClient.groupIdColName: groupId,
+    await db.insert(_dbClient.contactGroupTbl, {
+      _dbClient.contactId: contactId,
+      _dbClient.groupId: groupId,
     });
   }
 
   Future<void> removeGroupFromContact(int contactId) async {
     final db = await _dbClient.database;
     await db.delete(
-      _dbClient.contactGroupTblName,
-      where: '${_dbClient.contactIdColName} = ?',
+      _dbClient.contactGroupTbl,
+      where: '${_dbClient.contactId} = ?',
       whereArgs: [contactId],
     );
   }
@@ -68,9 +67,9 @@ class GroupService {
   Future<void> updateGroup(GroupModel group) async {
     final db = await _dbClient.database;
     await db.update(
-      _dbClient.groupTblName,
+      _dbClient.groupTbl,
       group.toMap(),
-      where: '${_dbClient.groupIdColName} = ?',
+      where: '${_dbClient.groupId} = ?',
       whereArgs: [group.id],
     );
   }
@@ -78,8 +77,8 @@ class GroupService {
   Future<void> deleteGroup(int groupId) async {
     final db = await _dbClient.database;
     await db.delete(
-      _dbClient.groupTblName,
-      where: '${_dbClient.groupIdColName} = ?',
+      _dbClient.groupTbl,
+      where: '${_dbClient.groupId} = ?',
       whereArgs: [groupId],
     );
   }
