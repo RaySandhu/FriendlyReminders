@@ -78,7 +78,7 @@ class _CreateContactScreenState extends State<CreateContactScreen> {
               StyledTextField(
                 controller: _nameController,
                 hintText: "Name",
-                prefixIcon: Icons.people,
+                prefixIcon: Icons.person,
                 focusNode: _nameFocusNode,
                 nextFocusNode: _phoneFocusNode,
                 textCapitalization: TextCapitalization.words,
@@ -102,13 +102,14 @@ class _CreateContactScreenState extends State<CreateContactScreen> {
               ),
               SuggestionTextField(
                 controller: _tagController,
-                hintText: "Tags",
-                prefixIcon: Icons.label,
+                hintText: "Groups",
+                prefixIcon: Icons.people,
                 focusNode: _tagFocusNode,
                 allSuggestions:
                     contactVM.groups.map((group) => group.name).toList(),
                 excludedSuggestions:
                     _selectedGroups.map((group) => group.name).toList(),
+                newText: "group",
                 onSelect: (text) {
                   setState(() {
                     _selectedGroups.add(GroupModel(name: text));
