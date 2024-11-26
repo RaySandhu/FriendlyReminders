@@ -19,11 +19,11 @@ class DatabaseClient {
   final String contactEmailColName = "ContactEmail";
   final String contactNotesColName = "ContactNotes";
 
-  final String interestTblName = 'Interest';
-  final String interestIdColName = 'InterestId';
-  final String interestNameColName = 'InterestName';
+  final String groupTblName = '[Group]';
+  final String groupIdColName = 'GroupId';
+  final String groupNameColName = 'GroupName';
 
-  final String contactInterestTblName = 'ContactInterest';
+  final String contactGroupTblName = 'ContactGroup';
 
   // final String _groupsTblName = "groups";
   // final String _remindersTblName = "reminders";
@@ -70,18 +70,18 @@ class DatabaseClient {
         )        
         ''');
           database.execute('''
-        CREATE TABLE $interestTblName (
-          $interestIdColName INTEGER PRIMARY KEY AUTOINCREMENT,
-          $interestNameColName TEXT NOT NULL
+        CREATE TABLE $groupTblName (
+          $groupIdColName INTEGER PRIMARY KEY AUTOINCREMENT,
+          $groupNameColName TEXT NOT NULL
         )    
         ''');
           database.execute('''
-        CREATE TABLE $contactInterestTblName (
+        CREATE TABLE $contactGroupTblName (
           $contactIdColName INTEGER NOT NULL,
-          $interestIdColName INTEGER NOT NULL,
-          PRIMARY KEY ($contactIdColName, $interestIdColName),
+          $groupIdColName INTEGER NOT NULL,
+          PRIMARY KEY ($contactIdColName, $groupIdColName),
           FOREIGN KEY ($contactIdColName) REFERENCES $contactTblName($contactIdColName),
-          FOREIGN KEY ($interestIdColName) REFERENCES $interestTblName($interestIdColName)
+          FOREIGN KEY ($groupIdColName) REFERENCES $groupTblName($groupIdColName)
         )    
         ''');
 

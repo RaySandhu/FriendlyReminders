@@ -1,25 +1,25 @@
 import 'package:friendlyreminder/services/DatabaseClient.dart';
-import 'package:friendlyreminder/models/InterestModel.dart';
+import 'package:friendlyreminder/models/GroupModel.dart';
 
 class InterestService {
   final DatabaseClient _dbClient = DatabaseClient();
 
-  Future<List<InterestModel>> getAllInterests() async {
+  Future<List<GroupModel>> getAllInterests() async {
     final db = await _dbClient.database;
     final List<Map<String, dynamic>> maps = await db.query(
-        _dbClient.interestTblName,
-        orderBy: '${_dbClient.interestNameColName} ASC');
+        _dbClient.groupTblName,
+        orderBy: '${_dbClient.groupNameColName} ASC');
     return List.generate(maps.length, (i) {
-      return InterestModel.fromMap(maps[i]);
+      return GroupModel.fromMap(maps[i]);
     });
   }
 
-  Future<int> getOrCreateInterest(InterestModel interest) async {
+  Future<int> getOrCreateInterest(GroupModel interest) async {
     final db = await _dbClient.database;
 
     var result = await db.query(
-      _dbClient.interestTblName,
-      where: '${_dbClient.interestNameColName} = ?',
+      _dbClient.groupTblName,
+      where: '${_dbClient.groupNameColName} = ?',
       whereArgs: [interest.name],
     );
 
@@ -27,24 +27,24 @@ class InterestService {
     int interestId;
     if (result.isNotEmpty) {
       // Interest already exists
-      interestId = result.first[_dbClient.interestIdColName] as int;
+      interestId = result.first[_dbClient.groupIdColName] as int;
     } else {
       // Interest does not exist
-      interestId = await db.insert(_dbClient.interestTblName, interest.toMap());
+      interestId = await db.insert(_dbClient.groupTblName, interest.toMap());
     }
     return interestId;
   }
 
-  Future<List<InterestModel>> getInterestsForContact(int contactId) async {
+  Future<List<GroupModel>> getInterestsForContact(int contactId) async {
     final db = await _dbClient.database;
     final List<Map<String, dynamic>> maps = await db.rawQuery('''
     SELECT I.*
-    FROM ${_dbClient.interestTblName} I
-    JOIN ${_dbClient.contactInterestTblName} CI ON (CI.${_dbClient.interestIdColName} = I.${_dbClient.interestIdColName})
+    FROM ${_dbClient.groupTblName} I
+    JOIN ${_dbClient.contactGroupTblName} CI ON (CI.${_dbClient.groupIdColName} = I.${_dbClient.groupIdColName})
     WHERE CI.${_dbClient.contactIdColName} = $contactId
     ''');
     return List.generate(maps.length, (i) {
-      return InterestModel.fromMap(maps[i]);
+      return GroupModel.fromMap(maps[i]);
     });
   }
 
@@ -63,27 +63,27 @@ class InterestService {
 
   Future<void> addInterestToContact(int contactId, int interestId) async {
     final db = await _dbClient.database;
-    await db.insert(_dbClient.contactInterestTblName, {
+    await db.insert(_dbClient.contactGroupTblName, {
       _dbClient.contactIdColName: contactId,
-      _dbClient.interestIdColName: interestId,
+      _dbClient.groupIdColName: interestId,
     });
   }
 
   Future<void> removeInterestFromContact(int contactId) async {
     final db = await _dbClient.database;
     await db.delete(
-      _dbClient.contactInterestTblName,
+      _dbClient.contactGroupTblName,
       where: '${_dbClient.contactIdColName} = ?',
       whereArgs: [contactId],
     );
   }
 
-  Future<void> updateInterest(InterestModel interest) async {
+  Future<void> updateInterest(GroupModel interest) async {
     final db = await _dbClient.database;
     await db.update(
-      _dbClient.interestTblName,
+      _dbClient.groupTblName,
       interest.toMap(),
-      where: '${_dbClient.interestIdColName} = ?',
+      where: '${_dbClient.groupIdColName} = ?',
       whereArgs: [interest.id],
     );
   }
@@ -91,8 +91,8 @@ class InterestService {
   Future<void> deleteInterest(int interestId) async {
     final db = await _dbClient.database;
     await db.delete(
-      _dbClient.interestTblName,
-      where: '${_dbClient.interestIdColName} = ?',
+      _dbClient.groupTblName,
+      where: '${_dbClient.groupIdColName} = ?',
       whereArgs: [interestId],
     );
   }

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:friendlyreminder/models/ContactModel.dart';
-import 'package:friendlyreminder/models/InterestModel.dart';
+import 'package:friendlyreminder/models/GroupModel.dart';
 import 'package:friendlyreminder/models/ContactWithInterestsModel.dart';
 import 'package:friendlyreminder/services/ContactService.dart';
 import 'package:friendlyreminder/services/InterestService.dart';
@@ -11,7 +11,7 @@ class ContactsViewModel extends ChangeNotifier {
 
   List<ContactWithInterestsModel> _contacts = [];
   List<ContactWithInterestsModel> _filteredContacts = [];
-  List<InterestModel> _interests = [];
+  List<GroupModel> _interests = [];
 
   bool _isLoading = false;
   bool _isFiltered = false;
@@ -25,7 +25,7 @@ class ContactsViewModel extends ChangeNotifier {
   bool get isLoading => _isLoading;
   String? get error => _error;
   List<String> get selectedInterests => _selectedInterests..sort();
-  List<InterestModel> get interests => _interests;
+  List<GroupModel> get interests => _interests;
 
   Future<void> loadContacts() async {
     _isLoading = true;
@@ -64,7 +64,7 @@ class ContactsViewModel extends ChangeNotifier {
   }
 
   Future<void> createContact(
-      ContactModel contact, List<InterestModel> interests) async {
+      ContactModel contact, List<GroupModel> interests) async {
     _isLoading = true;
     _error = null;
     notifyListeners();
@@ -84,7 +84,7 @@ class ContactsViewModel extends ChangeNotifier {
   }
 
   Future<void> updateContact(
-      ContactModel contact, List<InterestModel> interests) async {
+      ContactModel contact, List<GroupModel> interests) async {
     _isLoading = true;
     _error = null;
     notifyListeners();

@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:provider/provider.dart';
 import 'package:friendlyreminder/viewmodels/ContactViewModel.dart';
-import 'package:friendlyreminder/models/InterestModel.dart';
+import 'package:friendlyreminder/models/GroupModel.dart';
 import 'package:friendlyreminder/models/ContactModel.dart';
 import 'package:friendlyreminder/widgets/StyledTextField.dart';
 import 'package:friendlyreminder/widgets/SuggestionTextField.dart';
@@ -28,7 +28,7 @@ class _CreateContactScreenState extends State<CreateContactScreen> {
   final FocusNode _emailFocusNode = FocusNode();
   final FocusNode _tagFocusNode = FocusNode();
 
-  final List<InterestModel> _selectedInterests = [];
+  final List<GroupModel> _selectedInterests = [];
 
   @override
   Widget build(BuildContext context) {
@@ -113,7 +113,7 @@ class _CreateContactScreenState extends State<CreateContactScreen> {
                     .toList(),
                 onSelect: (text) {
                   setState(() {
-                    _selectedInterests.add(InterestModel(name: text));
+                    _selectedInterests.add(GroupModel(name: text));
                   });
                 },
               ),

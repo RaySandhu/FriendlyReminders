@@ -118,178 +118,178 @@ class DatabaseInitializer {
       dbClient.contactNotesColName: 'Cousin',
     });
 
-    batch.insert(dbClient.interestTblName, {
-      dbClient.interestIdColName: 1,
-      dbClient.interestNameColName: 'Photography 📷',
+    batch.insert(dbClient.groupTblName, {
+      dbClient.groupIdColName: 1,
+      dbClient.groupNameColName: 'Photography 📷',
     });
-    batch.insert(dbClient.interestTblName, {
-      dbClient.interestIdColName: 2,
-      dbClient.interestNameColName: 'Art 🎨',
+    batch.insert(dbClient.groupTblName, {
+      dbClient.groupIdColName: 2,
+      dbClient.groupNameColName: 'Art 🎨',
     });
-    batch.insert(dbClient.interestTblName, {
-      dbClient.interestIdColName: 3,
-      dbClient.interestNameColName: 'Dancing 💃',
+    batch.insert(dbClient.groupTblName, {
+      dbClient.groupIdColName: 3,
+      dbClient.groupNameColName: 'Dancing 💃',
     });
-    batch.insert(dbClient.interestTblName, {
-      dbClient.interestIdColName: 4,
-      dbClient.interestNameColName: 'Singing 🎤',
+    batch.insert(dbClient.groupTblName, {
+      dbClient.groupIdColName: 4,
+      dbClient.groupNameColName: 'Singing 🎤',
     });
-    batch.insert(dbClient.interestTblName, {
-      dbClient.interestIdColName: 5,
-      dbClient.interestNameColName: 'Writing 📝',
+    batch.insert(dbClient.groupTblName, {
+      dbClient.groupIdColName: 5,
+      dbClient.groupNameColName: 'Writing 📝',
     });
-    batch.insert(dbClient.interestTblName, {
-      dbClient.interestIdColName: 6,
-      dbClient.interestNameColName: 'Baking 🍰',
+    batch.insert(dbClient.groupTblName, {
+      dbClient.groupIdColName: 6,
+      dbClient.groupNameColName: 'Baking 🍰',
     });
-    batch.insert(dbClient.interestTblName, {
-      dbClient.interestIdColName: 7,
-      dbClient.interestNameColName: 'Board games 🎲',
+    batch.insert(dbClient.groupTblName, {
+      dbClient.groupIdColName: 7,
+      dbClient.groupNameColName: 'Board games 🎲',
     });
-    batch.insert(dbClient.interestTblName, {
-      dbClient.interestIdColName: 8,
-      dbClient.interestNameColName: 'Cooking 🍳',
+    batch.insert(dbClient.groupTblName, {
+      dbClient.groupIdColName: 8,
+      dbClient.groupNameColName: 'Cooking 🍳',
     });
-    batch.insert(dbClient.interestTblName, {
-      dbClient.interestIdColName: 9,
-      dbClient.interestNameColName: 'Video games 🎮',
+    batch.insert(dbClient.groupTblName, {
+      dbClient.groupIdColName: 9,
+      dbClient.groupNameColName: 'Video games 🎮',
     });
 
 // Alice
-    batch.insert(dbClient.contactInterestTblName, {
+    batch.insert(dbClient.contactGroupTblName, {
       dbClient.contactIdColName: 2,
-      dbClient.interestIdColName: 2, // Art
+      dbClient.groupIdColName: 2, // Art
     });
-    batch.insert(dbClient.contactInterestTblName, {
+    batch.insert(dbClient.contactGroupTblName, {
       dbClient.contactIdColName: 2,
-      dbClient.interestIdColName: 6, // Baking
+      dbClient.groupIdColName: 6, // Baking
     });
 // Bob
-    batch.insert(dbClient.contactInterestTblName, {
+    batch.insert(dbClient.contactGroupTblName, {
       dbClient.contactIdColName: 1,
-      dbClient.interestIdColName: 1, // Photography
+      dbClient.groupIdColName: 1, // Photography
     });
-    batch.insert(dbClient.contactInterestTblName, {
+    batch.insert(dbClient.contactGroupTblName, {
       dbClient.contactIdColName: 1,
-      dbClient.interestIdColName: 7, // Board games
+      dbClient.groupIdColName: 7, // Board games
     });
 
 // Charlie
-    batch.insert(dbClient.contactInterestTblName, {
+    batch.insert(dbClient.contactGroupTblName, {
       dbClient.contactIdColName: 3,
-      dbClient.interestIdColName: 3, // Dancing
+      dbClient.groupIdColName: 3, // Dancing
     });
-    batch.insert(dbClient.contactInterestTblName, {
+    batch.insert(dbClient.contactGroupTblName, {
       dbClient.contactIdColName: 3,
-      dbClient.interestIdColName: 4, // Singing
+      dbClient.groupIdColName: 4, // Singing
     });
 
 // David
-    batch.insert(dbClient.contactInterestTblName, {
+    batch.insert(dbClient.contactGroupTblName, {
       dbClient.contactIdColName: 4,
-      dbClient.interestIdColName: 9, // Video games
+      dbClient.groupIdColName: 9, // Video games
     });
 
 // Eva
-    batch.insert(dbClient.contactInterestTblName, {
+    batch.insert(dbClient.contactGroupTblName, {
       dbClient.contactIdColName: 5,
-      dbClient.interestIdColName: 5, // Writing
+      dbClient.groupIdColName: 5, // Writing
     });
-    batch.insert(dbClient.contactInterestTblName, {
+    batch.insert(dbClient.contactGroupTblName, {
       dbClient.contactIdColName: 5,
-      dbClient.interestIdColName: 8, // Cooking
+      dbClient.groupIdColName: 8, // Cooking
     });
 
 // Frank
-    batch.insert(dbClient.contactInterestTblName, {
+    batch.insert(dbClient.contactGroupTblName, {
       dbClient.contactIdColName: 6,
-      dbClient.interestIdColName: 1, // Photography
+      dbClient.groupIdColName: 1, // Photography
     });
 
 // Grace
-    batch.insert(dbClient.contactInterestTblName, {
+    batch.insert(dbClient.contactGroupTblName, {
       dbClient.contactIdColName: 7,
-      dbClient.interestIdColName: 6, // Baking
+      dbClient.groupIdColName: 6, // Baking
     });
-    batch.insert(dbClient.contactInterestTblName, {
+    batch.insert(dbClient.contactGroupTblName, {
       dbClient.contactIdColName: 7,
-      dbClient.interestIdColName: 8, // Cooking
+      dbClient.groupIdColName: 8, // Cooking
     });
 
 // Henry
-    batch.insert(dbClient.contactInterestTblName, {
+    batch.insert(dbClient.contactGroupTblName, {
       dbClient.contactIdColName: 8,
-      dbClient.interestIdColName: 7, // Board games
+      dbClient.groupIdColName: 7, // Board games
     });
-    batch.insert(dbClient.contactInterestTblName, {
+    batch.insert(dbClient.contactGroupTblName, {
       dbClient.contactIdColName: 8,
-      dbClient.interestIdColName: 9, // Video games
+      dbClient.groupIdColName: 9, // Video games
     });
 
 // Ivy
-    batch.insert(dbClient.contactInterestTblName, {
+    batch.insert(dbClient.contactGroupTblName, {
       dbClient.contactIdColName: 9,
-      dbClient.interestIdColName: 2, // Art
+      dbClient.groupIdColName: 2, // Art
     });
-    batch.insert(dbClient.contactInterestTblName, {
+    batch.insert(dbClient.contactGroupTblName, {
       dbClient.contactIdColName: 9,
-      dbClient.interestIdColName: 5, // Writing
+      dbClient.groupIdColName: 5, // Writing
     });
 
 // Jack
-    batch.insert(dbClient.contactInterestTblName, {
+    batch.insert(dbClient.contactGroupTblName, {
       dbClient.contactIdColName: 10,
-      dbClient.interestIdColName: 3, // Dancing
+      dbClient.groupIdColName: 3, // Dancing
     });
 
 // Karen
-    batch.insert(dbClient.contactInterestTblName, {
+    batch.insert(dbClient.contactGroupTblName, {
       dbClient.contactIdColName: 11,
-      dbClient.interestIdColName: 3, // Dancing
+      dbClient.groupIdColName: 3, // Dancing
     });
-    batch.insert(dbClient.contactInterestTblName, {
+    batch.insert(dbClient.contactGroupTblName, {
       dbClient.contactIdColName: 11,
-      dbClient.interestIdColName: 6, // Baking
+      dbClient.groupIdColName: 6, // Baking
     });
 
 // Liam
-    batch.insert(dbClient.contactInterestTblName, {
+    batch.insert(dbClient.contactGroupTblName, {
       dbClient.contactIdColName: 12,
-      dbClient.interestIdColName: 4, // Singing
+      dbClient.groupIdColName: 4, // Singing
     });
-    batch.insert(dbClient.contactInterestTblName, {
+    batch.insert(dbClient.contactGroupTblName, {
       dbClient.contactIdColName: 12,
-      dbClient.interestIdColName: 9, // Video games
+      dbClient.groupIdColName: 9, // Video games
     });
 
 // Mia
-    batch.insert(dbClient.contactInterestTblName, {
+    batch.insert(dbClient.contactGroupTblName, {
       dbClient.contactIdColName: 13,
-      dbClient.interestIdColName: 1, // Photography
+      dbClient.groupIdColName: 1, // Photography
     });
-    batch.insert(dbClient.contactInterestTblName, {
+    batch.insert(dbClient.contactGroupTblName, {
       dbClient.contactIdColName: 13,
-      dbClient.interestIdColName: 2, // Art
+      dbClient.groupIdColName: 2, // Art
     });
 
 // Noah
-    batch.insert(dbClient.contactInterestTblName, {
+    batch.insert(dbClient.contactGroupTblName, {
       dbClient.contactIdColName: 14,
-      dbClient.interestIdColName: 7, // Board games
+      dbClient.groupIdColName: 7, // Board games
     });
-    batch.insert(dbClient.contactInterestTblName, {
+    batch.insert(dbClient.contactGroupTblName, {
       dbClient.contactIdColName: 14,
-      dbClient.interestIdColName: 8, // Cooking
+      dbClient.groupIdColName: 8, // Cooking
     });
 
 // Olivia
-    batch.insert(dbClient.contactInterestTblName, {
+    batch.insert(dbClient.contactGroupTblName, {
       dbClient.contactIdColName: 15,
-      dbClient.interestIdColName: 4, // Singing
+      dbClient.groupIdColName: 4, // Singing
     });
-    batch.insert(dbClient.contactInterestTblName, {
+    batch.insert(dbClient.contactGroupTblName, {
       dbClient.contactIdColName: 15,
-      dbClient.interestIdColName: 5, // Writing
+      dbClient.groupIdColName: 5, // Writing
     });
 
     // Commit the batch

@@ -1,9 +1,9 @@
 import 'package:friendlyreminder/models/ContactModel.dart';
-import 'package:friendlyreminder/models/InterestModel.dart';
+import 'package:friendlyreminder/models/GroupModel.dart';
 
 class ContactWithInterestsModel {
   final ContactModel contact;
-  final List<InterestModel> interests;
+  final List<GroupModel> interests;
 
   const ContactWithInterestsModel({
     required this.contact,
