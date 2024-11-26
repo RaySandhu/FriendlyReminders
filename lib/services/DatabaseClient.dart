@@ -1,5 +1,7 @@
 import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
+import 'package:sqflite_common/sqlite_api.dart';
+import 'package:sqflite_common_ffi/sqflite_ffi.dart';
 import 'package:friendlyreminder/services/DatabaseInitializer.dart';
 
 class DatabaseClient {
@@ -35,14 +37,20 @@ class DatabaseClient {
   }
 
   Future<Database> _initDatabase() async {
+    // Init ffi loader if needed.
+    sqfliteFfiInit();
+    databaseFactory = databaseFactoryFfi;
+
     final String dbDirPath = await getDatabasesPath();
+
     final String dbPath = join(dbDirPath, "friendly_reminder_database.db");
     await deleteDatabase(dbPath); // REM
-    final Database database = await openDatabase(
-      dbPath,
-      version: 1,
-      onCreate: (database, version) {
-        database.execute('''
+    final Database database = await databaseFactory.openDatabase(
+      inMemoryDatabasePath,
+      options: OpenDatabaseOptions(
+        version: 1,
+        onCreate: (database, version) {
+          database.execute('''
         CREATE TABLE $contactTblName (
           $contactIdColName INTEGER PRIMARY KEY AUTOINCREMENT,
           $contactNameColName TEXT NOT NULL,
@@ -51,13 +59,13 @@ class DatabaseClient {
           $contactNotesColName TEXT
         )        
         ''');
-        database.execute('''
+          database.execute('''
         CREATE TABLE $interestTblName (
           $interestIdColName INTEGER PRIMARY KEY AUTOINCREMENT,
           $interestNameColName TEXT NOT NULL
         )    
         ''');
-        database.execute('''
+          database.execute('''
         CREATE TABLE $contactInterestTblName (
           $contactIdColName INTEGER NOT NULL,
           $interestIdColName INTEGER NOT NULL,
@@ -67,9 +75,10 @@ class DatabaseClient {
         )    
         ''');
 
-        // Initialize data after creating tables
-        DatabaseInitializer(database).initializeDatabase();
-      },
+          // Initialize data after creating tables
+          DatabaseInitializer(database).initializeDatabase();
+        },
+      ),
     );
 
     return database;
