@@ -1,16 +1,11 @@
 # friendlyreminder
 
-A new Flutter project.
-
 ## Getting Started
 
-This project is a starting point for a Flutter application.
+To run on web, run the following command in terminal to set up the `sqlite3.wasm` binaries.
 
-A few resources to get you started if this is your first Flutter project:
+- Documentation: https://pub.dev/packages/sqflite_common_ffi_web
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
-
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+```bash
+dart run sqflite_common_ffi_web:setup
+```
