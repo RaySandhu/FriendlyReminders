@@ -129,10 +129,10 @@ class _ContactsScreenState extends State<ContactsScreen> {
                       OutlinedButton(
                         onPressed: () {
                           contactVM.clearFilters();
-                          // setState(() {
-                          //   _isSearching = false;
-                          //   _searchController.clear();
-                          // });
+                          setState(() {
+                            _isSearching = false;
+                            _searchController.clear();
+                          });
                         },
                         child: Text("CLEAR"),
                         style: OutlinedButton.styleFrom(
