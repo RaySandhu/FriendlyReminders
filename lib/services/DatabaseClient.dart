@@ -2,7 +2,10 @@ import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:sqflite_common/sqlite_api.dart';
 import 'package:sqflite_common_ffi/sqflite_ffi.dart';
+import 'package:sqflite_common_ffi_web/sqflite_ffi_web.dart';
 import 'package:friendlyreminder/services/DatabaseInitializer.dart';
+import 'package:flutter/foundation.dart';
+import 'dart:io';
 
 class DatabaseClient {
   static final DatabaseClient _instance =
@@ -37,9 +40,16 @@ class DatabaseClient {
   }
 
   Future<Database> _initDatabase() async {
-    // Init ffi loader if needed.
-    sqfliteFfiInit();
-    databaseFactory = databaseFactoryFfi;
+    if (kIsWeb) {
+      databaseFactory = databaseFactoryFfiWeb;
+    } else {
+      if (Platform.isWindows || Platform.isLinux) {
+        // Init ffi loader if needed.
+        sqfliteFfiInit();
+        databaseFactory = databaseFactoryFfi;
+      }
+      // Default initialization is for mobile platforms (Android and iOS)
+    }
 
     final String dbDirPath = await getDatabasesPath();
 
