@@ -19,9 +19,10 @@ class DatabaseClient {
   final String contactEmail = "ContactEmail";
   final String contactNotes = "ContactNotes";
 
-  final String groupTbl = '[Group]';
+  final String groupTbl = '[Group]'; // Group is reserved word in SQL
   final String groupId = 'GroupId';
   final String groupName = 'GroupName';
+  final String groupSize = 'GroupSize';
 
   final String contactGroupTbl = 'ContactGroup';
 
@@ -72,7 +73,8 @@ class DatabaseClient {
           database.execute('''
         CREATE TABLE $groupTbl (
           $groupId INTEGER PRIMARY KEY AUTOINCREMENT,
-          $groupName TEXT NOT NULL
+          $groupName TEXT NOT NULL,
+          $groupSize INTEGER DEFAULT 0
         )    
         ''');
           database.execute('''
