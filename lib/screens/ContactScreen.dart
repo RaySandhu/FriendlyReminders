@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:friendlyreminder/screens/ContactViewDetailScreen.dart';
 import 'package:provider/provider.dart';
 import 'package:friendlyreminder/widgets/ContactCard.dart';
 import 'package:friendlyreminder/viewmodels/ContactViewModel.dart';
@@ -89,9 +90,11 @@ class _ContactsScreenState extends State<ContactsScreen> {
                         icon: Icon(Icons.add),
                         onPressed: () {
                           Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) => CreateContactScreen()));
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => CreateContactScreen(),
+                            ),
+                          );
                         })
                   ],
             backgroundColor: Theme.of(context).colorScheme.inversePrimary,
@@ -205,10 +208,19 @@ class _ContactsScreenState extends State<ContactsScreen> {
                                     final contactWithGroups =
                                         contactVM.contacts[index];
                                     return ContactCard(
-                                      name: contactWithGroups.contact.name,
-                                      onTap: () => contactVM
-                                          .onContactTap(contactWithGroups),
-                                    );
+                                        name: contactWithGroups.contact.name,
+                                        onTap: () {
+                                          Navigator.push(
+                                            context,
+                                            MaterialPageRoute(
+                                              builder: (context) =>
+                                                  ContactViewDetailScreen(
+                                                contactWithGroups:
+                                                    contactWithGroups,
+                                              ),
+                                            ),
+                                          );
+                                        });
                                   },
                                 ),
                 ),

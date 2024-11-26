@@ -37,6 +37,23 @@ class MyApp extends StatelessWidget {
         //
         // This works for code too, not just values: Most code changes can be
         // tested with just a hot reload.
+        textTheme: const TextTheme(
+            //   displayLarge: TextStyle(fontSize: 32, fontWeight: FontWeight.bold),
+            //   displayMedium: TextStyle(fontSize: 28, fontWeight: FontWeight.bold),
+            //   displaySmall: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+            //   headlineLarge: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
+            //   headlineMedium: TextStyle(fontSize: 20),
+            //   headlineSmall: TextStyle(fontSize: 18),
+            //   titleLarge: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+            //   titleMedium: TextStyle(fontSize: 14),
+            //   titleSmall: TextStyle(fontSize: 12),
+            //   bodyLarge: TextStyle(fontSize: 16),
+            //   bodyMedium: TextStyle(fontSize: 14),
+            //   bodySmall: TextStyle(fontSize: 12),
+            //   labelLarge: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
+            //   labelMedium: TextStyle(fontSize: 14, fontWeight: FontWeight.w600),
+            //   labelSmall: TextStyle(fontSize: 12, fontWeight: FontWeight.w600),
+            ),
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
       ),

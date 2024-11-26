@@ -178,9 +178,4 @@ class ContactsViewModel extends ChangeNotifier {
     _selectedGroups.remove(group);
     filterContacts();
   }
-
-  void onContactTap(ContactWithGroupsModel contactWithGroups) {
-    print(
-        "Clicked ${contactWithGroups.contact} with groups: ${contactWithGroups.groups..join(', ')}");
-  }
 }
