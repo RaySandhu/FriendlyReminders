@@ -81,48 +81,50 @@ class _ContactViewDetailScreenState extends State<ContactViewDetailScreen> {
                             ),
                           ),
                         ),
-                        Column(
-                          children: [
-                            const SizedBox(height: 85),
-                            CircleAvatar(
-                              radius: 45,
-                              backgroundColor: Colors.white,
-                              child: CircleAvatar(
-                                radius: 40,
-                                backgroundColor: Theme.of(context)
-                                    .colorScheme
-                                    .secondaryContainer,
-                                child: const Icon(
-                                  Icons.person,
-                                  size: 50,
+                        Center(
+                          child: Column(
+                            children: [
+                              const SizedBox(height: 85),
+                              CircleAvatar(
+                                radius: 45,
+                                backgroundColor: Colors.white,
+                                child: CircleAvatar(
+                                  radius: 40,
+                                  backgroundColor: Theme.of(context)
+                                      .colorScheme
+                                      .secondaryContainer,
+                                  child: const Icon(
+                                    Icons.person,
+                                    size: 50,
+                                  ),
                                 ),
                               ),
-                            ),
-                            if (_contactWithGroups.contact.name.isNotEmpty)
-                              Column(
-                                children: [
-                                  const SizedBox(height: 5),
-                                  Text(_contactWithGroups.contact.name,
-                                      style: Theme.of(context)
-                                          .textTheme
-                                          .headlineLarge),
-                                ],
-                              ),
-                            if (_contactWithGroups.contact.phone.isNotEmpty)
-                              ContactInfoListTile(
-                                prefixIcon: Icons.phone,
-                                title: "PHONE",
-                                content: _contactWithGroups.contact.phone,
-                                onTap: () => (),
-                              ),
-                            if (_contactWithGroups.contact.email.isNotEmpty)
-                              ContactInfoListTile(
-                                prefixIcon: Icons.email,
-                                title: "EMAIL",
-                                content: _contactWithGroups.contact.email,
-                                onTap: () => (),
-                              ),
-                          ],
+                              if (_contactWithGroups.contact.name.isNotEmpty)
+                                Column(
+                                  children: [
+                                    const SizedBox(height: 5),
+                                    Text(_contactWithGroups.contact.name,
+                                        style: Theme.of(context)
+                                            .textTheme
+                                            .headlineLarge),
+                                  ],
+                                ),
+                              if (_contactWithGroups.contact.phone.isNotEmpty)
+                                ContactInfoListTile(
+                                  prefixIcon: Icons.phone,
+                                  title: "PHONE",
+                                  content: _contactWithGroups.contact.phone,
+                                  onTap: () => (),
+                                ),
+                              if (_contactWithGroups.contact.email.isNotEmpty)
+                                ContactInfoListTile(
+                                  prefixIcon: Icons.email,
+                                  title: "EMAIL",
+                                  content: _contactWithGroups.contact.email,
+                                  onTap: () => (),
+                                ),
+                            ],
+                          ),
                         ),
                       ],
                     ),
