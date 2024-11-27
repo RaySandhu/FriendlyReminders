@@ -5,9 +5,9 @@ import 'package:friendlyreminder/models/ContactWithGroupsModel.dart';
 import 'package:friendlyreminder/widgets/ContactInfoListTile.dart';
 
 class ContactViewDetailScreen extends StatefulWidget {
-  ContactWithGroupsModel contactWithGroups;
+  final ContactWithGroupsModel contactWithGroups;
 
-  ContactViewDetailScreen({Key? key, required this.contactWithGroups})
+  const ContactViewDetailScreen({Key? key, required this.contactWithGroups})
       : super(key: key);
 
   @override
@@ -16,18 +16,20 @@ class ContactViewDetailScreen extends StatefulWidget {
 }
 
 class _ContactViewDetailScreenState extends State<ContactViewDetailScreen> {
+  late ContactWithGroupsModel _contactWithGroups;
   late TextEditingController _noteController;
   bool _hasNotesChanged = false;
 
   @override
   void initState() {
     super.initState();
+    _contactWithGroups = widget.contactWithGroups;
     _noteController =
-        TextEditingController(text: widget.contactWithGroups.contact.notes);
+        TextEditingController(text: _contactWithGroups.contact.notes);
     _noteController.addListener(() {
       setState(() {
         _hasNotesChanged =
-            _noteController.text != widget.contactWithGroups.contact.notes;
+            _noteController.text != _contactWithGroups.contact.notes;
       });
     });
   }
@@ -96,31 +98,28 @@ class _ContactViewDetailScreenState extends State<ContactViewDetailScreen> {
                                 ),
                               ),
                             ),
-                            if (widget
-                                .contactWithGroups.contact.name.isNotEmpty)
+                            if (_contactWithGroups.contact.name.isNotEmpty)
                               Column(
                                 children: [
                                   const SizedBox(height: 5),
-                                  Text(widget.contactWithGroups.contact.name,
+                                  Text(_contactWithGroups.contact.name,
                                       style: Theme.of(context)
                                           .textTheme
                                           .headlineLarge),
                                 ],
                               ),
-                            if (widget
-                                .contactWithGroups.contact.phone.isNotEmpty)
+                            if (_contactWithGroups.contact.phone.isNotEmpty)
                               ContactInfoListTile(
                                 prefixIcon: Icons.phone,
                                 title: "PHONE",
-                                content: widget.contactWithGroups.contact.phone,
+                                content: _contactWithGroups.contact.phone,
                                 onTap: () => (),
                               ),
-                            if (widget
-                                .contactWithGroups.contact.email.isNotEmpty)
+                            if (_contactWithGroups.contact.email.isNotEmpty)
                               ContactInfoListTile(
                                 prefixIcon: Icons.email,
                                 title: "EMAIL",
-                                content: widget.contactWithGroups.contact.email,
+                                content: _contactWithGroups.contact.email,
                                 onTap: () => (),
                               ),
                           ],
@@ -128,7 +127,7 @@ class _ContactViewDetailScreenState extends State<ContactViewDetailScreen> {
                       ],
                     ),
                   ),
-                  if (widget.contactWithGroups.groups.isNotEmpty)
+                  if (_contactWithGroups.groups.isNotEmpty)
                     Column(
                       children: [
                         const SizedBox(height: 3),
@@ -148,8 +147,8 @@ class _ContactViewDetailScreenState extends State<ContactViewDetailScreen> {
                                 Wrap(
                                   spacing: 8.0, // gap between adjacent chips
                                   runSpacing: 4.0, // gap between lines
-                                  children: widget.contactWithGroups.groups
-                                      .map((group) {
+                                  children:
+                                      _contactWithGroups.groups.map((group) {
                                     return ActionChip(
                                       label: Text(group.name),
                                       onPressed: () {
@@ -191,8 +190,7 @@ class _ContactViewDetailScreenState extends State<ContactViewDetailScreen> {
                             ),
                             onChanged: (text) {
                               setState(() {
-                                if (widget.contactWithGroups.contact.notes !=
-                                    text) {
+                                if (_contactWithGroups.contact.notes != text) {
                                   _hasNotesChanged = true;
                                 }
                               });
@@ -206,11 +204,17 @@ class _ContactViewDetailScreenState extends State<ContactViewDetailScreen> {
                                 child: FilledButton(
                                   onPressed: _hasNotesChanged
                                       ? () {
-                                          contactVM.saveNotes(widget
-                                              .contactWithGroups.contact
-                                              .update(
-                                                  notes: _noteController.text));
                                           setState(() {
+                                            _contactWithGroups =
+                                                _contactWithGroups.update(
+                                                    contact: _contactWithGroups
+                                                        .contact
+                                                        .update(
+                                                            notes:
+                                                                _noteController
+                                                                    .text));
+                                            contactVM.saveNotes(
+                                                _contactWithGroups.contact);
                                             _hasNotesChanged = false;
                                           });
                                         }
@@ -228,8 +232,8 @@ class _ContactViewDetailScreenState extends State<ContactViewDetailScreen> {
                                 child: OutlinedButton(
                                   onPressed: _hasNotesChanged
                                       ? () {
-                                          _noteController.text = widget
-                                              .contactWithGroups.contact.notes;
+                                          _noteController.text =
+                                              _contactWithGroups.contact.notes;
                                         }
                                       : null,
                                   style: OutlinedButton.styleFrom(
