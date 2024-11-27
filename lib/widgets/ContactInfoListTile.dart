@@ -3,12 +3,14 @@ import 'package:flutter/material.dart';
 class ContactInfoListTile extends StatelessWidget {
   final IconData prefixIcon;
   final String title;
+  final String content;
   final void Function()? onTap;
 
   const ContactInfoListTile({
     super.key,
     required this.prefixIcon,
     required this.title,
+    required this.content,
     this.onTap,
   });
 
@@ -23,11 +25,11 @@ class ContactInfoListTile extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            'EMAIL',
+            title,
             style: Theme.of(context).textTheme.titleMedium,
           ),
           Text(
-            title,
+            content,
             overflow: TextOverflow.ellipsis,
             maxLines: 1,
           ),
