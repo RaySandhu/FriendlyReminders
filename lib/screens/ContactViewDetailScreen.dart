@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 import 'package:friendlyreminder/viewmodels/ContactViewModel.dart';
 import 'package:friendlyreminder/models/ContactWithGroupsModel.dart';
 import 'package:friendlyreminder/widgets/ContactInfoListTile.dart';
+import 'package:friendlyreminder/widgets/ContactReminderCard.dart';
 
 class ContactViewDetailScreen extends StatefulWidget {
   final ContactWithGroupsModel contactWithGroups;
@@ -102,6 +103,17 @@ class _ContactViewDetailScreenState extends State<ContactViewDetailScreen> {
                                     size: 50,
                                   ),
                                 ),
+                              ),
+                              ContactReminderCard(
+                                onAccept: () {
+                                  print('Reminder accepted!');
+                                },
+                                onDismiss: () {
+                                  print('Reminder dismissed!');
+                                },
+                                onReject: () {
+                                  print('Reminder rejected!');
+                                },
                               ),
                               if (_contactWithGroups.contact.name.isNotEmpty)
                                 Column(
