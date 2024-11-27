@@ -62,6 +62,21 @@ class ContactsViewModel extends ChangeNotifier {
     return uniqueGroups.toList()..sort();
   }
 
+  Future<void> saveNotes(ContactModel contact) async {
+    _isLoading = true;
+    _error = null;
+    notifyListeners();
+    try {
+      await _contactService.updateContact(contact.update(notes: contact.notes));
+      await loadContacts(); // Refresh the contacts list after creating a new contact
+    } catch (e) {
+      _error = "Failed to save notes: ${e.toString()}";
+    } finally {
+      _isLoading = false;
+      notifyListeners();
+    }
+  }
+
   Future<void> createContact(
       ContactModel contact, List<GroupModel> groups) async {
     _isLoading = true;

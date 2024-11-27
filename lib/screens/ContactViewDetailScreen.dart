@@ -1,17 +1,46 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:friendlyreminder/viewmodels/ContactViewModel.dart';
 import 'package:friendlyreminder/models/ContactWithGroupsModel.dart';
 import 'package:friendlyreminder/widgets/ContactInfoListTile.dart';
 
-class ContactViewDetailScreen extends StatelessWidget {
-  final ContactWithGroupsModel contactWithGroups;
+class ContactViewDetailScreen extends StatefulWidget {
+  ContactWithGroupsModel contactWithGroups;
 
-  const ContactViewDetailScreen({Key? key, required this.contactWithGroups})
+  ContactViewDetailScreen({Key? key, required this.contactWithGroups})
       : super(key: key);
 
   @override
+  State<ContactViewDetailScreen> createState() =>
+      _ContactViewDetailScreenState();
+}
+
+class _ContactViewDetailScreenState extends State<ContactViewDetailScreen> {
+  late TextEditingController _noteController;
+  bool _hasNotesChanged = false;
+
+  @override
+  void initState() {
+    super.initState();
+    _noteController =
+        TextEditingController(text: widget.contactWithGroups.contact.notes);
+    _noteController.addListener(() {
+      setState(() {
+        _hasNotesChanged =
+            _noteController.text != widget.contactWithGroups.contact.notes;
+      });
+    });
+  }
+
+  @override
+  void dispose() {
+    _noteController.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
-    final TextEditingController _noteController =
-        TextEditingController(text: contactWithGroups.contact.notes);
+    final contactVM = Provider.of<ContactsViewModel>(context, listen: false);
 
     return Scaffold(
       appBar: AppBar(actions: [
@@ -67,28 +96,31 @@ class ContactViewDetailScreen extends StatelessWidget {
                                 ),
                               ),
                             ),
-                            if (contactWithGroups.contact.name.isNotEmpty)
+                            if (widget
+                                .contactWithGroups.contact.name.isNotEmpty)
                               Column(
                                 children: [
                                   const SizedBox(height: 5),
-                                  Text(contactWithGroups.contact.name,
+                                  Text(widget.contactWithGroups.contact.name,
                                       style: Theme.of(context)
                                           .textTheme
                                           .headlineLarge),
                                 ],
                               ),
-                            if (contactWithGroups.contact.phone.isNotEmpty)
+                            if (widget
+                                .contactWithGroups.contact.phone.isNotEmpty)
                               ContactInfoListTile(
                                 prefixIcon: Icons.phone,
                                 title: "PHONE",
-                                content: contactWithGroups.contact.phone,
+                                content: widget.contactWithGroups.contact.phone,
                                 onTap: () => (),
                               ),
-                            if (contactWithGroups.contact.email.isNotEmpty)
+                            if (widget
+                                .contactWithGroups.contact.email.isNotEmpty)
                               ContactInfoListTile(
                                 prefixIcon: Icons.email,
                                 title: "EMAIL",
-                                content: contactWithGroups.contact.email,
+                                content: widget.contactWithGroups.contact.email,
                                 onTap: () => (),
                               ),
                           ],
@@ -96,7 +128,7 @@ class ContactViewDetailScreen extends StatelessWidget {
                       ],
                     ),
                   ),
-                  if (contactWithGroups.groups.isNotEmpty)
+                  if (widget.contactWithGroups.groups.isNotEmpty)
                     Column(
                       children: [
                         const SizedBox(height: 3),
@@ -116,8 +148,8 @@ class ContactViewDetailScreen extends StatelessWidget {
                                 Wrap(
                                   spacing: 8.0, // gap between adjacent chips
                                   runSpacing: 4.0, // gap between lines
-                                  children:
-                                      contactWithGroups.groups.map((group) {
+                                  children: widget.contactWithGroups.groups
+                                      .map((group) {
                                     return ActionChip(
                                       label: Text(group.name),
                                       onPressed: () {
@@ -147,17 +179,74 @@ class ContactViewDetailScreen extends StatelessWidget {
                           TextField(
                             controller: _noteController,
                             maxLines: null, // Allows for multi-line input
+                            textInputAction: TextInputAction.done,
                             decoration: InputDecoration(
-                              border: OutlineInputBorder(),
-                              hintText: 'Enter your note...',
+                              border: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(15),
+                              ),
+                              contentPadding: EdgeInsets.all(10),
+                              hintText: 'Create a note...',
                               filled: true,
                               fillColor: Colors.white,
                             ),
                             onChanged: (text) {
-                              // Handle changes if needed
-                              print('Current note: $text');
+                              setState(() {
+                                if (widget.contactWithGroups.contact.notes !=
+                                    text) {
+                                  _hasNotesChanged = true;
+                                }
+                              });
                             },
                           ),
+                          const SizedBox(height: 8),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            children: [
+                              Expanded(
+                                child: FilledButton(
+                                  onPressed: _hasNotesChanged
+                                      ? () {
+                                          contactVM.saveNotes(widget
+                                              .contactWithGroups.contact
+                                              .update(
+                                                  notes: _noteController.text));
+                                          setState(() {
+                                            _hasNotesChanged = false;
+                                          });
+                                        }
+                                      : null,
+                                  style: FilledButton.styleFrom(
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(10),
+                                    ),
+                                  ),
+                                  child: const Text("Save"),
+                                ),
+                              ),
+                              const SizedBox(width: 10),
+                              Expanded(
+                                child: OutlinedButton(
+                                  onPressed: _hasNotesChanged
+                                      ? () {
+                                          _noteController.text = widget
+                                              .contactWithGroups.contact.notes;
+                                        }
+                                      : null,
+                                  style: OutlinedButton.styleFrom(
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(10),
+                                    ),
+                                    side: BorderSide(
+                                        color: _hasNotesChanged
+                                            ? Colors.red
+                                            : Colors.grey),
+                                    foregroundColor: Colors.red,
+                                  ),
+                                  child: const Text("Cancel"),
+                                ),
+                              ),
+                            ],
+                          )
                         ],
                       ),
                     ),

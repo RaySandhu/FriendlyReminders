@@ -126,9 +126,7 @@ class _ContactsScreenState extends State<ContactsScreen> {
                           minimumSize: Size(0, 32),
                         ),
                       ),
-                      SizedBox(
-                        width: 5,
-                      ),
+                      const SizedBox(width: 5),
                       OutlinedButton(
                         onPressed: () {
                           contactVM.clearFilters();
