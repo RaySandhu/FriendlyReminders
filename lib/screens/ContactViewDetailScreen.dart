@@ -104,17 +104,7 @@ class _ContactViewDetailScreenState extends State<ContactViewDetailScreen> {
                                   ),
                                 ),
                               ),
-                              ContactReminderCard(
-                                onAccept: () {
-                                  print('Reminder accepted!');
-                                },
-                                onDismiss: () {
-                                  print('Reminder dismissed!');
-                                },
-                                onReject: () {
-                                  print('Reminder rejected!');
-                                },
-                              ),
+                              
                               if (_contactWithGroups.contact.name.isNotEmpty)
                                 Column(
                                   children: [
@@ -125,6 +115,17 @@ class _ContactViewDetailScreenState extends State<ContactViewDetailScreen> {
                                         style: Theme.of(context)
                                             .textTheme
                                             .headlineLarge),
+                                    ContactReminderCard(
+                                      onAccept: () {
+                                        print('Reminder accepted!');
+                                      },
+                                      onDismiss: () {
+                                        print('Reminder dismissed!');
+                                      },
+                                      onReject: () {
+                                        print('Reminder rejected!');
+                                      },
+                                    ),
                                   ],
                                 ),
                               if (_contactWithGroups.contact.phone.isNotEmpty)
