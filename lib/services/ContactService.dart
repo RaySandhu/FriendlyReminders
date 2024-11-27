@@ -8,7 +8,7 @@ class ContactService {
   Future<List<ContactModel>> getAllContacts() async {
     final db = await _dbClient.database;
     final List<Map<String, dynamic>> maps = await db.query(_dbClient.contactTbl,
-        orderBy: '${_dbClient.contactName} ASC');
+        orderBy: '${_dbClient.contactName} COLLATE NOCASE');
     return List.generate(maps.length, (i) {
       return ContactModel.fromMap(maps[i]);
     });

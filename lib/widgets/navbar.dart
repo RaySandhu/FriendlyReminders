@@ -5,6 +5,7 @@ import 'package:friendlyreminder/screens/DatabaseScreen.dart';
 import 'package:friendlyreminder/screens/GroupScreen.dart';
 import 'package:friendlyreminder/screens/ReminderScreen.dart';
 import 'package:friendlyreminder/screens/ColorPaletteScreen.dart';
+import 'package:friendlyreminder/screens/TextThemeScreen.dart';
 
 class NavigationBarApp extends StatefulWidget {
   const NavigationBarApp({super.key});
@@ -40,10 +41,10 @@ class _NavigationBarAppState extends State<NavigationBarApp> {
               icon: Icon(Icons.group),
               label: 'Groups',
             ),
-            NavigationDestination(
-              icon: Icon(Icons.bug_report),
-              label: 'Testing',
-            ),
+            // NavigationDestination(
+            //   icon: Icon(Icons.bug_report),
+            //   label: 'Testing',
+            // ),
             NavigationDestination(
               icon: Icon(Icons.storage),
               label: 'Database',
@@ -52,15 +53,20 @@ class _NavigationBarAppState extends State<NavigationBarApp> {
               icon: Icon(Icons.palette),
               label: 'Color',
             ),
+            NavigationDestination(
+              icon: Icon(Icons.text_fields),
+              label: 'Text',
+            ),
           ],
         ),
         body: [
           ContactsScreen(),
           RemindersScreen(),
           GroupScreen(),
-          CounterScreen(title: 'Flutter Demo Home Page'),
+          // CounterScreen(title: 'Flutter Demo Home Page'),
           DatabaseScreen(),
-          ColorPaletteScreen()
+          ColorPaletteScreen(),
+          TextThemePage(),
         ][currentPageIndex]);
   }
 }

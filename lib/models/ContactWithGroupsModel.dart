@@ -10,6 +10,13 @@ class ContactWithGroupsModel {
     required this.groups,
   });
 
+  update({ContactModel? contact, List<GroupModel>? groups}) {
+    return ContactWithGroupsModel(
+      contact: contact ?? this.contact,
+      groups: groups ?? this.groups,
+    );
+  }
+
   @override
   String toString() {
     return 'ContactWithGroupsModel{contact: $contact, groups: $groups}';

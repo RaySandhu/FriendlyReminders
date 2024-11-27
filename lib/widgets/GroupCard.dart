@@ -3,14 +3,15 @@ import 'package:flutter/widgets.dart';
 import 'package:friendlyreminder/utilities/Utils.dart';
 
 class GroupCard extends StatelessWidget {
+  final String name;
+  final int numMembers;
+  final VoidCallback onTap;
+
   const GroupCard(
       {super.key,
       required this.name,
       required this.numMembers,
       required this.onTap});
-  final String name;
-  final int numMembers;
-  final VoidCallback onTap;
 
   @override
   Widget build(BuildContext context) {
