@@ -18,6 +18,7 @@ class ContactViewDetailScreen extends StatefulWidget {
 class _ContactViewDetailScreenState extends State<ContactViewDetailScreen> {
   late ContactWithGroupsModel _contactWithGroups;
   late TextEditingController _noteController;
+  late bool isEmpty;
   bool _hasNotesChanged = false;
 
   @override
@@ -26,8 +27,11 @@ class _ContactViewDetailScreenState extends State<ContactViewDetailScreen> {
     _contactWithGroups = widget.contactWithGroups;
     _noteController =
         TextEditingController(text: _contactWithGroups.contact.notes);
+    isEmpty = _noteController.text.isEmpty;
+
     _noteController.addListener(() {
       setState(() {
+        isEmpty = _noteController.text.isEmpty;
         _hasNotesChanged =
             _noteController.text != _contactWithGroups.contact.notes;
       });
@@ -104,6 +108,8 @@ class _ContactViewDetailScreenState extends State<ContactViewDetailScreen> {
                                   children: [
                                     const SizedBox(height: 5),
                                     Text(_contactWithGroups.contact.name,
+                                        overflow: TextOverflow.ellipsis,
+                                        maxLines: 1,
                                         style: Theme.of(context)
                                             .textTheme
                                             .headlineLarge),
@@ -176,27 +182,50 @@ class _ContactViewDetailScreenState extends State<ContactViewDetailScreen> {
                             "NOTES",
                             style: Theme.of(context).textTheme.titleMedium,
                           ),
-                          // Text(contactWithGroups.contact.notes),
-                          TextField(
-                            controller: _noteController,
-                            maxLines: null, // Allows for multi-line input
-                            textInputAction: TextInputAction.done,
-                            decoration: InputDecoration(
-                              border: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(15),
+                          Stack(
+                            children: [
+                              TextField(
+                                controller: _noteController,
+                                maxLines: null, // Allows for multi-line input
+                                textInputAction: TextInputAction.done,
+                                decoration: InputDecoration(
+                                  suffixIcon: const IconButton(
+                                    icon: Icon(Icons.close,
+                                        color: Colors.transparent),
+                                    onPressed: null,
+                                  ),
+                                  border: OutlineInputBorder(
+                                    borderRadius: BorderRadius.circular(15),
+                                  ),
+                                  contentPadding: EdgeInsets.all(10),
+                                  hintText: 'Create a note...',
+                                  filled: true,
+                                  fillColor: Colors.white,
+                                ),
+                                onChanged: (text) {
+                                  setState(() {
+                                    if (_contactWithGroups.contact.notes !=
+                                        text) {
+                                      _hasNotesChanged = true;
+                                    }
+                                  });
+                                },
                               ),
-                              contentPadding: EdgeInsets.all(10),
-                              hintText: 'Create a note...',
-                              filled: true,
-                              fillColor: Colors.white,
-                            ),
-                            onChanged: (text) {
-                              setState(() {
-                                if (_contactWithGroups.contact.notes != text) {
-                                  _hasNotesChanged = true;
-                                }
-                              });
-                            },
+                              Row(
+                                children: [
+                                  const Spacer(),
+                                  IconButton(
+                                    icon: Icon(Icons.close,
+                                        color: !isEmpty
+                                            ? Colors.grey
+                                            : Colors.transparent),
+                                    onPressed: !isEmpty
+                                        ? () => _noteController.clear()
+                                        : null,
+                                  ),
+                                ],
+                              ),
+                            ],
                           ),
                           const SizedBox(height: 8),
                           Row(

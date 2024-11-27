@@ -55,38 +55,56 @@ class _StyledTextFieldState extends State<StyledTextField> {
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.all(8.0),
-      child: TextField(
-        controller: widget.controller,
-        maxLines: widget.maxLines,
-        focusNode: widget.focusNode,
-        keyboardType: widget.keyboardType,
-        textCapitalization: widget.textCapitalization,
-        textInputAction: widget.nextFocusNode != null
-            ? TextInputAction.next
-            : TextInputAction.done,
-        inputFormatters: widget.inputFormatters,
-        onSubmitted: (value) {
-          if (widget.nextFocusNode != null) {
-            FocusScope.of(context).requestFocus(widget.nextFocusNode);
-          }
-        },
-        onChanged: widget.onChanged,
-        decoration: InputDecoration(
-          prefixIcon: Icon(widget.prefixIcon),
-          suffixIcon: isEmpty
-              ? null
-              : IconButton(
-                  icon: Icon(Icons.close),
-                  onPressed: () {
-                    widget.controller.clear();
-                  },
-                ),
-          hintText: widget.hintText,
-          border: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(15),
+      child: Stack(
+        children: [
+          TextField(
+            controller: widget.controller,
+            maxLines: widget.maxLines,
+            focusNode: widget.focusNode,
+            keyboardType: widget.keyboardType,
+            textCapitalization: widget.textCapitalization,
+            textInputAction: widget.nextFocusNode != null
+                ? TextInputAction.next
+                : TextInputAction.done,
+            inputFormatters: widget.inputFormatters,
+            onSubmitted: (value) {
+              if (widget.nextFocusNode != null) {
+                FocusScope.of(context).requestFocus(widget.nextFocusNode);
+              }
+            },
+            onChanged: widget.onChanged,
+            decoration: InputDecoration(
+              prefixIcon: Icon(widget.prefixIcon, color: Colors.transparent),
+              suffixIcon: isEmpty
+                  ? null
+                  : const IconButton(
+                      icon: Icon(Icons.close, color: Colors.transparent),
+                      onPressed: null,
+                    ),
+              hintText: widget.hintText,
+              border: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(15),
+              ),
+              contentPadding: EdgeInsets.all(10),
+            ),
           ),
-          contentPadding: EdgeInsets.all(10),
-        ),
+          Row(
+            children: [
+              Padding(
+                padding: const EdgeInsets.fromLTRB(12, 0, 0, 0),
+                child: Icon(widget.prefixIcon),
+              ),
+              const Spacer(),
+              IconButton(
+                icon: Icon(
+                  Icons.close,
+                  color: !isEmpty ? Colors.grey : Colors.transparent,
+                ),
+                onPressed: !isEmpty ? () => widget.controller.clear() : null,
+              ),
+            ],
+          ),
+        ],
       ),
     );
   }
