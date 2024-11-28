@@ -2,6 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
 class AIPromptPopup extends StatelessWidget{
+final String prompt;
+
+  const AIPromptPopup({
+    super.key,
+    required this.prompt,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -11,11 +17,11 @@ class AIPromptPopup extends StatelessWidget{
         IconButton(
           icon: const Icon(Icons.copy),
           onPressed: () {
-            Clipboard.setData(const ClipboardData(text: 'AI Prompt goes here'));
+            Clipboard.setData(ClipboardData(text: prompt));
           },
         ),
       ],),
-      content: const Text('AI Prompt goes here'),
+      content: Text(prompt),
       actions: <Widget>[
         TextButton(
           onPressed: () {

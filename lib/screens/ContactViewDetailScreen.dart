@@ -209,7 +209,10 @@ class _ContactViewDetailScreenState extends State<ContactViewDetailScreen> {
                                 text: 'Generate Icebreaker', 
                                 onPressed: () {
                                   print("Generated Icebreaker");
-                                  showDialog(context: context, builder: (context) => AIPromptPopup());
+                                  showDialog(
+                                    context: context, 
+                                    builder: (context) => AIPromptPopup(prompt: "AI Prompt goes here"),
+                                    );
                                 }, 
                                 buttonColour: Colors.blue)
                             ]
