@@ -4,7 +4,7 @@ import 'package:friendlyreminder/screens/ContactViewDetailScreen.dart';
 import 'package:provider/provider.dart';
 import 'package:friendlyreminder/widgets/ContactCard.dart';
 import 'package:friendlyreminder/viewmodels/ContactViewModel.dart';
-import 'package:friendlyreminder/screens/CreateContactScreen.dart';
+import 'package:friendlyreminder/screens/ContactEditDetailScreen.dart';
 
 class ContactsScreen extends StatefulWidget {
   const ContactsScreen({Key? key}) : super(key: key);
@@ -92,7 +92,7 @@ class _ContactsScreenState extends State<ContactsScreen> {
                           Navigator.push(
                             context,
                             MaterialPageRoute(
-                              builder: (context) => CreateContactScreen(),
+                              builder: (context) => ContactEditDetailScreen(),
                             ),
                           );
                         })
