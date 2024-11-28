@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 import 'package:friendlyreminder/viewmodels/ContactViewModel.dart';
 import 'package:friendlyreminder/models/ContactWithGroupsModel.dart';
 import 'package:friendlyreminder/widgets/ContactInfoListTile.dart';
+import 'package:friendlyreminder/widgets/ContactReminderCard.dart';
 
 class ContactViewDetailScreen extends StatefulWidget {
   final ContactWithGroupsModel contactWithGroups;
@@ -103,6 +104,7 @@ class _ContactViewDetailScreenState extends State<ContactViewDetailScreen> {
                                   ),
                                 ),
                               ),
+                              
                               if (_contactWithGroups.contact.name.isNotEmpty)
                                 Column(
                                   children: [
@@ -130,6 +132,17 @@ class _ContactViewDetailScreenState extends State<ContactViewDetailScreen> {
                                       },
                                     ),
 >>>>>>> Stashed changes
+                                    ContactReminderCard(
+                                      onAccept: () {
+                                        print('Reminder accepted!');
+                                      },
+                                      onDismiss: () {
+                                        print('Reminder dismissed!');
+                                      },
+                                      onReject: () {
+                                        print('Reminder rejected!');
+                                      },
+                                    ),
                                   ],
                                 ),
                               if (_contactWithGroups.contact.phone.isNotEmpty)
