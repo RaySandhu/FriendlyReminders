@@ -16,8 +16,8 @@ class AIPromptService {
   Future<AIPromptModel> getPrompt(int promptId) async {
     final db = await _dbClient.database;
     final List<Map<String, dynamic>> maps = await db.query(
-      _dbClient.aiPromptTbl,
-      where: '${_dbClient.aiPromptId} = ?',
+      _dbClient.aiPromptsTbl,
+      where: '${_dbClient.promptId} = ?',
       whereArgs: [promptId],
     );
     if (maps.isNotEmpty) {

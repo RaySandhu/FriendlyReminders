@@ -23,6 +23,6 @@ class AIPromptModel{
 
   @override
   String toString() {
-    return 'AIPromptModel{PromptId: $promptId, PromptText: $promptText}';
+    return '{$promptText}';
   }
 }

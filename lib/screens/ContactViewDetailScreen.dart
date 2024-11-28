@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:friendlyreminder/models/AIPromptModel.dart';
+import 'package:friendlyreminder/widgets/IconButtonWithTextRow.dart';
 import 'package:provider/provider.dart';
 import 'package:friendlyreminder/viewmodels/ContactViewModel.dart';
 import 'package:friendlyreminder/models/ContactWithGroupsModel.dart';
 import 'package:friendlyreminder/widgets/ContactInfoListTile.dart';
 import 'package:friendlyreminder/widgets/ContactReminderCard.dart';
+import 'package:friendlyreminder/widgets/AIPromptPopup.dart';
 
 class ContactViewDetailScreen extends StatefulWidget {
   final ContactWithGroupsModel contactWithGroups;
@@ -115,8 +118,6 @@ class _ContactViewDetailScreenState extends State<ContactViewDetailScreen> {
                                         style: Theme.of(context)
                                             .textTheme
                                             .headlineLarge),
-<<<<<<< Updated upstream
-=======
                                     ContactReminderCard(
                                       onAccept: () {
                                         // Do stuff in here
@@ -128,18 +129,6 @@ class _ContactViewDetailScreenState extends State<ContactViewDetailScreen> {
                                       },
                                       onReject: () {
                                         // Do stuff in here
-                                        print('Reminder rejected!');
-                                      },
-                                    ),
->>>>>>> Stashed changes
-                                    ContactReminderCard(
-                                      onAccept: () {
-                                        print('Reminder accepted!');
-                                      },
-                                      onDismiss: () {
-                                        print('Reminder dismissed!');
-                                      },
-                                      onReject: () {
                                         print('Reminder rejected!');
                                       },
                                     ),
@@ -208,9 +197,22 @@ class _ContactViewDetailScreenState extends State<ContactViewDetailScreen> {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Text(
-                            "NOTES",
-                            style: Theme.of(context).textTheme.titleMedium,
+                          Row(
+                            children: [
+                              Text(
+                                "NOTES",
+                                style: Theme.of(context).textTheme.titleMedium,
+                              ),
+                              const Spacer(),
+                              IconButtonWithTextRow(
+                                icon: const Icon(Icons.factory), 
+                                text: 'Generate Icebreaker', 
+                                onPressed: () {
+                                  print("Generated Icebreaker");
+                                  showDialog(context: context, builder: (context) => AIPromptPopup());
+                                }, 
+                                buttonColour: Colors.blue)
+                            ]
                           ),
                           Stack(
                             children: [
