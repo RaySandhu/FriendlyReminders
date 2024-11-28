@@ -33,9 +33,9 @@ class _CreateContactScreenState extends State<CreateContactScreen> {
   final List<ReminderModel> _reminders = [];
 
   void _handleReminderSet(DateTime? date, String? frequency) {
-    _reminders.add(ReminderModel(date: date!, freq: frequency!));
-    print("Reminder Set: Date=$date, Frequency=$frequency");
-    print("Reminders list: $_reminders");
+    setState(() {
+      _reminders.add(ReminderModel(date: date!, freq: frequency!));
+    });
   }
 
   @override
@@ -51,21 +51,28 @@ class _CreateContactScreenState extends State<CreateContactScreen> {
           Padding(
             padding: const EdgeInsets.all(8.0),
             child: FilledButton(
-              onPressed: () {
-                if (_reminders.isNotEmpty) {
-                  // TODO: call to create reminders in the remindersTable and retrieve Ids; ContactModel will have reminders which is a comma separated string of reminderIds
-                }
+              onPressed: () async {
                 if (_nameController.text.isNotEmpty) {
                   ContactModel newContact = ContactModel(
                       name: _nameController.text,
                       phone: _phoneController.text,
                       email: _emailController.text,
                       notes: _noteController.text);
-                  contactVM.createContact(newContact, _selectedGroups);
+                  // Call the createContact function
+                  final int contactId = await Provider.of<ContactsViewModel>(
+                          context,
+                          listen: false)
+                      .createContact(newContact, _selectedGroups);
+
+                  if (_reminders.isNotEmpty && contactId != -1) {
+                    // TODO: call to create reminders in the remindersTable and retrieve Ids
+                  }
                   _nameController.clear();
                   _phoneController.clear();
                   _emailController.clear();
                   _noteController.clear();
+                  _reminders.clear();
+                  _reminderController.clear();
                   Navigator.pop(context);
                 }
               },
@@ -150,25 +157,80 @@ class _CreateContactScreenState extends State<CreateContactScreen> {
                     ),
                   ),
                 ),
+              StyledTextField(
+                  controller: _noteController,
+                  hintText: "Notes",
+                  prefixIcon: Icons.description,
+                  maxLines: null),
               GestureDetector(
                 onTap: () => showReminderModal(
                   context: context,
                   reminderController: _reminderController,
                   onReminderSet: _handleReminderSet,
                 ),
-                child: AbsorbPointer(
-                  child: StyledTextField(
-                    controller: _reminderController,
-                    hintText: "Reminders",
-                    prefixIcon: Icons.schedule,
+                child: Container(
+                  padding: const EdgeInsets.only(
+                      left: 16.0), // Add padding to the left
+                  margin: const EdgeInsets.all(10),
+                  decoration: const BoxDecoration(
+                    border: Border(
+                      bottom: BorderSide(
+                        color: Colors.grey, // Grey underline
+                        width: 1.0, // Thickness of the underline
+                      ),
+                    ),
+                  ),
+                  child: Row(
+                    children: [
+                      const Row(
+                        children: [
+                          Icon(Icons.schedule, color: Colors.grey),
+                          SizedBox(width: 8),
+                          Text(
+                            "Reminders",
+                            style: TextStyle(
+                                fontSize: 18, fontWeight: FontWeight.bold),
+                          ),
+                        ],
+                      ),
+                      IconButton(
+                        icon: const Icon(Icons.add_circle, color: Colors.blue),
+                        onPressed: () => showReminderModal(
+                          context: context,
+                          reminderController: _reminderController,
+                          onReminderSet: _handleReminderSet,
+                        ),
+                      ),
+                    ],
                   ),
                 ),
               ),
-              StyledTextField(
-                  controller: _noteController,
-                  hintText: "Notes",
-                  prefixIcon: Icons.description,
-                  maxLines: null),
+              if (_reminders.isNotEmpty)
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: SizedBox(
+                    width: double.infinity,
+                    child: Wrap(
+                      spacing: 8.0, // Gap between chips
+                      runSpacing: 4.0, // Gap between rows
+                      children: _reminders.map((reminder) {
+                        return Chip(
+                          label: Text(
+                            "${reminder.freq == "Once" ? "Single" : reminder.freq} reminder ${reminder.freq == "Once" ? "on" : "starting"} ${reminder.date.toString().split(" ")[0]}",
+                            overflow:
+                                TextOverflow.ellipsis, // Handle long labels
+                          ),
+                          deleteIcon: const Icon(Icons.close),
+                          onDeleted: () async {
+                            setState(() {
+                              _reminders.remove(reminder);
+                            });
+                          },
+                        );
+                      }).toList(),
+                    ),
+                  ),
+                ),
             ],
           ),
         ),
