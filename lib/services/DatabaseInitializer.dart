@@ -292,6 +292,27 @@ class DatabaseInitializer {
       dbClient.groupId: 5, // Writing
     });
 
+// AI Prompts
+    batch.insert(dbClient.aiPromptsTbl, {
+      dbClient.promptId: 1,
+      dbClient.promptText: 'How are you doing today?',
+    });
+
+    batch.insert(dbClient.aiPromptsTbl, {
+      dbClient.promptId: 2,
+      dbClient.promptText: 'What are you up to this weekend?',
+    });
+
+    batch.insert(dbClient.aiPromptsTbl, {
+      dbClient.promptId: 3,
+      dbClient.promptText: 'What are you reading these days?',
+    });
+
+    batch.insert(dbClient.aiPromptsTbl, {
+      dbClient.promptId: 4,
+      dbClient.promptText: 'What are you watching on TV?',
+    });
+
     // Commit the batch
     await batch.commit(noResult: true);
   }

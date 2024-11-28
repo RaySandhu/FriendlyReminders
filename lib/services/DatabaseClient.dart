@@ -26,6 +26,10 @@ class DatabaseClient {
 
   final String contactGroupTbl = 'ContactGroup';
 
+  final String aiPromptsTbl = 'AIPrompts';
+  final String promptId = 'PromptId';
+  final String promptText = 'PromptText';
+
   // final String _groupsTblName = "groups";
   // final String _remindersTblName = "reminders";
 
@@ -86,7 +90,13 @@ class DatabaseClient {
           FOREIGN KEY ($groupId) REFERENCES $groupTbl($groupId)
         )    
         ''');
-
+        database.execute('''
+        CREATE TABLE $aiPromptsTbl (
+          $promptId INTEGER PRIMARY KEY AUTOINCREMENT,
+          $promptText TEXT NOT NULL
+        )
+         
+        ''');
           // Initialize data after creating tables
           DatabaseInitializer(database).initializeDatabase();
         },

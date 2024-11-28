@@ -113,6 +113,23 @@ class _ContactViewDetailScreenState extends State<ContactViewDetailScreen> {
                                         style: Theme.of(context)
                                             .textTheme
                                             .headlineLarge),
+<<<<<<< Updated upstream
+=======
+                                    ContactReminderCard(
+                                      onAccept: () {
+                                        // Do stuff in here
+                                        print('Reminder accepted!');
+                                      },
+                                      onDismiss: () {
+                                        // Do stuff in here
+                                        print('Reminder dismissed!');
+                                      },
+                                      onReject: () {
+                                        // Do stuff in here
+                                        print('Reminder rejected!');
+                                      },
+                                    ),
+>>>>>>> Stashed changes
                                   ],
                                 ),
                               if (_contactWithGroups.contact.phone.isNotEmpty)
