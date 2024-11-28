@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:friendlyreminder/models/AIPromptModel.dart';
 import 'package:friendlyreminder/widgets/IconButtonWithTextRow.dart';
+import 'package:friendlyreminder/screens/ContactEditDetailScreen.dart';
 import 'package:provider/provider.dart';
 import 'package:friendlyreminder/viewmodels/ContactViewModel.dart';
 import 'package:friendlyreminder/models/ContactWithGroupsModel.dart';
@@ -48,6 +49,23 @@ class _ContactViewDetailScreenState extends State<ContactViewDetailScreen> {
     super.dispose();
   }
 
+  Future<void> navigateToContactEditDetail() async {
+    final updatedContactWithGroups = await Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => ContactEditDetailScreen(
+          contactWithGroups: _contactWithGroups,
+        ),
+      ),
+    );
+
+    if (updatedContactWithGroups != null) {
+      setState(() {
+        _contactWithGroups = updatedContactWithGroups;
+      });
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final contactVM = Provider.of<ContactsViewModel>(context, listen: false);
@@ -55,8 +73,10 @@ class _ContactViewDetailScreenState extends State<ContactViewDetailScreen> {
     return Scaffold(
       appBar: AppBar(actions: [
         IconButton(
-          onPressed: () => (),
           icon: const Icon(Icons.edit),
+          onPressed: () {
+            navigateToContactEditDetail();
+          },
         )
       ]),
       body: SafeArea(

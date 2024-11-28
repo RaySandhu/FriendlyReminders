@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:friendlyreminder/models/ContactWithGroupsModel.dart';
 import 'package:provider/provider.dart';
 import 'package:friendlyreminder/viewmodels/ContactViewModel.dart';
 import 'package:friendlyreminder/models/GroupModel.dart';
@@ -8,27 +9,53 @@ import 'package:friendlyreminder/widgets/StyledTextField.dart';
 import 'package:friendlyreminder/widgets/SuggestionTextField.dart';
 import 'package:friendlyreminder/utilities/PhoneNumberFormatter.dart';
 
-class CreateContactScreen extends StatefulWidget {
-  CreateContactScreen({super.key});
+class ContactEditDetailScreen extends StatefulWidget {
+  final ContactWithGroupsModel? contactWithGroups;
+  const ContactEditDetailScreen({super.key, this.contactWithGroups});
 
   @override
-  State<CreateContactScreen> createState() => _CreateContactScreenState();
+  State<ContactEditDetailScreen> createState() =>
+      _ContactEditDetailScreenState();
 }
 
-class _CreateContactScreenState extends State<CreateContactScreen> {
-  final TextEditingController _nameController = TextEditingController();
-  final TextEditingController _phoneController = TextEditingController();
-  final TextEditingController _emailController = TextEditingController();
+class _ContactEditDetailScreenState extends State<ContactEditDetailScreen> {
+  late ContactWithGroupsModel? _contactWithGroups;
+
+  late TextEditingController _nameController = TextEditingController();
+  late TextEditingController _phoneController = TextEditingController();
+  late TextEditingController _emailController = TextEditingController();
   final TextEditingController _tagController = TextEditingController();
   final TextEditingController _reminderController = TextEditingController();
-  final TextEditingController _noteController = TextEditingController();
+  late TextEditingController _noteController = TextEditingController();
 
   final FocusNode _nameFocusNode = FocusNode();
   final FocusNode _phoneFocusNode = FocusNode();
   final FocusNode _emailFocusNode = FocusNode();
   final FocusNode _tagFocusNode = FocusNode();
 
-  final List<GroupModel> _selectedGroups = [];
+  late List<GroupModel> _selectedGroups = [];
+
+  @override
+  void initState() {
+    super.initState();
+    _contactWithGroups = widget.contactWithGroups;
+    if (_contactWithGroups != null) {
+      _nameController =
+          TextEditingController(text: _contactWithGroups!.contact.name);
+      _phoneController =
+          TextEditingController(text: _contactWithGroups!.contact.phone);
+      _emailController =
+          TextEditingController(text: _contactWithGroups!.contact.email);
+      _noteController =
+          TextEditingController(text: _contactWithGroups!.contact.notes);
+      _selectedGroups = _contactWithGroups!.groups;
+    }
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -37,26 +64,44 @@ class _CreateContactScreenState extends State<CreateContactScreen> {
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
-        title: Text("Create New Contact",
+        title: Text(
+            _contactWithGroups == null ? "Create New Contact" : "Edit Contact",
             style: Theme.of(context).textTheme.headlineSmall),
         actions: [
           Padding(
             padding: const EdgeInsets.all(8.0),
             child: FilledButton(
-              child: Text("Done"),
+              child: const Text("Done"),
               onPressed: () {
                 if (_nameController.text.isNotEmpty) {
-                  ContactModel newContact = ContactModel(
-                      name: _nameController.text,
-                      phone: _phoneController.text,
-                      email: _emailController.text,
-                      notes: _noteController.text);
-                  contactVM.createContact(newContact, _selectedGroups);
+                  if (_contactWithGroups == null) {
+                    ContactModel newContact = ContactModel(
+                        name: _nameController.text,
+                        phone: _phoneController.text,
+                        email: _emailController.text,
+                        notes: _noteController.text);
+
+                    contactVM.createContact(newContact, _selectedGroups);
+                  } else {
+                    ContactModel newContact = _contactWithGroups!.contact
+                        .update(
+                            name: _nameController.text,
+                            phone: _phoneController.text,
+                            email: _emailController.text,
+                            notes: _noteController.text);
+                    _contactWithGroups = _contactWithGroups!
+                        .update(contact: newContact, groups: _selectedGroups);
+                    contactVM.updateContact(newContact, _selectedGroups);
+                  }
                   _nameController.clear();
                   _phoneController.clear();
                   _emailController.clear();
                   _noteController.clear();
-                  Navigator.pop(context);
+                  if (_contactWithGroups == null) {
+                    Navigator.pop(context);
+                  } else {
+                    Navigator.pop(context, _contactWithGroups);
+                  }
                 }
               },
               style: FilledButton.styleFrom(
