@@ -28,7 +28,7 @@ class _DatabaseScreenState extends State<DatabaseScreen> {
             Text("Contacts CRUD", style: Theme.of(context).textTheme.bodyLarge),
             FilledButton(
               onPressed: () {
-                ContactModel newContact = ContactModel(
+                ContactModel newContact = const ContactModel(
                     name: "Alice",
                     phone: "(123)-456-7890",
                     email: "alice@gmail.com",
@@ -53,7 +53,7 @@ class _DatabaseScreenState extends State<DatabaseScreen> {
             ),
             FilledButton(
               onPressed: () {
-                ContactModel newContact = ContactModel(
+                ContactModel newContact = const ContactModel(
                     id: 1,
                     name: "Bob",
                     phone: "(123)-456-7890",

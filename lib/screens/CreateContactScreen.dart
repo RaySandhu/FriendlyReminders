@@ -52,6 +52,9 @@ class _CreateContactScreenState extends State<CreateContactScreen> {
             padding: const EdgeInsets.all(8.0),
             child: FilledButton(
               onPressed: () {
+                if (_reminders.isNotEmpty) {
+                  // TODO: call to create reminders in the remindersTable and retrieve Ids; ContactModel will have reminders which is a comma separated string of reminderIds
+                }
                 if (_nameController.text.isNotEmpty) {
                   ContactModel newContact = ContactModel(
                       name: _nameController.text,
