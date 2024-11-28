@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
+import 'package:friendlyreminder/models/ReminderModel.dart';
 import 'package:provider/provider.dart';
 import 'package:friendlyreminder/viewmodels/ContactViewModel.dart';
 import 'package:friendlyreminder/models/GroupModel.dart';
@@ -7,6 +7,7 @@ import 'package:friendlyreminder/models/ContactModel.dart';
 import 'package:friendlyreminder/widgets/StyledTextField.dart';
 import 'package:friendlyreminder/widgets/SuggestionTextField.dart';
 import 'package:friendlyreminder/utilities/PhoneNumberFormatter.dart';
+import '../widgets/ReminderDialog.dart';
 
 class CreateContactScreen extends StatefulWidget {
   CreateContactScreen({super.key});
@@ -29,6 +30,13 @@ class _CreateContactScreenState extends State<CreateContactScreen> {
   final FocusNode _tagFocusNode = FocusNode();
 
   final List<GroupModel> _selectedGroups = [];
+  final List<ReminderModel> _reminders = [];
+
+  void _handleReminderSet(DateTime? date, String? frequency) {
+    _reminders.add(ReminderModel(date: date!, freq: frequency!));
+    print("Reminder Set: Date=$date, Frequency=$frequency");
+    print("Reminders list: $_reminders");
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -43,7 +51,6 @@ class _CreateContactScreenState extends State<CreateContactScreen> {
           Padding(
             padding: const EdgeInsets.all(8.0),
             child: FilledButton(
-              child: Text("Done"),
               onPressed: () {
                 if (_nameController.text.isNotEmpty) {
                   ContactModel newContact = ContactModel(
@@ -63,9 +70,11 @@ class _CreateContactScreenState extends State<CreateContactScreen> {
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(5),
                 ),
-                padding: EdgeInsets.symmetric(horizontal: 10, vertical: 4),
-                minimumSize: Size(0, 0),
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+                minimumSize: const Size(0, 0),
               ),
+              child: const Text("Done"),
             ),
           )
         ],
@@ -127,7 +136,7 @@ class _CreateContactScreenState extends State<CreateContactScreen> {
                       children: _selectedGroups.map((group) {
                         return Chip(
                           label: Text(group.name),
-                          deleteIcon: Icon(Icons.close),
+                          deleteIcon: const Icon(Icons.close),
                           onDeleted: () {
                             setState(() {
                               _selectedGroups.remove(group);
@@ -138,10 +147,20 @@ class _CreateContactScreenState extends State<CreateContactScreen> {
                     ),
                   ),
                 ),
-              StyledTextField(
-                  controller: _reminderController,
-                  hintText: "Reminders",
-                  prefixIcon: Icons.schedule),
+              GestureDetector(
+                onTap: () => showReminderModal(
+                  context: context,
+                  reminderController: _reminderController,
+                  onReminderSet: _handleReminderSet,
+                ),
+                child: AbsorbPointer(
+                  child: StyledTextField(
+                    controller: _reminderController,
+                    hintText: "Reminders",
+                    prefixIcon: Icons.schedule,
+                  ),
+                ),
+              ),
               StyledTextField(
                   controller: _noteController,
                   hintText: "Notes",
