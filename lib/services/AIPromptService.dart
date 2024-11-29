@@ -26,16 +26,18 @@ class AIPromptService {
     throw Exception('AIPromptService - Prompt not found');
   }
 
-  Future<AIPromptModel> getRandomPrompt() async {
+  Future<List<AIPromptModel>> getRandomPrompt() async {
     final db = await _dbClient.database;
     final List<Map<String, dynamic>> maps = await db.query(
       _dbClient.aiPromptsTbl,
       orderBy: 'RANDOM()',
-      limit: 1,
     );
     if (maps.isNotEmpty) {
-      return AIPromptModel.fromMap(maps.first);
+      return List.generate(maps.length, (i) {
+        return AIPromptModel.fromMap(maps[i]);
+      });
     }
+    
     throw Exception('AIPromptService - No prompts found');
   }
 }
