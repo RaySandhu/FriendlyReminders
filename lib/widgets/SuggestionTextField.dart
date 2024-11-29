@@ -46,13 +46,21 @@ class _SuggestionTextFieldState extends State<SuggestionTextField> {
   void initState() {
     super.initState();
     widget.controller.addListener(_onControllerChanged);
+    widget.focusNode!.addListener(() {
+      if (widget.focusNode!.hasFocus) {
+        suggestions = widget.allSuggestions;
+        _showOverlay();
+      } else {
+        _hideOverlay();
+      }
+    });
   }
 
   @override
   void dispose() {
+    super.dispose();
     widget.controller.removeListener(_onControllerChanged);
     _hideOverlay();
-    super.dispose();
   }
 
   void _onControllerChanged() {
@@ -84,49 +92,54 @@ class _SuggestionTextFieldState extends State<SuggestionTextField> {
         width: size.width,
         child: Material(
           elevation: 4.0,
-          child: Column(
-            children: [
-              ListView.builder(
-                padding: EdgeInsets.zero,
-                shrinkWrap: true,
-                itemCount: suggestions.length,
-                itemBuilder: (context, index) {
-                  return ListTile(
-                    title: Text(suggestions[index]),
-                    onTap: () {
-                      if (widget.onSelect != null) {
-                        widget.onSelect!(suggestions[index]);
-                      }
-                      setState(() {
-                        _hideOverlay();
-                        widget.controller.clear();
-                      });
-                    },
-                  );
-                },
+          child: ConstrainedBox(
+            constraints: const BoxConstraints(
+              maxHeight: 200, // Adjust this value as needed
+            ),
+            child: SingleChildScrollView(
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  ...suggestions
+                      .map((suggestion) => ListTile(
+                            title: Text(suggestion),
+                            onTap: () {
+                              if (widget.onSelect != null) {
+                                widget.onSelect!(suggestion);
+                              }
+                              setState(() {
+                                _hideOverlay();
+                                widget.controller.clear();
+                              });
+                            },
+                          ))
+                      .toList(),
+                  if (widget.controller.text.isNotEmpty)
+                    ListTile(
+                      leading: Icon(
+                        Icons.add,
+                        color: Theme.of(context).colorScheme.primary,
+                      ),
+                      title: Text(
+                        "Create \"${widget.controller.text}\" ${widget.newText}",
+                        style: TextStyle(
+                          color: Theme.of(context).colorScheme.primary,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      onTap: () {
+                        if (widget.onSelect != null) {
+                          widget.onSelect!(widget.controller.text);
+                        }
+                        setState(() {
+                          _hideOverlay();
+                          widget.controller.clear();
+                        });
+                      },
+                    ),
+                ],
               ),
-              ListTile(
-                leading: Icon(
-                  Icons.add,
-                  color: Theme.of(context).colorScheme.primary,
-                ),
-                title: Text(
-                  "Create \"${widget.controller.text}\" ${widget.newText}",
-                  style: TextStyle(
-                      color: Theme.of(context).colorScheme.primary,
-                      fontWeight: FontWeight.bold),
-                ),
-                onTap: () {
-                  if (widget.onSelect != null) {
-                    widget.onSelect!(widget.controller.text);
-                  }
-                  setState(() {
-                    _hideOverlay();
-                    widget.controller.clear();
-                  });
-                },
-              ),
-            ],
+            ),
           ),
         ),
       );
@@ -161,7 +174,7 @@ class _SuggestionTextFieldState extends State<SuggestionTextField> {
                   suggestion.toLowerCase().contains(text.toLowerCase()) &&
                   !widget.excludedSuggestions!.contains(suggestion))
               .toList();
-          if (text.isNotEmpty) {
+          if (widget.focusNode!.hasFocus) {
             _showOverlay();
           } else {
             _hideOverlay();

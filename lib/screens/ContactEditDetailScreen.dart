@@ -24,14 +24,14 @@ class _ContactEditDetailScreenState extends State<ContactEditDetailScreen> {
   late TextEditingController _nameController = TextEditingController();
   late TextEditingController _phoneController = TextEditingController();
   late TextEditingController _emailController = TextEditingController();
-  final TextEditingController _tagController = TextEditingController();
+  final TextEditingController _groupController = TextEditingController();
   final TextEditingController _reminderController = TextEditingController();
   late TextEditingController _noteController = TextEditingController();
 
   final FocusNode _nameFocusNode = FocusNode();
   final FocusNode _phoneFocusNode = FocusNode();
   final FocusNode _emailFocusNode = FocusNode();
-  final FocusNode _tagFocusNode = FocusNode();
+  final FocusNode _groupFocusNode = FocusNode();
 
   late List<GroupModel> _selectedGroups = [];
 
@@ -143,13 +143,13 @@ class _ContactEditDetailScreenState extends State<ContactEditDetailScreen> {
                 prefixIcon: Icons.email,
                 keyboardType: TextInputType.emailAddress,
                 focusNode: _emailFocusNode,
-                nextFocusNode: _tagFocusNode,
+                nextFocusNode: _groupFocusNode,
               ),
               SuggestionTextField(
-                controller: _tagController,
+                controller: _groupController,
                 hintText: "Groups",
                 prefixIcon: Icons.people,
-                focusNode: _tagFocusNode,
+                focusNode: _groupFocusNode,
                 allSuggestions:
                     contactVM.groups.map((group) => group.name).toList(),
                 excludedSuggestions:
@@ -169,17 +169,21 @@ class _ContactEditDetailScreenState extends State<ContactEditDetailScreen> {
                     child: Wrap(
                       spacing: 8.0, // gap between adjacent chips
                       runSpacing: 4.0, // gap between lines
-                      children: _selectedGroups.map((group) {
-                        return Chip(
-                          label: Text(group.name),
-                          deleteIcon: Icon(Icons.close),
-                          onDeleted: () {
-                            setState(() {
-                              _selectedGroups.remove(group);
-                            });
-                          },
-                        );
-                      }).toList(),
+                      children: () {
+                        _selectedGroups
+                            .sort((a, b) => a.name.compareTo(b.name));
+                        return _selectedGroups.map((group) {
+                          return Chip(
+                            label: Text(group.name),
+                            deleteIcon: Icon(Icons.close),
+                            onDeleted: () {
+                              setState(() {
+                                _selectedGroups.remove(group);
+                              });
+                            },
+                          );
+                        }).toList();
+                      }(),
                     ),
                   ),
                 ),
