@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:friendlyreminder/widgets/ReminderCard.dart';
 
-class RemindersScreen extends StatefulWidget {
-  const RemindersScreen({super.key});
+class ReminderScreen extends StatefulWidget {
+  const ReminderScreen({super.key});
 
   @override
-  State<RemindersScreen> createState() => _RemindersScreenState();
+  State<ReminderScreen> createState() => _ReminderScreenState();
 }
 
-class _RemindersScreenState extends State<RemindersScreen> {
+class _ReminderScreenState extends State<ReminderScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
