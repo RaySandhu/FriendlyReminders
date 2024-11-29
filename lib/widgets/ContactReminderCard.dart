@@ -24,7 +24,7 @@ class ContactReminderCard extends StatelessWidget {
           Center(
             child: Text(
               "Time to Reach Out!",
-              style: Theme.of(context).textTheme.displaySmall?.copyWith(
+              style: Theme.of(context).textTheme.titleLarge?.copyWith(
                 fontWeight: FontWeight.bold,
               ),
               textAlign: TextAlign.center,
