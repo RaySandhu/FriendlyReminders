@@ -16,76 +16,101 @@ class ContactReminderCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ListTile(
-      title: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        mainAxisSize: MainAxisSize.min, // Ensures the Column takes minimum height
-        children: [
-          // Title Text
-          Center(
-            child: Text(
-              "Time to Reach Out!",
-              style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                fontWeight: FontWeight.bold,
-              ),
-              textAlign: TextAlign.center,
-            ),
+      title: Card(
+        color: Theme.of(context).colorScheme.primaryContainer,
+        elevation: 0,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(12),
+          side: BorderSide(
+            color: Colors.grey.shade300,
+            width: 1,
           ),
-          const SizedBox(height: 24), // Spacing between text and buttons
-          // Button Row
-          
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        ),
+        child: Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisSize:
+                MainAxisSize.min, // Ensures the Column takes minimum height
             children: [
-              // Accept Button
-              Flexible(
-                child: Container(
-                  decoration: BoxDecoration(
-                    color: Colors.green,
-                    borderRadius: BorderRadius.circular(8),
-                  ),
-                  child: IconButtonWithTextRow(
+              // Title Text
+              Center(
+                child: Text(
+                  "Time to Reach Out!",
+                  style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                        fontWeight: FontWeight.bold,
+                      ),
+                  textAlign: TextAlign.center,
+                ),
+              ),
+              const SizedBox(height: 8), // Spacing between text and buttons
+              // Button Row
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  // Accept Button
+                  FilledButton.icon(
                     onPressed: onAccept,
-                    icon: const Icon(Icons.check, color: Colors.white),
-                    text: 'On It!',
-                    buttonColour: Colors.green,
+                    label: const Text("Accept"),
+                    icon: const Icon(Icons.check),
+                    style: ButtonStyle(
+                      backgroundColor: MaterialStateProperty.all(Colors.green),
+                      shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                        RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(8),
+                        ),
+                      ),
+                      padding: MaterialStateProperty.all<EdgeInsetsGeometry>(
+                        const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+                      ),
+                      minimumSize:
+                          MaterialStateProperty.all<Size>(const Size(0, 32)),
+                    ),
                   ),
-                ),
-              ),
 
-              // Dismiss Button
-              Flexible(
-                child: Container(
-                  decoration: BoxDecoration(
-                    color: Colors.amber,
-                    borderRadius: BorderRadius.circular(8),
-                  ),
-                  child: IconButtonWithTextRow(
+                  // Dismiss Button
+                  FilledButton.icon(
                     onPressed: onDismiss,
-                    icon: const Icon(Icons.schedule, color: Colors.white),
-                    text: 'Snooze',
-                    buttonColour: Colors.amber,
+                    label: const Text("Dismiss"),
+                    icon: const Icon(Icons.schedule),
+                    style: ButtonStyle(
+                      backgroundColor: MaterialStateProperty.all(Colors.amber),
+                      shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                        RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(8),
+                        ),
+                      ),
+                      padding: MaterialStateProperty.all<EdgeInsetsGeometry>(
+                        const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+                      ),
+                      minimumSize:
+                          MaterialStateProperty.all<Size>(const Size(0, 32)),
+                    ),
                   ),
-                ),
-              ),
-
-              // Reject Button
-              Flexible(
-                child: Container(
-                  decoration: BoxDecoration(
-                    color: Colors.red,
-                    borderRadius: BorderRadius.circular(8),
+                  // Reject
+                  FilledButton.icon(
+                    onPressed: onAccept,
+                    label: const Text("Reject"),
+                    icon: const Icon(Icons.close),
+                    style: ButtonStyle(
+                      backgroundColor: MaterialStateProperty.all(Colors.red),
+                      shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                        RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(8),
+                        ),
+                      ),
+                      padding: MaterialStateProperty.all<EdgeInsetsGeometry>(
+                        const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+                      ),
+                      minimumSize:
+                          MaterialStateProperty.all<Size>(const Size(0, 32)),
+                    ),
                   ),
-                  child: IconButtonWithTextRow(
-                    onPressed: onReject,
-                    icon: const Icon(Icons.close, color: Colors.white),
-                    text: 'Dismiss',
-                    buttonColour: Colors.red,
-                  ),
-                ),
+                ],
               ),
             ],
           ),
-        ],
+        ),
       ),
     );
   }
