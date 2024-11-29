@@ -14,7 +14,7 @@ class ReminderModel {
   factory ReminderModel.fromMap(Map<String, dynamic> map) {
     return ReminderModel(
       id: map['ReminderId'] as int?,
-      reminderContactId: map['ReminderContactId'] as int?,
+      reminderContactId: map['ContactId'] as int?,
       date: DateTime.parse(map['ReminderDate']),
       freq: map['ReminderFreq'] as String,
     );

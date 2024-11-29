@@ -306,13 +306,13 @@ class DatabaseInitializer {
     });
 
     batch.insert(dbClient.reminderTbl, {
-      dbClient.contactId: 2,
+      dbClient.contactId: 3,
       dbClient.reminderDate: "2024-11-28 00:00:00.000",
       dbClient.reminderFreq: "Daily"
     });
 
     batch.insert(dbClient.reminderTbl, {
-      dbClient.contactId: 2,
+      dbClient.contactId: 4,
       dbClient.reminderDate: "2024-11-22 00:00:00.000",
       dbClient.reminderFreq: "Weekly"
     });

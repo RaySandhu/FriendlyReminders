@@ -25,13 +25,16 @@ class ReminderViewModel extends ChangeNotifier {
     notifyListeners();
     try {
       final allReminders = await _reminderService.getAllReminders();
-      _currentReminders = [
-        ...allReminders
-            .where((reminder) => DateTime.now().isSameDate(reminder.date))
-      ];
+
+      _currentReminders = allReminders.where((reminder) {
+        print("Compare dates: ${DateTime.now()}, ${reminder.date}");
+        return DateTime.now().isSameDate(reminder.date);
+      }).toList();
+
       _pastReminders = [
-        ...allReminders
-            .where((reminder) => DateTime.now().isBefore(reminder.date))
+        ...allReminders.where((reminder) =>
+            DateTime.now().isAfter(reminder.date) &&
+            !DateTime.now().isSameDate(reminder.date))
       ];
     } catch (e) {
       _error = "Failed to load reminders: ${e.toString()}";
