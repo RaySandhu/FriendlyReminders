@@ -1,14 +1,17 @@
 class ReminderModel {
+  final int? id;
   final DateTime date;
   final String freq;
 
   const ReminderModel({
+    this.id,
     required this.date,
     required this.freq,
   });
 
   factory ReminderModel.fromMap(Map<String, dynamic> map) {
     return ReminderModel(
+      id: map['ReminderId'] as int?,
       date: DateTime.parse(map['ReminderDate']),
       freq: map['ReminderFreq'] as String,
     );
@@ -23,6 +26,7 @@ class ReminderModel {
 
   Map<String, dynamic> toMap() {
     return {
+      'ReminderId': id,
       'ReminderDate': date,
       'ReminderFreq': freq,
     };
@@ -30,6 +34,6 @@ class ReminderModel {
 
   @override
   String toString() {
-    return 'ReminderModel{ReminderDate: ${date.toLocal().toString()}, ReminderFreq: $freq}';
+    return 'ReminderModel{Reminder ID: $id, ReminderDate: ${date.toLocal().toString()}, ReminderFreq: $freq}';
   }
 }
