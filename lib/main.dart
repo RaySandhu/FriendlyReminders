@@ -2,11 +2,19 @@ import 'package:flutter/material.dart';
 import 'widgets/NavBar.dart';
 import 'package:provider/provider.dart';
 import 'package:friendlyreminder/viewmodels/ContactViewModel.dart';
+import 'package:friendlyreminder/viewmodels/AIPromptViewModel.dart';
 
 void main() {
   runApp(
-    ChangeNotifierProvider(
-      create: (context) => ContactsViewModel()..loadContacts(),
+    MultiProvider(
+      providers: [
+        ChangeNotifierProvider(
+          create: (context) => ContactsViewModel()..loadContacts(),
+        ),
+        ChangeNotifierProvider(
+          create: (context) => AIPromptViewModel()..loadPrompts(),
+        ),
+      ],
       child: const MyApp(),
     ),
   );

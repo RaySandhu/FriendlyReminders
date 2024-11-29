@@ -292,6 +292,67 @@ class DatabaseInitializer {
       dbClient.groupId: 5, // Writing
     });
 
+// AI Prompts
+    batch.insert(dbClient.aiPromptsTbl, {
+      dbClient.promptId: 1,
+      dbClient.promptText: 'How are you doing today?',
+    });
+
+    batch.insert(dbClient.aiPromptsTbl, {
+      dbClient.promptId: 2,
+      dbClient.promptText: 'What are you up to this weekend?',
+    });
+
+    batch.insert(dbClient.aiPromptsTbl, {
+      dbClient.promptId: 3,
+      dbClient.promptText: 'What are you reading these days?',
+    });
+
+    batch.insert(dbClient.aiPromptsTbl, {
+      dbClient.promptId: 4,
+      dbClient.promptText: 'What are you watching on TV?',
+    });
+
+    batch.insert(dbClient.aiPromptsTbl, {
+      dbClient.promptId: 5,
+      dbClient.promptText: 'What are you listening to right now?',
+    });
+
+    batch.insert(dbClient.aiPromptsTbl, {
+      dbClient.promptId: 6,
+      dbClient.promptText: 'What are you doing for the holidays?',
+    });
+
+    batch.insert(dbClient.aiPromptsTbl, {
+      dbClient.promptId: 7,
+      dbClient.promptText: 'What are you doing for your birthday?',
+    });
+
+    batch.insert(dbClient.aiPromptsTbl, {
+      dbClient.promptId: 8,
+      dbClient.promptText: 'What are you doing for the summer?',
+    });
+
+    batch.insert(dbClient.aiPromptsTbl, {
+      dbClient.promptId: 9,
+      dbClient.promptText: 'What are you doing for the winter?',
+    });
+
+    batch.insert(dbClient.aiPromptsTbl, {
+      dbClient.promptId: 10,
+      dbClient.promptText: 'What are you doing for the spring?',
+    });
+
+    batch.insert(dbClient.aiPromptsTbl, {
+      dbClient.promptId: 11,
+      dbClient.promptText: 'What are you doing for the fall?',
+    });
+
+    batch.insert(dbClient.aiPromptsTbl, {
+      dbClient.promptId: 12,
+      dbClient.promptText: 'What are you doing for the new year?',
+    });
+
     // Commit the batch
     await batch.commit(noResult: true);
   }

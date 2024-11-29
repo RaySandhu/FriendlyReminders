@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:friendlyreminder/screens/ContactViewDetailScreen.dart';
+import 'package:friendlyreminder/viewmodels/AIPromptViewModel.dart';
 import 'package:provider/provider.dart';
 import 'package:friendlyreminder/widgets/ContactCard.dart';
 import 'package:friendlyreminder/viewmodels/ContactViewModel.dart';
@@ -205,6 +206,8 @@ class _ContactsScreenState extends State<ContactsScreen> {
                                   itemBuilder: (context, index) {
                                     final contactWithGroups =
                                         contactVM.contacts[index];
+                                    final aiPromptsList =
+                                        Provider.of<AIPromptViewModel>(context).prompts;
                                     return ContactCard(
                                         name: contactWithGroups.contact.name,
                                         onTap: () {
@@ -215,6 +218,7 @@ class _ContactsScreenState extends State<ContactsScreen> {
                                                   ContactViewDetailScreen(
                                                 contactWithGroups:
                                                     contactWithGroups,
+                                                aiPrompts: aiPromptsList,
                                               ),
                                             ),
                                           );

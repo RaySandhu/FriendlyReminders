@@ -1,14 +1,26 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
+import 'package:friendlyreminder/models/AIPromptModel.dart';
+import 'package:friendlyreminder/widgets/IconButtonWithTextRow.dart';
 import 'package:friendlyreminder/screens/ContactEditDetailScreen.dart';
 import 'package:provider/provider.dart';
 import 'package:friendlyreminder/viewmodels/ContactViewModel.dart';
 import 'package:friendlyreminder/models/ContactWithGroupsModel.dart';
 import 'package:friendlyreminder/widgets/ContactInfoListTile.dart';
+import 'package:friendlyreminder/widgets/ContactReminderCard.dart';
+import 'package:friendlyreminder/widgets/AIPromptPopup.dart';
+import 'package:friendlyreminder/viewmodels/AIPromptViewModel.dart';
 
 class ContactViewDetailScreen extends StatefulWidget {
   final ContactWithGroupsModel contactWithGroups;
+  final List<AIPromptModel> aiPrompts;
 
-  const ContactViewDetailScreen({Key? key, required this.contactWithGroups})
+  const ContactViewDetailScreen({
+      Key? key, 
+      required this.contactWithGroups, 
+      required this.aiPrompts
+    })
       : super(key: key);
 
   @override
@@ -20,6 +32,7 @@ class _ContactViewDetailScreenState extends State<ContactViewDetailScreen> {
   late ContactWithGroupsModel _contactWithGroups;
   late TextEditingController _noteController;
   late bool isEmpty;
+  late int reminderCardState = 0;
   bool _hasNotesChanged = false;
 
   @override
@@ -65,6 +78,7 @@ class _ContactViewDetailScreenState extends State<ContactViewDetailScreen> {
   @override
   Widget build(BuildContext context) {
     final contactVM = Provider.of<ContactsViewModel>(context, listen: false);
+    final aiPromptVM = Provider.of<AIPromptViewModel>(context, listen: false);
 
     return Scaffold(
       appBar: AppBar(actions: [
@@ -123,6 +137,7 @@ class _ContactViewDetailScreenState extends State<ContactViewDetailScreen> {
                                   ),
                                 ),
                               ),
+                              
                               if (_contactWithGroups.contact.name.isNotEmpty)
                                 Column(
                                   children: [
@@ -133,6 +148,23 @@ class _ContactViewDetailScreenState extends State<ContactViewDetailScreen> {
                                         style: Theme.of(context)
                                             .textTheme
                                             .headlineLarge),
+                                    if(reminderCardState == 0)
+                                      ContactReminderCard(
+                                        onAccept: () {
+                                          reminderCardState = 1;
+                                          print('Reminder accepted!');
+                                        },
+                                        onDismiss: () {
+                                          // Do stuff in here
+                                          reminderCardState = 2;
+                                          print('Reminder dismissed!');
+                                        },
+                                        onReject: () {
+                                          // Do stuff in here
+                                          reminderCardState = 3;
+                                          print('Reminder rejected!');
+                                        },
+                                      ),
                                   ],
                                 ),
                               if (_contactWithGroups.contact.phone.isNotEmpty)
@@ -198,9 +230,26 @@ class _ContactViewDetailScreenState extends State<ContactViewDetailScreen> {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Text(
-                            "NOTES",
-                            style: Theme.of(context).textTheme.titleMedium,
+                          Row(
+                            children: [
+                              Text(
+                                "NOTES",
+                                style: Theme.of(context).textTheme.titleMedium,
+                              ),
+                              const Spacer(),
+                              IconButtonWithTextRow(
+                                icon: const Icon(Icons.factory), 
+                                text: 'Generate Icebreaker', 
+                                onPressed: () {
+                                  print("Generated Icebreaker");
+                                  var rng = Random();
+                                  showDialog(
+                                    context: context, 
+                                    builder: (context) => AIPromptPopup(prompt: aiPromptVM.prompts[rng.nextInt(aiPromptVM.prompts.length - 1)].promptText),
+                                    );
+                                }, 
+                                buttonColour: Colors.blue)
+                            ]
                           ),
                           Stack(
                             children: [
