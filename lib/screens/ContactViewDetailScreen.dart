@@ -263,7 +263,7 @@ class _ContactViewDetailScreenState extends State<ContactViewDetailScreen> {
                                   var rng = Random();
                                   showDialog(
                                     context: context, 
-                                    builder: (context) => AIPromptPopup(prompt: aiPromptVM.prompts[rng.nextInt(aiPromptVM.prompts.length - 1)].promptText),
+                                    builder: (context) => AIPromptPopup(prompt: aiPromptVM.prompts[rng.nextInt(aiPromptVM.prompts.length)].promptText),
                                     );
                                 }, 
                                 buttonColour: Colors.blue)
