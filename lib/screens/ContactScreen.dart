@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:friendlyreminder/screens/ContactViewDetailScreen.dart';
+import 'package:friendlyreminder/viewmodels/AIPromptViewModel.dart';
 import 'package:provider/provider.dart';
 import 'package:friendlyreminder/widgets/ContactCard.dart';
 import 'package:friendlyreminder/viewmodels/ContactViewModel.dart';
-import 'package:friendlyreminder/screens/CreateContactScreen.dart';
+import 'package:friendlyreminder/screens/ContactEditDetailScreen.dart';
 
 class ContactsScreen extends StatefulWidget {
   const ContactsScreen({Key? key}) : super(key: key);
@@ -92,7 +93,7 @@ class _ContactsScreenState extends State<ContactsScreen> {
                           Navigator.push(
                             context,
                             MaterialPageRoute(
-                              builder: (context) => CreateContactScreen(),
+                              builder: (context) => ContactEditDetailScreen(),
                             ),
                           );
                         })
@@ -201,10 +202,14 @@ class _ContactsScreenState extends State<ContactsScreen> {
                           : contactVM.contacts.isEmpty
                               ? const Center(child: Text('No contacts found'))
                               : ListView.builder(
+                                  controller: _scrollController,
                                   itemCount: contactVM.contacts.length,
                                   itemBuilder: (context, index) {
                                     final contactWithGroups =
                                         contactVM.contacts[index];
+                                    final aiPromptsList =
+                                        Provider.of<AIPromptViewModel>(context)
+                                            .prompts;
                                     return ContactCard(
                                         name: contactWithGroups.contact.name,
                                         onTap: () {
@@ -215,6 +220,7 @@ class _ContactsScreenState extends State<ContactsScreen> {
                                                   ContactViewDetailScreen(
                                                 contactWithGroups:
                                                     contactWithGroups,
+                                                aiPrompts: aiPromptsList,
                                               ),
                                             ),
                                           );

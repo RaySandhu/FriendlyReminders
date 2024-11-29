@@ -61,7 +61,7 @@ class _NavigationBarAppState extends State<NavigationBarApp> {
         ),
         body: [
           ContactsScreen(),
-          RemindersScreen(),
+          ReminderScreen(),
           GroupScreen(),
           // CounterScreen(title: 'Flutter Demo Home Page'),
           DatabaseScreen(),

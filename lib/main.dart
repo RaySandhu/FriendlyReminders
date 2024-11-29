@@ -3,6 +3,7 @@ import 'widgets/NavBar.dart';
 import 'package:provider/provider.dart';
 import 'package:friendlyreminder/viewmodels/ContactViewModel.dart';
 import 'package:friendlyreminder/viewmodels/ReminderViewModel.dart';
+import 'package:friendlyreminder/viewmodels/AIPromptViewModel.dart';
 
 void main() {
   runApp(
@@ -12,9 +13,13 @@ void main() {
           create: (context) => ContactsViewModel()..loadContacts(),
         ),
         ChangeNotifierProvider(
+          create: (context) => AIPromptViewModel()..loadPrompts(),
+        ),
+        ChangeNotifierProvider(
           create: (context) => ReminderViewModel(),
         ),
       ],
+        
       child: const MyApp(),
     ),
   );

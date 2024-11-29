@@ -1,14 +1,28 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:friendlyreminder/viewmodels/ReminderViewModel.dart';
 import 'package:friendlyreminder/widgets/ContactInfoListTile.dart';
+import 'package:friendlyreminder/models/AIPromptModel.dart';
+import 'package:friendlyreminder/widgets/IconButtonWithTextRow.dart';
+import 'package:friendlyreminder/screens/ContactEditDetailScreen.dart';
 import 'package:provider/provider.dart';
 import 'package:friendlyreminder/viewmodels/ContactViewModel.dart';
 import 'package:friendlyreminder/models/ContactWithGroupsModel.dart';
+import 'package:friendlyreminder/widgets/ContactInfoListTile.dart';
+import 'package:friendlyreminder/widgets/ContactReminderCard.dart';
+import 'package:friendlyreminder/widgets/AIPromptPopup.dart';
+import 'package:friendlyreminder/viewmodels/AIPromptViewModel.dart';
 
 class ContactViewDetailScreen extends StatefulWidget {
   final ContactWithGroupsModel contactWithGroups;
+  final List<AIPromptModel> aiPrompts;
 
-  const ContactViewDetailScreen({Key? key, required this.contactWithGroups})
+  const ContactViewDetailScreen({
+      Key? key, 
+      required this.contactWithGroups, 
+      required this.aiPrompts
+    })
       : super(key: key);
 
   @override
@@ -20,6 +34,7 @@ class _ContactViewDetailScreenState extends State<ContactViewDetailScreen> {
   late ContactWithGroupsModel _contactWithGroups;
   late TextEditingController _noteController;
   late bool isEmpty;
+  late int reminderCardState = 0;
   bool _hasNotesChanged = false;
 
   @override
@@ -45,9 +60,27 @@ class _ContactViewDetailScreenState extends State<ContactViewDetailScreen> {
     super.dispose();
   }
 
+  Future<void> navigateToContactEditDetail() async {
+    final updatedContactWithGroups = await Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => ContactEditDetailScreen(
+          contactWithGroups: _contactWithGroups,
+        ),
+      ),
+    );
+
+    if (updatedContactWithGroups != null) {
+      setState(() {
+        _contactWithGroups = updatedContactWithGroups;
+      });
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final contactVM = Provider.of<ContactsViewModel>(context, listen: false);
+    final aiPromptVM = Provider.of<AIPromptViewModel>(context, listen: false);
     final reminderVM = Provider.of<ReminderViewModel>(context, listen: false);
 
     // Ensure reminders are loaded after the first build
@@ -58,14 +91,14 @@ class _ContactViewDetailScreenState extends State<ContactViewDetailScreen> {
     });
 
     return Scaffold(
-      appBar: AppBar(
-        actions: [
-          IconButton(
-            onPressed: () => print("Edit pressed"),
-            icon: const Icon(Icons.edit),
-          )
-        ],
-      ),
+      appBar: AppBar(actions: [
+        IconButton(
+          icon: const Icon(Icons.edit),
+          onPressed: () {
+            navigateToContactEditDetail();
+          },
+        )
+      ]),
       body: SafeArea(
         child: SingleChildScrollView(
           child: Padding(
@@ -115,6 +148,7 @@ class _ContactViewDetailScreenState extends State<ContactViewDetailScreen> {
                                   ),
                                 ),
                               ),
+                              
                               if (_contactWithGroups.contact.name.isNotEmpty)
                                 Column(
                                   children: [
@@ -125,6 +159,41 @@ class _ContactViewDetailScreenState extends State<ContactViewDetailScreen> {
                                         style: Theme.of(context)
                                             .textTheme
                                             .headlineLarge),
+                                    if(reminderCardState == 0)
+                                      ContactReminderCard(
+                                        onAccept: () {
+                                          setState(() {
+                                            reminderCardState = 1;
+                                          });
+                                          print('Reminder accepted!');
+                                        },
+                                        onDismiss: () {
+                                          setState(() {
+                                            reminderCardState = 2;
+                                          });
+                                          print('Reminder dismissed!');
+                                        },
+                                        onReject: () {
+                                          setState(() {
+                                            reminderCardState = 3;
+                                          });
+                                          print('Reminder rejected!');
+                                        },
+                                      ),
+
+                                    if(reminderCardState == 2)
+                                      Text('Reminder Snoozed',
+                                      style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                    ),
+
+                                    if(reminderCardState == 3)
+                                      Text('Reminder Dismissed',
+                                        style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                                          fontWeight: FontWeight.bold,
+                                        ),
+                                      ),
                                   ],
                                 ),
                               if (_contactWithGroups.contact.phone.isNotEmpty)
@@ -281,9 +350,26 @@ class _ContactViewDetailScreenState extends State<ContactViewDetailScreen> {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Text(
-                            "NOTES",
-                            style: Theme.of(context).textTheme.titleMedium,
+                          Row(
+                            children: [
+                              Text(
+                                "NOTES",
+                                style: Theme.of(context).textTheme.titleMedium,
+                              ),
+                              const Spacer(),
+                              IconButtonWithTextRow(
+                                icon: const Icon(Icons.factory), 
+                                text: 'Generate Icebreaker', 
+                                onPressed: () {
+                                  print("Generated Icebreaker");
+                                  var rng = Random();
+                                  showDialog(
+                                    context: context, 
+                                    builder: (context) => AIPromptPopup(prompt: aiPromptVM.prompts[rng.nextInt(aiPromptVM.prompts.length)].promptText),
+                                    );
+                                }, 
+                                buttonColour: Colors.blue)
+                            ]
                           ),
                           const SizedBox(height: 8),
                           Stack(
