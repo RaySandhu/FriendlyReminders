@@ -202,12 +202,14 @@ class _ContactsScreenState extends State<ContactsScreen> {
                           : contactVM.contacts.isEmpty
                               ? const Center(child: Text('No contacts found'))
                               : ListView.builder(
+                                  controller: _scrollController,
                                   itemCount: contactVM.contacts.length,
                                   itemBuilder: (context, index) {
                                     final contactWithGroups =
                                         contactVM.contacts[index];
                                     final aiPromptsList =
-                                        Provider.of<AIPromptViewModel>(context).prompts;
+                                        Provider.of<AIPromptViewModel>(context)
+                                            .prompts;
                                     return ContactCard(
                                         name: contactWithGroups.contact.name,
                                         onTap: () {
