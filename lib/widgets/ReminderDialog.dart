@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 
 Future<void> showReminderModal({
   required BuildContext context,
-  required TextEditingController reminderController,
   required void Function(DateTime? date, String? frequency) onReminderSet,
 }) async {
   await showModalBottomSheet(
@@ -79,9 +78,6 @@ Future<void> showReminderModal({
                 ElevatedButton(
                   onPressed: () {
                     if (selectedDate != null && selectedFrequency != null) {
-                      reminderController.text =
-                          "Date: ${selectedDate!.toLocal().toString().split(' ')[0]}, Frequency: $selectedFrequency";
-
                       // Pass the selected values back to the parent widget
                       onReminderSet(selectedDate, selectedFrequency);
                       Navigator.pop(context);

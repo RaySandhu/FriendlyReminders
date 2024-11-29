@@ -9,7 +9,7 @@ class ReminderModel {
 
   factory ReminderModel.fromMap(Map<String, dynamic> map) {
     return ReminderModel(
-      date: map['ReminderDate'] as DateTime,
+      date: DateTime.parse(map['ReminderDate']),
       freq: map['ReminderFreq'] as String,
     );
   }

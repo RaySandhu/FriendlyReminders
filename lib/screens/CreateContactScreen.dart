@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:friendlyreminder/models/ReminderModel.dart';
+import 'package:friendlyreminder/viewmodels/ReminderViewModel.dart';
 import 'package:provider/provider.dart';
 import 'package:friendlyreminder/viewmodels/ContactViewModel.dart';
 import 'package:friendlyreminder/models/GroupModel.dart';
@@ -21,7 +22,6 @@ class _CreateContactScreenState extends State<CreateContactScreen> {
   final TextEditingController _phoneController = TextEditingController();
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _tagController = TextEditingController();
-  final TextEditingController _reminderController = TextEditingController();
   final TextEditingController _noteController = TextEditingController();
 
   final FocusNode _nameFocusNode = FocusNode();
@@ -40,6 +40,7 @@ class _CreateContactScreenState extends State<CreateContactScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final reminderVM = Provider.of<ReminderViewModel>(context, listen: false);
     final contactVM = Provider.of<ContactsViewModel>(context, listen: false);
 
     return Scaffold(
@@ -65,14 +66,15 @@ class _CreateContactScreenState extends State<CreateContactScreen> {
                       .createContact(newContact, _selectedGroups);
 
                   if (_reminders.isNotEmpty && contactId != -1) {
-                    // TODO: call to create reminders in the remindersTable and retrieve Ids
+                    for (var reminder in _reminders) {
+                      reminderVM.addReminder(reminder, contactId);
+                    }
                   }
                   _nameController.clear();
                   _phoneController.clear();
                   _emailController.clear();
                   _noteController.clear();
                   _reminders.clear();
-                  _reminderController.clear();
                   Navigator.pop(context);
                 }
               },
@@ -165,7 +167,6 @@ class _CreateContactScreenState extends State<CreateContactScreen> {
               GestureDetector(
                 onTap: () => showReminderModal(
                   context: context,
-                  reminderController: _reminderController,
                   onReminderSet: _handleReminderSet,
                 ),
                 child: Container(
@@ -197,7 +198,6 @@ class _CreateContactScreenState extends State<CreateContactScreen> {
                         icon: const Icon(Icons.add_circle, color: Colors.blue),
                         onPressed: () => showReminderModal(
                           context: context,
-                          reminderController: _reminderController,
                           onReminderSet: _handleReminderSet,
                         ),
                       ),

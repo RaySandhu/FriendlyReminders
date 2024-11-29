@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:friendlyreminder/models/ContactModel.dart';
 import 'package:friendlyreminder/services/ContactService.dart';
+import 'package:friendlyreminder/services/ReminderService.dart';
 
 class DatabaseScreen extends StatefulWidget {
   const DatabaseScreen({super.key});
@@ -11,6 +12,7 @@ class DatabaseScreen extends StatefulWidget {
 
 class _DatabaseScreenState extends State<DatabaseScreen> {
   final ContactService contactService = ContactService();
+  final ReminderService reminderService = ReminderService();
 
   @override
   Widget build(BuildContext context) {
@@ -43,7 +45,7 @@ class _DatabaseScreenState extends State<DatabaseScreen> {
             ),
             FilledButton(
               onPressed: () async {
-                print(await contactService.getAllContacts());
+                print(await reminderService.getAllReminders());
               },
               child: Text("Get"),
               style: ButtonStyle(
