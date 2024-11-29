@@ -24,7 +24,7 @@ class ContactReminderCard extends StatelessWidget {
           Center(
             child: Text(
               "Time to Reach Out!",
-              style: Theme.of(context).textTheme.displayMedium?.copyWith(
+              style: Theme.of(context).textTheme.displaySmall?.copyWith(
                 fontWeight: FontWeight.bold,
               ),
               textAlign: TextAlign.center,
@@ -32,48 +32,55 @@ class ContactReminderCard extends StatelessWidget {
           ),
           const SizedBox(height: 24), // Spacing between text and buttons
           // Button Row
+          
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
               // Accept Button
-              Container(
-                decoration: BoxDecoration(
-                  color: Colors.green,
-                  borderRadius: BorderRadius.circular(8),
-                ),
-                child: IconButtonWithTextRow(
-                  onPressed: onAccept,
-                  icon: const Icon(Icons.check, color: Colors.white),
-                  text: 'Reached Out!',
-                  buttonColour: Colors.green,
+              Flexible(
+                child: Container(
+                  decoration: BoxDecoration(
+                    color: Colors.green,
+                    borderRadius: BorderRadius.circular(8),
+                  ),
+                  child: IconButtonWithTextRow(
+                    onPressed: onAccept,
+                    icon: const Icon(Icons.check, color: Colors.white),
+                    text: 'On It!',
+                    buttonColour: Colors.green,
+                  ),
                 ),
               ),
 
               // Dismiss Button
-              Container(
-                decoration: BoxDecoration(
-                  color: Colors.amber,
-                  borderRadius: BorderRadius.circular(8),
-                ),
-                child: IconButtonWithTextRow(
-                  onPressed: onDismiss,
-                  icon: const Icon(Icons.schedule, color: Colors.white),
-                  text: 'Snooze',
-                  buttonColour: Colors.amber,
+              Flexible(
+                child: Container(
+                  decoration: BoxDecoration(
+                    color: Colors.amber,
+                    borderRadius: BorderRadius.circular(8),
+                  ),
+                  child: IconButtonWithTextRow(
+                    onPressed: onDismiss,
+                    icon: const Icon(Icons.schedule, color: Colors.white),
+                    text: 'Snooze',
+                    buttonColour: Colors.amber,
+                  ),
                 ),
               ),
 
               // Reject Button
-              Container(
-                decoration: BoxDecoration(
-                  color: Colors.red,
-                  borderRadius: BorderRadius.circular(8),
-                ),
-                child: IconButtonWithTextRow(
-                  onPressed: onReject,
-                  icon: const Icon(Icons.close, color: Colors.white),
-                  text: 'Dismiss',
-                  buttonColour: Colors.red,
+              Flexible(
+                child: Container(
+                  decoration: BoxDecoration(
+                    color: Colors.red,
+                    borderRadius: BorderRadius.circular(8),
+                  ),
+                  child: IconButtonWithTextRow(
+                    onPressed: onReject,
+                    icon: const Icon(Icons.close, color: Colors.white),
+                    text: 'Dismiss',
+                    buttonColour: Colors.red,
+                  ),
                 ),
               ),
             ],

@@ -13,7 +13,14 @@ final String prompt;
   Widget build(BuildContext context) {
     return AlertDialog(
       title: Row(children: [
-        const Text('AI Generated Icebreaker', style: TextStyle(fontWeight: FontWeight.bold),),
+        Text(
+          'AI Generated Icebreaker', 
+          style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                fontWeight: FontWeight.bold,
+                color: Colors.black
+              ),
+          ),
+        const SizedBox(width: 16),
         IconButton(
           icon: const Icon(Icons.copy),
           onPressed: () {
