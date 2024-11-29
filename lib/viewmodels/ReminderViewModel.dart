@@ -6,17 +6,40 @@ class ReminderViewModel extends ChangeNotifier {
   final ReminderService _reminderService = ReminderService();
 
   List<ReminderModel> _reminders = [];
-  List<ReminderModel> _filteredReminders = [];
+  List<ReminderModel> _currentReminders = [];
+  List<ReminderModel> _pastReminders = [];
 
   bool _isLoading = false;
   String? _error;
 
-  bool _isFiltered = false;
-
-  List<ReminderModel> get reminders =>
-      _isFiltered ? _filteredReminders : _reminders;
+  List<ReminderModel> get reminders => _reminders;
+  List<ReminderModel> get currentReminders => _currentReminders;
+  List<ReminderModel> get pastReminders => _pastReminders;
   bool get isLoading => _isLoading;
   String? get error => _error;
+
+  /// Load all reminders for a specific contact
+  Future<void> renderCurrentPastReminders() async {
+    _isLoading = true;
+    _error = null;
+    notifyListeners();
+    try {
+      final allReminders = await _reminderService.getAllReminders();
+      _currentReminders = [
+        ...allReminders
+            .where((reminder) => DateTime.now().isSameDate(reminder.date))
+      ];
+      _pastReminders = [
+        ...allReminders
+            .where((reminder) => DateTime.now().isBefore(reminder.date))
+      ];
+    } catch (e) {
+      _error = "Failed to load reminders: ${e.toString()}";
+    } finally {
+      _isLoading = false;
+      notifyListeners();
+    }
+  }
 
   /// Load all reminders for a specific contact
   Future<void> loadRemindersByContact(int contactId) async {
@@ -25,7 +48,7 @@ class ReminderViewModel extends ChangeNotifier {
     notifyListeners();
     try {
       _reminders = await _reminderService.getRemindersByContactId(contactId);
-      _filteredReminders = [];
+      _currentReminders = [];
     } catch (e) {
       _error = "Failed to load reminders: ${e.toString()}";
     } finally {
@@ -111,20 +134,6 @@ class ReminderViewModel extends ChangeNotifier {
       _isLoading = false;
       notifyListeners();
     }
-  }
-
-  /// Filter reminders (e.g., reminders due today)
-  void filterReminders({DateTime? dueDate}) {
-    _isFiltered = dueDate != null;
-
-    if (!_isFiltered) {
-      _filteredReminders.clear();
-    } else {
-      _filteredReminders = _reminders.where((reminder) {
-        return reminder.date.toLocal().isSameDate(dueDate!);
-      }).toList();
-    }
-    notifyListeners();
   }
 
   Future<void> incrementReminder(

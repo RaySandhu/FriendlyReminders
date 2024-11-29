@@ -27,6 +27,11 @@ class ContactsViewModel extends ChangeNotifier {
   List<String> get selectedGroups => _selectedGroups..sort();
   List<GroupModel> get groups => _groups;
 
+  ContactWithGroupsModel? getContactById(int contactId) {
+    return (_contacts.where((contact) => contact.contact.id! == contactId))
+        .firstOrNull;
+  }
+
   Future<void> loadContacts() async {
     _isLoading = true;
     _error = null;

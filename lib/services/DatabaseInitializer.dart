@@ -292,6 +292,30 @@ class DatabaseInitializer {
       dbClient.groupId: 5, // Writing
     });
 
+// Reminders
+    batch.insert(dbClient.reminderTbl, {
+      dbClient.contactId: 2,
+      dbClient.reminderDate: "2024-11-29 00:00:00.000",
+      dbClient.reminderFreq: "Once"
+    });
+
+    batch.insert(dbClient.reminderTbl, {
+      dbClient.contactId: 2,
+      dbClient.reminderDate: "2024-11-30 00:00:00.000",
+      dbClient.reminderFreq: "Once"
+    });
+
+    batch.insert(dbClient.reminderTbl, {
+      dbClient.contactId: 2,
+      dbClient.reminderDate: "2024-11-28 00:00:00.000",
+      dbClient.reminderFreq: "Daily"
+    });
+
+    batch.insert(dbClient.reminderTbl, {
+      dbClient.contactId: 2,
+      dbClient.reminderDate: "2024-11-22 00:00:00.000",
+      dbClient.reminderFreq: "Weekly"
+    });
 // AI Prompts
     batch.insert(dbClient.aiPromptsTbl, {
       dbClient.promptId: 1,
