@@ -151,19 +151,37 @@ class _ContactViewDetailScreenState extends State<ContactViewDetailScreen> {
                                     if(reminderCardState == 0)
                                       ContactReminderCard(
                                         onAccept: () {
-                                          reminderCardState = 1;
+                                          setState(() {
+                                            reminderCardState = 1;
+                                          });
                                           print('Reminder accepted!');
                                         },
                                         onDismiss: () {
-                                          // Do stuff in here
-                                          reminderCardState = 2;
+                                          setState(() {
+                                            reminderCardState = 2;
+                                          });
                                           print('Reminder dismissed!');
                                         },
                                         onReject: () {
-                                          // Do stuff in here
-                                          reminderCardState = 3;
+                                          setState(() {
+                                            reminderCardState = 3;
+                                          });
                                           print('Reminder rejected!');
                                         },
+                                      ),
+
+                                    if(reminderCardState == 2)
+                                      Text('Reminder Snoozed',
+                                      style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                    ),
+
+                                    if(reminderCardState == 3)
+                                      Text('Reminder Dismissed',
+                                        style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                                          fontWeight: FontWeight.bold,
+                                        ),
                                       ),
                                   ],
                                 ),
@@ -245,7 +263,7 @@ class _ContactViewDetailScreenState extends State<ContactViewDetailScreen> {
                                   var rng = Random();
                                   showDialog(
                                     context: context, 
-                                    builder: (context) => AIPromptPopup(prompt: aiPromptVM.prompts[rng.nextInt(aiPromptVM.prompts.length - 1)].promptText),
+                                    builder: (context) => AIPromptPopup(prompt: aiPromptVM.prompts[rng.nextInt(aiPromptVM.prompts.length)].promptText),
                                     );
                                 }, 
                                 buttonColour: Colors.blue)

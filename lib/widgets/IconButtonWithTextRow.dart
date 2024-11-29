@@ -20,8 +20,8 @@ class IconButtonWithTextRow extends StatelessWidget {
       onTap: onPressed,
       child: Container(
         padding: const EdgeInsets.symmetric(
-          horizontal: 16, // Horizontal padding
-          vertical: 8,    // Vertical padding
+          horizontal: 8, // Horizontal padding
+          vertical: 4,    // Vertical padding
         ),
         decoration: BoxDecoration(
           color: buttonColour, 
