@@ -12,6 +12,8 @@ import 'package:friendlyreminder/models/ContactModel.dart';
 import 'package:friendlyreminder/widgets/StyledTextField.dart';
 import 'package:friendlyreminder/widgets/SuggestionTextField.dart';
 import 'package:friendlyreminder/utilities/PhoneNumberFormatter.dart';
+import 'package:friendlyreminder/widgets/DiscardChangesPopup.dart';
+import 'package:friendlyreminder/widgets/DeleteContactPopup.dart';
 
 class ContactEditDetailScreen extends StatefulWidget {
   final ContactWithGroupsModel? contactWithGroups;
@@ -38,6 +40,8 @@ class _ContactEditDetailScreenState extends State<ContactEditDetailScreen> {
 
   late List<GroupModel> _selectedGroups = [];
   final List<ReminderModel> _newReminders = [];
+
+  bool _hasChanges = false; // Track changes
 
   @override
   void initState() {
@@ -81,6 +85,12 @@ class _ContactEditDetailScreenState extends State<ContactEditDetailScreen> {
         title: Text(
             _contactWithGroups == null ? "Create New Contact" : "Edit Contact",
             style: Theme.of(context).textTheme.headlineSmall),
+        leading: IconButton(
+          icon: Icon(Icons.arrow_back),
+          onPressed: () {
+            showDiscardChangesAlert(context);
+          },
+        ),
         actions: [
           Padding(
             padding: const EdgeInsets.all(8.0),
@@ -353,10 +363,12 @@ class _ContactEditDetailScreenState extends State<ContactEditDetailScreen> {
                 padding: const EdgeInsets.all(8.0),
                 child: FilledButton.icon(
                   onPressed: () {
-                    contactVM
-                        .deleteContact(_contactWithGroups!.contact.id ?? -1);
-                    Navigator.pop(context);
-                    Navigator.pop(context);
+                    showDeleteContactAlert(context, () {
+                      contactVM
+                          .deleteContact(_contactWithGroups!.contact.id ?? -1);
+                      Navigator.pop(context);
+                      Navigator.pop(context);
+                    });
                   },
                   label: const Text("Delete Contact"),
                   icon: const Icon(Icons.delete),
