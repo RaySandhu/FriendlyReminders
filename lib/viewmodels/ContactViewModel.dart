@@ -77,13 +77,14 @@ class ContactsViewModel extends ChangeNotifier {
     }
   }
 
-  Future<void> createContact(
+  Future<int> createContact(
       ContactModel contact, List<GroupModel> groups) async {
     _isLoading = true;
     _error = null;
     notifyListeners();
+    int contactId = -1;
     try {
-      final contactId = await _contactService.createContact(contact);
+      contactId = await _contactService.createContact(contact);
       for (var group in groups) {
         final groupId = await _groupService.getOrCreateGroup(group);
         await _groupService.addGroupToContact(contactId, groupId);
@@ -95,6 +96,7 @@ class ContactsViewModel extends ChangeNotifier {
       _isLoading = false;
       notifyListeners();
     }
+    return contactId;
   }
 
   Future<void> updateContact(

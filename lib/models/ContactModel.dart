@@ -4,7 +4,6 @@ class ContactModel {
   final String phone;
   final String email;
   // final List<String> tags;
-  // final int reminder;
   final String notes;
 
   const ContactModel({
@@ -13,18 +12,16 @@ class ContactModel {
     required this.phone,
     required this.email,
     // required this.tags,
-    // required this.reminder,
     required this.notes,
   });
 
   update({String? name, String? phone, String? email, String? notes}) {
     return ContactModel(
-      id: this.id, // id stays the same
-      name: name ?? this.name,
-      phone: phone ?? this.phone,
-      email: email ?? this.email,
-      notes: notes ?? this.notes,
-    );
+        id: id, // id stays the same
+        name: name ?? this.name,
+        phone: phone ?? this.phone,
+        email: email ?? this.email,
+        notes: notes ?? this.notes);
   }
 
   factory ContactModel.fromMap(Map<String, dynamic> map) {

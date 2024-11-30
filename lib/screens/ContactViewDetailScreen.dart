@@ -1,6 +1,8 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
+import 'package:friendlyreminder/viewmodels/ReminderViewModel.dart';
+import 'package:friendlyreminder/widgets/ContactInfoListTile.dart';
 import 'package:friendlyreminder/models/AIPromptModel.dart';
 import 'package:friendlyreminder/widgets/IconButtonWithTextRow.dart';
 import 'package:friendlyreminder/screens/ContactEditDetailScreen.dart';
@@ -79,6 +81,14 @@ class _ContactViewDetailScreenState extends State<ContactViewDetailScreen> {
   Widget build(BuildContext context) {
     final contactVM = Provider.of<ContactsViewModel>(context, listen: false);
     final aiPromptVM = Provider.of<AIPromptViewModel>(context, listen: false);
+    final reminderVM = Provider.of<ReminderViewModel>(context, listen: false);
+
+    // Ensure reminders are loaded after the first build
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (_contactWithGroups.contact.id != null) {
+        reminderVM.loadRemindersByContact(_contactWithGroups.contact.id!);
+      }
+    });
 
     return Scaffold(
       appBar: AppBar(actions: [
@@ -96,6 +106,7 @@ class _ContactViewDetailScreenState extends State<ContactViewDetailScreen> {
             child: Center(
               child: Column(
                 children: [
+                  // Contact Card Section
                   Card(
                     child: Stack(
                       children: [
@@ -219,9 +230,15 @@ class _ContactViewDetailScreenState extends State<ContactViewDetailScreen> {
                               children: [
                                 Text(
                                   "GROUPS",
-                                  style:
-                                      Theme.of(context).textTheme.titleMedium,
+                                  style: Theme.of(context)
+                                      .textTheme
+                                      .titleMedium
+                                      ?.copyWith(
+                                        fontSize: 18,
+                                        fontWeight: FontWeight.bold,
+                                      ),
                                 ),
+                                const SizedBox(height: 10),
                                 Wrap(
                                   spacing: 8.0, // gap between adjacent chips
                                   runSpacing: 4.0, // gap between lines
@@ -230,6 +247,7 @@ class _ContactViewDetailScreenState extends State<ContactViewDetailScreen> {
                                     return ActionChip(
                                       label: Text(group.name),
                                       onPressed: () {
+                                        // TODO: Click leads to clicked group screen
                                         print("Group: ${group.name}");
                                       },
                                     );
@@ -241,7 +259,91 @@ class _ContactViewDetailScreenState extends State<ContactViewDetailScreen> {
                         )),
                       ],
                     ),
-                  const SizedBox(height: 3),
+                  // Reminders Section
+                  const SizedBox(height: 10),
+                  Card(
+                    child: Consumer<ReminderViewModel>(
+                      builder: (context, reminderVM, child) {
+                        if (reminderVM.isLoading) {
+                          return const Center(
+                              child: CircularProgressIndicator());
+                        }
+
+                        if (reminderVM.error != null) {
+                          return Center(
+                            child: Text(
+                              "Failed to load reminders: ${reminderVM.error}",
+                              style: const TextStyle(color: Colors.red),
+                            ),
+                          );
+                        }
+
+                        final reminders = reminderVM.reminders;
+
+                        return Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Container(
+                              width: double.infinity,
+                              padding: const EdgeInsets.only(left: 16.0),
+                              margin: const EdgeInsets.only(bottom: 10),
+                              child: Row(
+                                children: [
+                                  const Icon(Icons.schedule,
+                                      color: Colors.grey),
+                                  const SizedBox(
+                                    width: 8,
+                                    height: 40,
+                                  ),
+                                  Text(
+                                    "REMINDERS",
+                                    style: Theme.of(context)
+                                        .textTheme
+                                        .titleMedium
+                                        ?.copyWith(
+                                          fontSize: 18,
+                                          fontWeight: FontWeight.bold,
+                                        ),
+                                  ),
+                                  if (reminders.isEmpty)
+                                    const Padding(
+                                      padding: EdgeInsets.only(left: 8.0),
+                                      child: Text(
+                                        "No reminders",
+                                        style: TextStyle(
+                                          fontSize: 14,
+                                          color: Colors.grey,
+                                        ),
+                                      ),
+                                    ),
+                                ],
+                              ),
+                            ),
+                            if (reminders.isNotEmpty)
+                              Padding(
+                                padding: const EdgeInsets.symmetric(
+                                    horizontal: 16.0,
+                                    vertical: 8.0), // Add spacing
+                                child: Wrap(
+                                  spacing: 8.0, // Gap between chips
+                                  runSpacing: 4.0, // Gap between rows
+                                  children: reminders.map((reminder) {
+                                    return Chip(
+                                      label: Text(
+                                        "${reminder.freq == "Once" ? "Single" : reminder.freq} reminder on ${reminder.date.toString().split(" ")[0]}",
+                                        overflow: TextOverflow
+                                            .ellipsis, // Handle long labels
+                                      ),
+                                    );
+                                  }).toList(),
+                                ),
+                              ),
+                          ],
+                        );
+                      },
+                    ),
+                  ),
+
                   Card(
                     child: Padding(
                       padding: const EdgeInsets.all(8.0),
@@ -269,6 +371,7 @@ class _ContactViewDetailScreenState extends State<ContactViewDetailScreen> {
                                 buttonColour: Colors.blue)
                             ]
                           ),
+                          const SizedBox(height: 8),
                           Stack(
                             children: [
                               TextField(
