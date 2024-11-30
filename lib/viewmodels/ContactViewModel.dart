@@ -43,7 +43,7 @@ class ContactsViewModel extends ChangeNotifier {
       _contacts = contactsWithGroups;
       _filteredContacts = []; // Reset filtered contacts
     } catch (e) {
-      _error = e.toString();
+      _error = "Failed to load contacts: ${e.toString()}";
     } finally {
       _isLoading = false;
       notifyListeners();
