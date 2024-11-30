@@ -15,7 +15,7 @@ class _GroupScreenState extends State<GroupScreen> {
       appBar: AppBar(
         centerTitle: true,
         title:
-            Text("Contacts", style: Theme.of(context).textTheme.headlineSmall),
+            Text("Groups", style: Theme.of(context).textTheme.headlineSmall),
         backgroundColor: Theme.of(context).colorScheme.inversePrimary,
       ),
       body: SafeArea(
