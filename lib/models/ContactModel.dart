@@ -16,7 +16,12 @@ class ContactModel {
       required this.notes,
       this.latestContactDate});
 
-  update({String? name, String? phone, String? email, String? notes}) {
+  update(
+      {String? name,
+      String? phone,
+      String? email,
+      String? notes,
+      DateTime? latestContactDate}) {
     return ContactModel(
       id: id, // id stays the same
       name: name ?? this.name,
@@ -47,7 +52,7 @@ class ContactModel {
       'ContactPhone': phone,
       'ContactEmail': email,
       'ContactNotes': notes,
-      'LatestContactDate': latestContactDate ?? ""
+      'LatestContactDate': latestContactDate?.toLocal().toString() ?? ""
     };
   }
 

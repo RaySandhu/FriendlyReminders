@@ -21,6 +21,8 @@ class _ReminderScreenState extends State<ReminderScreen> {
         final past = reminderVM.pastReminders;
         final current = reminderVM.currentReminders;
 
+        print("Past: ${past.toString()},\n Current: ${current.toString()}");
+
         return Scaffold(
           appBar: AppBar(
             centerTitle: true,
@@ -95,9 +97,10 @@ class _ReminderScreenState extends State<ReminderScreen> {
                                         ),
                                       );
                                     },
-                                    onAccept: () => print("Accept"),
+                                    onAccept: () => print(past[index]),
                                     onDismiss: () => print("Dismiss"),
                                     onReject: () => print("Reject"),
+                                    backgroundColor: Colors.red[200],
                                   );
                                 },
                               ),
@@ -149,6 +152,7 @@ class _ReminderScreenState extends State<ReminderScreen> {
                                   return ReminderCard(
                                     name: contactInfo.contact.name,
                                     onTap: () {
+                                      print(current[index]);
                                       Navigator.push(
                                         context,
                                         MaterialPageRoute(
@@ -160,9 +164,18 @@ class _ReminderScreenState extends State<ReminderScreen> {
                                         ),
                                       );
                                     },
-                                    onAccept: () => print("Accept"),
-                                    onDismiss: () => print("Dismiss"),
-                                    onReject: () => print("Reject"),
+                                    onAccept: () => {
+                                      contactVM.updateContactDate(contactInfo),
+                                      // update last contacted on for contact
+                                      // increment all reminders to be past today's date
+                                    },
+                                    onDismiss: () => {
+                                      // increment all reminders to be past tomorrow's date
+                                      // add a single (snooze) reminder for tomorrow
+                                    },
+                                    onReject: () => {
+                                      // increment all reminders to be past today's date
+                                    },
                                   );
                                 },
                               ),

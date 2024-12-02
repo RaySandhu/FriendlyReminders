@@ -18,11 +18,8 @@ class ContactViewDetailScreen extends StatefulWidget {
   final ContactWithGroupsModel contactWithGroups;
   final List<AIPromptModel> aiPrompts;
 
-  const ContactViewDetailScreen({
-      Key? key, 
-      required this.contactWithGroups, 
-      required this.aiPrompts
-    })
+  const ContactViewDetailScreen(
+      {Key? key, required this.contactWithGroups, required this.aiPrompts})
       : super(key: key);
 
   @override
@@ -34,7 +31,7 @@ class _ContactViewDetailScreenState extends State<ContactViewDetailScreen> {
   late ContactWithGroupsModel _contactWithGroups;
   late TextEditingController _noteController;
   late bool isEmpty;
-  late int reminderCardState = 0;
+  late int reminderCardState = 1;
   bool _hasNotesChanged = false;
 
   @override
@@ -148,7 +145,6 @@ class _ContactViewDetailScreenState extends State<ContactViewDetailScreen> {
                                   ),
                                 ),
                               ),
-                              
                               if (_contactWithGroups.contact.name.isNotEmpty)
                                 Column(
                                   children: [
@@ -159,7 +155,36 @@ class _ContactViewDetailScreenState extends State<ContactViewDetailScreen> {
                                         style: Theme.of(context)
                                             .textTheme
                                             .headlineLarge),
-                                    if(reminderCardState == 0)
+                                    if (_contactWithGroups
+                                            .contact.latestContactDate !=
+                                        null)
+                                      Text(
+                                        "Last reached out on ${_contactWithGroups.contact.latestContactDate.toString().split(' ')[0]}",
+                                        overflow: TextOverflow.ellipsis,
+                                        maxLines: 1,
+                                        style: Theme.of(context)
+                                            .textTheme
+                                            .bodyMedium
+                                            ?.copyWith(
+                                              color: Colors
+                                                  .grey, // Set the text color to grey
+                                            ),
+                                      )
+                                    else
+                                      Text(
+                                        "You haven't reached out to this person yet!",
+                                        overflow: TextOverflow.ellipsis,
+                                        maxLines: 1,
+                                        style: Theme.of(context)
+                                            .textTheme
+                                            .bodyMedium
+                                            ?.copyWith(
+                                              color: Colors
+                                                  .grey, // Set the text color to grey
+                                            ),
+                                      ),
+                                    if (reminderCardState ==
+                                        0) // make a list of contacts with active reminders in remindersVM
                                       ContactReminderCard(
                                         onAccept: () {
                                           setState(() {
@@ -180,19 +205,25 @@ class _ContactViewDetailScreenState extends State<ContactViewDetailScreen> {
                                           print('Reminder rejected!');
                                         },
                                       ),
-
-                                    if(reminderCardState == 2)
-                                      Text('Reminder Snoozed',
-                                      style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                                        fontWeight: FontWeight.bold,
+                                    if (reminderCardState == 2)
+                                      Text(
+                                        'Reminder Snoozed',
+                                        style: Theme.of(context)
+                                            .textTheme
+                                            .titleLarge
+                                            ?.copyWith(
+                                              fontWeight: FontWeight.bold,
+                                            ),
                                       ),
-                                    ),
-
-                                    if(reminderCardState == 3)
-                                      Text('Reminder Dismissed',
-                                        style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                                          fontWeight: FontWeight.bold,
-                                        ),
+                                    if (reminderCardState == 3)
+                                      Text(
+                                        'Reminder Dismissed',
+                                        style: Theme.of(context)
+                                            .textTheme
+                                            .titleLarge
+                                            ?.copyWith(
+                                              fontWeight: FontWeight.bold,
+                                            ),
                                       ),
                                   ],
                                 ),
@@ -350,27 +381,29 @@ class _ContactViewDetailScreenState extends State<ContactViewDetailScreen> {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Row(
-                            children: [
-                              Text(
-                                "NOTES",
-                                style: Theme.of(context).textTheme.titleMedium,
-                              ),
-                              const Spacer(),
-                              IconButtonWithTextRow(
-                                icon: const Icon(Icons.factory), 
-                                text: 'Generate Icebreaker', 
+                          Row(children: [
+                            Text(
+                              "NOTES",
+                              style: Theme.of(context).textTheme.titleMedium,
+                            ),
+                            const Spacer(),
+                            IconButtonWithTextRow(
+                                icon: const Icon(Icons.factory),
+                                text: 'Generate Icebreaker',
                                 onPressed: () {
                                   print("Generated Icebreaker");
                                   var rng = Random();
                                   showDialog(
-                                    context: context, 
-                                    builder: (context) => AIPromptPopup(prompt: aiPromptVM.prompts[rng.nextInt(aiPromptVM.prompts.length)].promptText),
-                                    );
-                                }, 
+                                    context: context,
+                                    builder: (context) => AIPromptPopup(
+                                        prompt: aiPromptVM
+                                            .prompts[rng.nextInt(
+                                                aiPromptVM.prompts.length)]
+                                            .promptText),
+                                  );
+                                },
                                 buttonColour: Colors.blue)
-                            ]
-                          ),
+                          ]),
                           const SizedBox(height: 8),
                           Stack(
                             children: [

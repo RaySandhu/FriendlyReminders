@@ -139,6 +139,11 @@ class ContactsViewModel extends ChangeNotifier {
     }
   }
 
+  Future<void> updateContactDate(ContactWithGroupsModel contactInfo) async {
+    final tmp = contactInfo.contact.update(latestContactDate: DateTime.now());
+    updateContact(tmp, contactInfo.groups);
+  }
+
   Future<void> deleteContact(int contactId) async {
     _isLoading = true;
     _error = null;
