@@ -301,13 +301,13 @@ class DatabaseInitializer {
 
     batch.insert(dbClient.reminderTbl, {
       dbClient.contactId: 2,
-      dbClient.reminderDate: "2024-11-30 00:00:00.000",
+      dbClient.reminderDate: "2024-12-01 00:00:00.000",
       dbClient.reminderFreq: "Once"
     });
 
     batch.insert(dbClient.reminderTbl, {
       dbClient.contactId: 3,
-      dbClient.reminderDate: "2024-11-28 00:00:00.000",
+      dbClient.reminderDate: "2024-12-01 00:00:00.000",
       dbClient.reminderFreq: "Daily"
     });
 
