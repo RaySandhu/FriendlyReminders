@@ -8,6 +8,7 @@ class ReminderViewModel extends ChangeNotifier {
   List<ReminderModel> _reminders = [];
   List<ReminderModel> _currentReminders = [];
   List<ReminderModel> _pastReminders = [];
+  List<int> _usersWithActiveReminders = [];
 
   bool _isLoading = false;
   String? _error;
@@ -15,6 +16,7 @@ class ReminderViewModel extends ChangeNotifier {
   List<ReminderModel> get reminders => _reminders;
   List<ReminderModel> get currentReminders => _currentReminders;
   List<ReminderModel> get pastReminders => _pastReminders;
+  List<int> get usersWithActiveReminders => _usersWithActiveReminders;
   bool get isLoading => _isLoading;
   String? get error => _error;
 
@@ -25,16 +27,26 @@ class ReminderViewModel extends ChangeNotifier {
     notifyListeners();
     try {
       final allReminders = await _reminderService.getAllReminders();
+      Set activeReminders = <int>{};
 
       _currentReminders = allReminders.where((reminder) {
-        return DateTime.now().isSameDate(reminder.date);
+        if (DateTime.now().isSameDate(reminder.date)) {
+          activeReminders.add(reminder.reminderContactId);
+          return true;
+        }
+        return false;
       }).toList();
 
-      _pastReminders = [
-        ...allReminders.where((reminder) =>
-            DateTime.now().isAfter(reminder.date) &&
-            !DateTime.now().isSameDate(reminder.date))
-      ];
+      _pastReminders = allReminders.where((reminder) {
+        if (DateTime.now().isAfter(reminder.date) &&
+            !DateTime.now().isSameDate(reminder.date)) {
+          activeReminders.add(reminder.reminderContactId);
+          return true;
+        }
+        return false;
+      }).toList();
+
+      _usersWithActiveReminders = activeReminders.cast<int>().toList();
     } catch (e) {
       _error = "Failed to load reminders: ${e.toString()}";
     } finally {

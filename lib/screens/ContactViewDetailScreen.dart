@@ -31,7 +31,7 @@ class _ContactViewDetailScreenState extends State<ContactViewDetailScreen> {
   late ContactWithGroupsModel _contactWithGroups;
   late TextEditingController _noteController;
   late bool isEmpty;
-  late int reminderCardState = 1;
+  late int reminderCardState = 0;
   bool _hasNotesChanged = false;
 
   @override
@@ -183,14 +183,15 @@ class _ContactViewDetailScreenState extends State<ContactViewDetailScreen> {
                                                   .grey, // Set the text color to grey
                                             ),
                                       ),
-                                    if (reminderCardState ==
-                                        0) // make a list of contacts with active reminders in remindersVM
+                                    if (reminderVM.usersWithActiveReminders
+                                        .contains(_contactWithGroups.contact
+                                            .id!)) // make a list of contacts with active reminders in remindersVM
                                       ContactReminderCard(
                                         onAccept: () {
                                           setState(() {
                                             reminderCardState = 1;
                                           });
-                                          print('Reminder accepted!');
+                                          print("Accept");
                                         },
                                         onDismiss: () {
                                           setState(() {
