@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:friendlyreminder/models/ContactWithGroupsModel.dart';
 import 'package:friendlyreminder/screens/ContactViewDetailScreen.dart';
 import 'package:friendlyreminder/viewmodels/AIPromptViewModel.dart';
 import 'package:friendlyreminder/viewmodels/ContactViewModel.dart';
