@@ -9,10 +9,10 @@ import 'package:friendlyreminder/screens/ContactEditDetailScreen.dart';
 import 'package:provider/provider.dart';
 import 'package:friendlyreminder/viewmodels/ContactViewModel.dart';
 import 'package:friendlyreminder/models/ContactWithGroupsModel.dart';
-import 'package:friendlyreminder/widgets/ContactInfoListTile.dart';
 import 'package:friendlyreminder/widgets/ContactReminderCard.dart';
 import 'package:friendlyreminder/widgets/AIPromptPopup.dart';
 import 'package:friendlyreminder/viewmodels/AIPromptViewModel.dart';
+import 'package:friendlyreminder/models/ReminderModel.dart';
 
 class ContactViewDetailScreen extends StatefulWidget {
   final ContactWithGroupsModel contactWithGroups;
@@ -79,6 +79,9 @@ class _ContactViewDetailScreenState extends State<ContactViewDetailScreen> {
     final contactVM = Provider.of<ContactsViewModel>(context, listen: false);
     final aiPromptVM = Provider.of<AIPromptViewModel>(context, listen: false);
     final reminderVM = Provider.of<ReminderViewModel>(context, listen: false);
+
+    reminderVM.loadRemindersByContact(
+        _contactWithGroups.contact.id ?? -1); // Load reminders for the contact
 
     // Ensure reminders are loaded after the first build
     WidgetsBinding.instance.addPostFrameCallback((_) {
@@ -185,24 +188,65 @@ class _ContactViewDetailScreenState extends State<ContactViewDetailScreen> {
                                       ),
                                     if (reminderVM.usersWithActiveReminders
                                         .contains(_contactWithGroups.contact
-                                            .id!)) // make a list of contacts with active reminders in remindersVM
+                                            .id!) && reminderCardState == 0) // Checks the list of reminders' contact id for the current contact id
                                       ContactReminderCard(
                                         onAccept: () {
+                                          contactVM.updateContactDate(_contactWithGroups);
+
+                                          for (var reminder in reminderVM.reminders) {
+                                            if (reminder.reminderContactId == _contactWithGroups.contact.id) {
+                                              reminderVM.incrementReminder(
+                                                reminder, 
+                                                reminder.id!, 
+                                                _contactWithGroups.contact.id!);
+                                            }
+                                          }
+
                                           setState(() {
                                             reminderCardState = 1;
                                           });
-                                          print("Accept");
+
+                                          _contactWithGroups = widget.contactWithGroups;
+                                          print("Reminder Accepted");
                                         },
                                         onDismiss: () {
+                                         for (var reminder in reminderVM.reminders) {
+                                            reminderVM.incrementReminder(
+                                              reminder, 
+                                              reminder.id!, 
+                                              _contactWithGroups.contact.id!
+                                            );
+                                            
+                                            reminderVM.addReminder( 
+                                              ReminderModel(
+                                              date: DateTime.now()
+                                                .add(const Duration(days: 1)),
+                                              freq: "Single"),
+                                              _contactWithGroups.contact.id!
+                                            );
+                                          }
+
                                           setState(() {
                                             reminderCardState = 2;
                                           });
+
                                           print('Reminder dismissed!');
+
                                         },
                                         onReject: () {
-                                          setState(() {
-                                            reminderCardState = 3;
-                                          });
+                                          for (var reminder in reminderVM.reminders) {
+                                            if (reminder.reminderContactId == _contactWithGroups.contact.id) {
+                                              reminderVM.incrementReminder(
+                                                reminder, 
+                                                reminder.id!, 
+                                                _contactWithGroups.contact.id!);
+                                            }
+                                          }
+
+                                            setState(() {
+                                              reminderCardState = 3;
+                                            });
+
                                           print('Reminder rejected!');
                                         },
                                       ),
