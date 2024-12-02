@@ -18,6 +18,12 @@ class DatabaseClient {
   final String contactPhone = "ContactPhone";
   final String contactEmail = "ContactEmail";
   final String contactNotes = "ContactNotes";
+  final String contactReminders = "ContactReminders";
+
+  final String reminderTbl = "Reminder";
+  final String reminderId = "ReminderId";
+  final String reminderDate = "ReminderDate";
+  final String reminderFreq = "ReminderFreq";
 
   final String groupTbl = '[Group]'; // Group is reserved word in SQL
   final String groupId = 'GroupId';
@@ -71,8 +77,18 @@ class DatabaseClient {
           $contactName TEXT NOT NULL,
           $contactPhone TEXT,
           $contactEmail TEXT,
-          $contactNotes TEXT
+          $contactNotes TEXT,
+          $contactReminders TEXT
         )        
+        ''');
+          database.execute('''
+        CREATE TABLE $reminderTbl (
+          $reminderId INTEGER PRIMARY KEY AUTOINCREMENT,
+          $contactId INTEGER NOT NULL,
+          $reminderDate TEXT NOT NULL,
+          $reminderFreq TEXT NOT NULL,
+          FOREIGN KEY ($contactId) REFERENCES $contactTbl($contactId) ON DELETE CASCADE
+        )
         ''');
           database.execute('''
         CREATE TABLE $groupTbl (

@@ -2,6 +2,9 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:friendlyreminder/models/ContactWithGroupsModel.dart';
+import 'package:friendlyreminder/models/ReminderModel.dart';
+import 'package:friendlyreminder/viewmodels/ReminderViewModel.dart';
+import 'package:friendlyreminder/widgets/ReminderDialog.dart';
 import 'package:provider/provider.dart';
 import 'package:friendlyreminder/viewmodels/ContactViewModel.dart';
 import 'package:friendlyreminder/models/GroupModel.dart';
@@ -28,7 +31,6 @@ class _ContactEditDetailScreenState extends State<ContactEditDetailScreen> {
   late TextEditingController _phoneController = TextEditingController();
   late TextEditingController _emailController = TextEditingController();
   final TextEditingController _groupController = TextEditingController();
-  final TextEditingController _reminderController = TextEditingController();
   late TextEditingController _noteController = TextEditingController();
 
   final FocusNode _nameFocusNode = FocusNode();
@@ -37,6 +39,9 @@ class _ContactEditDetailScreenState extends State<ContactEditDetailScreen> {
   final FocusNode _groupFocusNode = FocusNode();
 
   late List<GroupModel> _selectedGroups = [];
+  final List<ReminderModel> _newReminders = [];
+
+  bool _hasChanges = false; // Track changes
 
   @override
   void initState() {
@@ -63,6 +68,16 @@ class _ContactEditDetailScreenState extends State<ContactEditDetailScreen> {
   @override
   Widget build(BuildContext context) {
     final contactVM = Provider.of<ContactsViewModel>(context, listen: false);
+    final reminderVM = Provider.of<ReminderViewModel>(context, listen: false);
+    reminderVM.reminders.clear();
+
+    // Ensure reminders are loaded after the first build
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (_contactWithGroups != null &&
+          _contactWithGroups!.contact.id != null) {
+        reminderVM.loadRemindersByContact(_contactWithGroups!.contact.id!);
+      }
+    });
 
     return Scaffold(
       appBar: AppBar(
@@ -80,9 +95,9 @@ class _ContactEditDetailScreenState extends State<ContactEditDetailScreen> {
           Padding(
             padding: const EdgeInsets.all(8.0),
             child: FilledButton(
-              child: const Text("Done"),
-              onPressed: () {
+              onPressed: () async {
                 if (_nameController.text.isNotEmpty) {
+                  int contactId;
                   if (_contactWithGroups == null) {
                     ContactModel newContact = ContactModel(
                         name: _nameController.text,
@@ -90,7 +105,9 @@ class _ContactEditDetailScreenState extends State<ContactEditDetailScreen> {
                         email: _emailController.text,
                         notes: _noteController.text);
 
-                    contactVM.createContact(newContact, _selectedGroups);
+                    contactId = await Provider.of<ContactsViewModel>(context,
+                            listen: false)
+                        .createContact(newContact, _selectedGroups);
                   } else {
                     ContactModel newContact = _contactWithGroups!.contact
                         .update(
@@ -101,11 +118,21 @@ class _ContactEditDetailScreenState extends State<ContactEditDetailScreen> {
                     _contactWithGroups = _contactWithGroups!
                         .update(contact: newContact, groups: _selectedGroups);
                     contactVM.updateContact(newContact, _selectedGroups);
+                    contactId = newContact.id!;
+                  }
+                  if (_newReminders.isNotEmpty && contactId != -1) {
+                    for (var reminder in _newReminders) {
+                      // only create new reminders for newly added reminders
+                      reminderVM.addReminder(reminder, contactId);
+                    }
                   }
                   _nameController.clear();
                   _phoneController.clear();
                   _emailController.clear();
                   _noteController.clear();
+                  _newReminders.clear();
+                  reminderVM.reminders.clear();
+
                   if (_contactWithGroups == null) {
                     Navigator.pop(context);
                   } else {
@@ -117,9 +144,11 @@ class _ContactEditDetailScreenState extends State<ContactEditDetailScreen> {
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(5),
                 ),
-                padding: EdgeInsets.symmetric(horizontal: 10, vertical: 4),
-                minimumSize: Size(0, 0),
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+                minimumSize: const Size(0, 0),
               ),
+              child: const Text("Done"),
             ),
           )
         ],
@@ -200,14 +229,131 @@ class _ContactEditDetailScreenState extends State<ContactEditDetailScreen> {
                         ),
                       ),
                     StyledTextField(
-                        controller: _reminderController,
-                        hintText: "Reminders",
-                        prefixIcon: Icons.schedule),
-                    StyledTextField(
                         controller: _noteController,
                         hintText: "Notes",
                         prefixIcon: Icons.description,
                         maxLines: null),
+                    Consumer<ReminderViewModel>(
+                      builder: (context, reminderVM, child) {
+                        final combinedReminders = [
+                          ...reminderVM.reminders,
+                          ..._newReminders,
+                        ];
+
+                        void handleReminderSet(
+                            DateTime? date, String? frequency) {
+                          setState(() {
+                            _newReminders.add(
+                                ReminderModel(date: date!, freq: frequency!));
+                          });
+                        }
+
+                        return Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            GestureDetector(
+                              onTap: () => showReminderModal(
+                                  context: context,
+                                  onReminderSet: handleReminderSet),
+                              child: Container(
+                                padding: const EdgeInsets.only(left: 16.0),
+                                margin: const EdgeInsets.all(10),
+                                decoration: const BoxDecoration(
+                                  border: Border(
+                                    bottom: BorderSide(
+                                      color: Colors.grey, // Grey underline
+                                      width: 1.0, // Thickness of the underline
+                                    ),
+                                  ),
+                                ),
+                                child: Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    const Row(
+                                      children: [
+                                        Icon(Icons.schedule,
+                                            color: Colors.grey),
+                                        SizedBox(width: 8),
+                                        Text(
+                                          "Reminders",
+                                          style: TextStyle(
+                                            fontSize: 18,
+                                            fontWeight: FontWeight.bold,
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                    IconButton(
+                                      icon: const Icon(Icons.add_circle,
+                                          color: Colors.blue),
+                                      onPressed: () => showReminderModal(
+                                          context: context,
+                                          onReminderSet: handleReminderSet),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ),
+                            if (reminderVM.isLoading)
+                              const Padding(
+                                padding: EdgeInsets.all(8.0),
+                                child:
+                                    Center(child: CircularProgressIndicator()),
+                              )
+                            else if (reminderVM.error != null)
+                              Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: Center(
+                                  child: Text(
+                                    "Failed to load reminders: ${reminderVM.error}",
+                                    style: const TextStyle(color: Colors.red),
+                                  ),
+                                ),
+                              )
+                            else if (combinedReminders.isNotEmpty)
+                              Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: SizedBox(
+                                  width: double.infinity,
+                                  child: Wrap(
+                                    spacing: 8.0, // Gap between chips
+                                    runSpacing: 4.0, // Gap between rows
+                                    children: combinedReminders.map((reminder) {
+                                      return Chip(
+                                        label: Text(
+                                          "${reminder.freq == "Once" ? "Single" : reminder.freq} reminder ${reminder.freq == "Once" ? "on" : "starting"} ${reminder.date.toString().split(" ")[0]}",
+                                          overflow: TextOverflow.ellipsis,
+                                        ),
+                                        deleteIcon: const Icon(Icons.close),
+                                        onDeleted: () async {
+                                          if (reminder.id != null) {
+                                            await reminderVM.deleteReminder(
+                                              reminder.id!,
+                                              _contactWithGroups!.contact.id!,
+                                            );
+                                          } else {
+                                            _newReminders.remove(reminder);
+                                          }
+                                        },
+                                      );
+                                    }).toList(),
+                                  ),
+                                ),
+                              )
+                            else
+                              const Padding(
+                                padding: EdgeInsets.all(8.0),
+                                child: Text(
+                                  "No reminders added yet.",
+                                  style: TextStyle(
+                                      fontSize: 14, color: Colors.grey),
+                                ),
+                              ),
+                          ],
+                        );
+                      },
+                    )
                   ],
                 ),
               ),

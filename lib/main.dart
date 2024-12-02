@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'widgets/NavBar.dart';
 import 'package:provider/provider.dart';
 import 'package:friendlyreminder/viewmodels/ContactViewModel.dart';
+import 'package:friendlyreminder/viewmodels/GroupViewModel.dart';
+import 'package:friendlyreminder/viewmodels/ReminderViewModel.dart';
 import 'package:friendlyreminder/viewmodels/AIPromptViewModel.dart';
 
 void main() {
@@ -13,6 +15,12 @@ void main() {
         ),
         ChangeNotifierProvider(
           create: (context) => AIPromptViewModel()..loadPrompts(),
+        ),
+        ChangeNotifierProvider(
+          create: (context) => ReminderViewModel(),
+        ),
+        ChangeNotifierProvider(
+          create: (context) => GroupViewModel()..loadGroups(),
         ),
       ],
       child: const MyApp(),
