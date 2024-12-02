@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 void showDeleteContactAlert(BuildContext context, Function onDeleted) {
   showDialog(
     context: context,
-    // barrierDismissible: false, // user must tap button
     builder: (BuildContext context) {
       return AlertDialog(
         title: Text('Deleting Contact',
@@ -29,7 +28,6 @@ void showDeleteContactAlert(BuildContext context, Function onDeleted) {
               child: const Text('No'),
               onPressed: () {
                 Navigator.of(context).pop();
-                // dismiss popup
               },
             ),
             TextButton(
@@ -47,7 +45,6 @@ void showDeleteContactAlert(BuildContext context, Function onDeleted) {
               onPressed: () {
                 onDeleted();
                 Navigator.of(context).pop();
-                //Navigator.of(context).pop(); // contact should be removed from the contact screen
             },
           ),
         ],

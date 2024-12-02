@@ -38,8 +38,6 @@ class _ContactEditDetailScreenState extends State<ContactEditDetailScreen> {
 
   late List<GroupModel> _selectedGroups = [];
 
-  bool _hasChanges = false; // Track changes
-
   @override
   void initState() {
     super.initState();

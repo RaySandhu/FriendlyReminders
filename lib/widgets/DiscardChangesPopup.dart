@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 void showDiscardChangesAlert(BuildContext context) {
   showDialog(
     context: context,
-    // barrierDismissible: false, // user must tap button
     builder: (BuildContext context) {
       return AlertDialog(
         title: Text('Discarding Changes', 
@@ -29,7 +28,6 @@ void showDiscardChangesAlert(BuildContext context) {
               child: const Text('No'),
               onPressed: () {
                 Navigator.of(context).pop();
-                // dismiss popup
               },
             ),
             TextButton(
