@@ -3,10 +3,9 @@ import 'package:flutter/material.dart';
 void showDeleteGroupAlert(BuildContext context, Function onDeleted) {
   showDialog(
     context: context,
-    // barrierDismissible: false, // user must tap button
     builder: (BuildContext context) {
       return AlertDialog(
-        title: Text('Deleting Contact',
+        title: Text('Deleting Group',
                     style: Theme.of(context).textTheme.titleMedium?.copyWith(
                             fontSize: 22,
                             fontWeight: FontWeight.bold,
@@ -29,7 +28,6 @@ void showDeleteGroupAlert(BuildContext context, Function onDeleted) {
               child: const Text('No'),
               onPressed: () {
                 Navigator.of(context).pop();
-                // dismiss popup
               },
             ),
             TextButton(
@@ -47,7 +45,6 @@ void showDeleteGroupAlert(BuildContext context, Function onDeleted) {
               onPressed: () {
                 onDeleted();
                 Navigator.of(context).pop();
-                // Navigator.of(context).pop(); // contact should be removed from the contact screen
             },
           ),
         ],
