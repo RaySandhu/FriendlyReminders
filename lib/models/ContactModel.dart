@@ -5,23 +5,26 @@ class ContactModel {
   final String email;
   // final List<String> tags;
   final String notes;
+  final DateTime? latestContactDate;
 
-  const ContactModel({
-    this.id,
-    required this.name,
-    required this.phone,
-    required this.email,
-    // required this.tags,
-    required this.notes,
-  });
+  const ContactModel(
+      {this.id,
+      required this.name,
+      required this.phone,
+      required this.email,
+      // required this.tags,
+      required this.notes,
+      this.latestContactDate});
 
   update({String? name, String? phone, String? email, String? notes}) {
     return ContactModel(
-        id: id, // id stays the same
-        name: name ?? this.name,
-        phone: phone ?? this.phone,
-        email: email ?? this.email,
-        notes: notes ?? this.notes);
+      id: id, // id stays the same
+      name: name ?? this.name,
+      phone: phone ?? this.phone,
+      email: email ?? this.email,
+      notes: notes ?? this.notes,
+      latestContactDate: latestContactDate,
+    );
   }
 
   factory ContactModel.fromMap(Map<String, dynamic> map) {
@@ -31,6 +34,9 @@ class ContactModel {
       phone: map['ContactPhone'] as String,
       email: map['ContactEmail'] as String,
       notes: map['ContactNotes'] as String,
+      latestContactDate: map['LatestContactDate'] != null
+          ? DateTime.parse(map['LatestContactDate'])
+          : null,
     );
   }
 
@@ -41,11 +47,12 @@ class ContactModel {
       'ContactPhone': phone,
       'ContactEmail': email,
       'ContactNotes': notes,
+      'LatestContactDate': latestContactDate ?? ""
     };
   }
 
   @override
   String toString() {
-    return 'ContactModel{ContactId: $id, ContactName: $name, ContactPhone: $phone, ContactEmail: $email, ContactNotes: $notes}';
+    return 'ContactModel{ContactId: $id, ContactName: $name, ContactPhone: $phone, ContactEmail: $email, ContactNotes: $notes, Last contacted on: ${latestContactDate.toString()}}';
   }
 }

@@ -25,6 +25,7 @@ class DatabaseInitializer {
       dbClient.contactPhone: '(987) 654-3210',
       dbClient.contactEmail: 'alice@gmail.com',
       dbClient.contactNotes: 'Hi there',
+      dbClient.latestContactDate: '2024-11-29 00:00:00.000'
     });
     batch.insert(dbClient.contactTbl, {
       dbClient.contactId: 3,
@@ -32,6 +33,7 @@ class DatabaseInitializer {
       dbClient.contactPhone: '(555) 123-4567',
       dbClient.contactEmail: 'charlie@gmail.com',
       dbClient.contactNotes: 'Nice to meet you',
+      dbClient.latestContactDate: '2024-11-19 00:00:00.000'
     });
     batch.insert(dbClient.contactTbl, {
       dbClient.contactId: 4,
