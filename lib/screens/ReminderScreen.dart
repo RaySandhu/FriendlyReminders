@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:friendlyreminder/models/ReminderModel.dart';
 import 'package:friendlyreminder/screens/ContactViewDetailScreen.dart';
 import 'package:friendlyreminder/viewmodels/AIPromptViewModel.dart';
 import 'package:friendlyreminder/viewmodels/ContactViewModel.dart';
@@ -104,7 +105,18 @@ class _ReminderScreenState extends State<ReminderScreen> {
                                           past[index].id!,
                                           contactInfo.contact.id!)
                                     },
-                                    onDismiss: () => print("Dismiss"),
+                                    onDismiss: () => {
+                                      reminderVM.incrementReminder(
+                                          past[index],
+                                          past[index].id!,
+                                          contactInfo.contact.id!),
+                                      reminderVM.addReminder(
+                                          ReminderModel(
+                                              date: DateTime.now()
+                                                  .add(const Duration(days: 1)),
+                                              freq: "Single"),
+                                          contactInfo.contact.id!),
+                                    },
                                     onReject: () =>
                                         reminderVM.incrementReminder(
                                             past[index],
@@ -184,8 +196,15 @@ class _ReminderScreenState extends State<ReminderScreen> {
                                           contactInfo.contact.id!)
                                     },
                                     onDismiss: () => {
-                                      // increment all reminders to be past tomorrow's date
-                                      // add a single (snooze) reminder for tomorrow
+                                      reminderVM.incrementReminder(
+                                          current[index],
+                                          current[index].id!,
+                                          contactInfo.contact.id!),
+                                      ReminderModel(
+                                          date: DateTime.now()
+                                              .add(const Duration(days: 1)),
+                                          freq: "Single"),
+                                      contactInfo.contact.id!,
                                     },
                                     onReject: () =>
                                         // increment all reminders to be past tomorrow's date
