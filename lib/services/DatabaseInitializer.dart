@@ -25,6 +25,7 @@ class DatabaseInitializer {
       dbClient.contactPhone: '(987) 654-3210',
       dbClient.contactEmail: 'alice@gmail.com',
       dbClient.contactNotes: 'Hi there',
+      dbClient.latestContactDate: '2024-11-29 00:00:00.000'
     });
     batch.insert(dbClient.contactTbl, {
       dbClient.contactId: 3,
@@ -32,6 +33,7 @@ class DatabaseInitializer {
       dbClient.contactPhone: '(555) 123-4567',
       dbClient.contactEmail: 'charlie@gmail.com',
       dbClient.contactNotes: 'Nice to meet you',
+      dbClient.latestContactDate: '2024-11-19 00:00:00.000'
     });
     batch.insert(dbClient.contactTbl, {
       dbClient.contactId: 4,
@@ -292,6 +294,30 @@ class DatabaseInitializer {
       dbClient.groupId: 5, // Writing
     });
 
+// Reminders
+    batch.insert(dbClient.reminderTbl, {
+      dbClient.contactId: 2,
+      dbClient.reminderDate: "2024-11-29 00:00:00.000",
+      dbClient.reminderFreq: "Once"
+    });
+
+    batch.insert(dbClient.reminderTbl, {
+      dbClient.contactId: 2,
+      dbClient.reminderDate: "2024-12-01 00:00:00.000",
+      dbClient.reminderFreq: "Once"
+    });
+
+    batch.insert(dbClient.reminderTbl, {
+      dbClient.contactId: 3,
+      dbClient.reminderDate: "2024-12-01 00:00:00.000",
+      dbClient.reminderFreq: "Daily"
+    });
+
+    batch.insert(dbClient.reminderTbl, {
+      dbClient.contactId: 4,
+      dbClient.reminderDate: "2024-11-22 00:00:00.000",
+      dbClient.reminderFreq: "Weekly"
+    });
 // AI Prompts
     batch.insert(dbClient.aiPromptsTbl, {
       dbClient.promptId: 1,

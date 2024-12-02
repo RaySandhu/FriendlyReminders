@@ -17,7 +17,8 @@ void main() {
           create: (context) => AIPromptViewModel()..loadPrompts(),
         ),
         ChangeNotifierProvider(
-          create: (context) => ReminderViewModel(),
+          create: (context) =>
+              ReminderViewModel()..renderCurrentPastReminders(),
         ),
         ChangeNotifierProvider(
           create: (context) => GroupViewModel()..loadGroups(),
