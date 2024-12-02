@@ -21,7 +21,6 @@ class ReminderCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    print(backgroundColor);
     return ListTile(
       tileColor: backgroundColor ?? Theme.of(context).colorScheme.surface,
       leading: CircleAvatar(

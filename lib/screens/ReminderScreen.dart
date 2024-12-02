@@ -21,7 +21,7 @@ class _ReminderScreenState extends State<ReminderScreen> {
         final past = reminderVM.pastReminders;
         final current = reminderVM.currentReminders;
 
-        print("Past: ${past.toString()},\n Current: ${current.toString()}");
+        // print("Past: ${past.toString()},\n Current: ${current.toString()}");
 
         return Scaffold(
           appBar: AppBar(
@@ -97,7 +97,13 @@ class _ReminderScreenState extends State<ReminderScreen> {
                                         ),
                                       );
                                     },
-                                    onAccept: () => print(past[index]),
+                                    onAccept: () => {
+                                      contactVM.updateContactDate(contactInfo),
+                                      reminderVM.incrementReminder(
+                                          past[index],
+                                          past[index].id!,
+                                          contactInfo.contact.id!)
+                                    },
                                     onDismiss: () => print("Dismiss"),
                                     onReject: () => print("Reject"),
                                     backgroundColor: Colors.red[200],
@@ -166,6 +172,10 @@ class _ReminderScreenState extends State<ReminderScreen> {
                                     },
                                     onAccept: () => {
                                       contactVM.updateContactDate(contactInfo),
+                                      reminderVM.incrementReminder(
+                                          current[index],
+                                          current[index].id!,
+                                          contactInfo.contact.id!)
                                       // update last contacted on for contact
                                       // increment all reminders to be past today's date
                                     },

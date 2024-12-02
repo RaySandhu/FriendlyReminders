@@ -22,6 +22,8 @@ class ReminderModel {
 
   update({DateTime? date, String? freq}) {
     return ReminderModel(
+      id: id,
+      reminderContactId: reminderContactId,
       date: date ?? this.date,
       freq: freq ?? this.freq,
     );
@@ -30,8 +32,8 @@ class ReminderModel {
   Map<String, dynamic> toMap() {
     return {
       'ReminderId': id,
-      'ReminderContactId': reminderContactId,
-      'ReminderDate': date,
+      'ContactId': reminderContactId,
+      'ReminderDate': date.toLocal().toString(),
       'ReminderFreq': freq,
     };
   }

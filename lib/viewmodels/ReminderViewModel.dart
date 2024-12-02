@@ -144,18 +144,27 @@ class ReminderViewModel extends ChangeNotifier {
     notifyListeners();
 
     try {
-      // Determine the new date based on frequency
-      final DateTime newDate =
-          _getIncrementedDate(reminder.date, reminder.freq);
+      // delete the reminder if its for single instance
+      print(reminder.freq);
+      if (reminder.freq == "Once") {
+        await deleteReminder(reminderId, contactId);
+      } else {
+        // Determine the new date based on frequency
+        DateTime newDate = reminder.date;
+        while (newDate.isBefore(DateTime.now())) {
+          newDate = _getIncrementedDate(newDate, reminder.freq);
+        }
 
-      // Create a new ReminderModel with the updated date
-      final updatedReminder = reminder.update(date: newDate);
+        // Create a new ReminderModel with the updated date
+        final updatedReminder = reminder.update(date: newDate);
 
-      // Update the reminder in the database
-      await _reminderService.updateReminder(updatedReminder, reminderId);
+        // Update the reminder in the database
+        await _reminderService.updateReminder(updatedReminder, reminderId);
+      }
 
-      // Refresh reminders for the contact
+      // Refresh reminders for the contact and reminders page
       await loadRemindersByContact(contactId);
+      await renderCurrentPastReminders();
     } catch (e) {
       _error = "Failed to increment reminder: ${e.toString()}";
     } finally {
