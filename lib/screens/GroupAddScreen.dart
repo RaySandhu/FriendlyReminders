@@ -95,33 +95,7 @@ class _GroupAddScreenState extends State<GroupAddScreen> {
               ),
             ),
             const SizedBox(height: 16.0),
-            const Text(
-              'Colour',
-              style: TextStyle(fontSize: 16.0, fontWeight: FontWeight.w600),
-            ),
             const SizedBox(height: 8.0),
-            DropdownButtonFormField<String>(
-              value: _selectedColor,
-              items: ['Red', 'Blue', 'Green', 'Yellow', 'Purple']
-                  .map(
-                    (color) => DropdownMenuItem(
-                      value: color,
-                      child: Text(color),
-                    ),
-                  )
-                  .toList(),
-              onChanged: (value) {
-                setState(() {
-                  _selectedColor = value;
-                });
-              },
-              decoration: const InputDecoration(
-                border: OutlineInputBorder(),
-                filled: true,
-                fillColor: Color(0xFFF8F8F8), // Light background color
-              ),
-              hint: const Text('Select a color'),
-            ),
           ],
         ),
       ),

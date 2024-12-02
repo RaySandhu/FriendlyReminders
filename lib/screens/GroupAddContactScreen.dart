@@ -139,6 +139,7 @@ class _GroupAddContactScreenState extends State<GroupAddContactScreen> {
                                 final contact = filteredContacts[index];
                                 final isSelected =
                                     _selectedContacts.contains(contact.contact);
+                                    
 
                                 return ListTile(
                                   leading: CircleAvatar(
@@ -155,6 +156,8 @@ class _GroupAddContactScreenState extends State<GroupAddContactScreen> {
                                           _selectedContacts.remove(contact.contact);
                                         }
                                       });
+                                                                                                                print(_selectedContacts);
+
                                     },
                                   ),
                                   onTap: () {
@@ -166,6 +169,7 @@ class _GroupAddContactScreenState extends State<GroupAddContactScreen> {
                                         _selectedContacts.add(contact.contact);
                                       }
                                     });
+
                                   },
                                 );
                               },

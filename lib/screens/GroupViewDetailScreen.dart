@@ -86,7 +86,7 @@ void deleteContact(int index) {
   @override
   Widget build(BuildContext context){
     final groupVM = Provider.of<GroupViewModel>(context, listen: false);
-    List<ContactModel> contactList = groupVM.getContactsinGroup(_group.id);
+   // List<ContactModel> contactList = groupVM.getContactsinGroup(_group.id);
 
     return Scaffold(
       appBar: AppBar(
@@ -109,7 +109,7 @@ void deleteContact(int index) {
       body: SafeArea(
           child: Column(
           children: [
-            Expanded(
+            /*Expanded(
                   child: groupVM.isLoading
                       ? const Center(child: CircularProgressIndicator())
                       : groupVM.error != null
@@ -137,7 +137,7 @@ void deleteContact(int index) {
                                         });
                                   },
                                 ),
-                ),
+                ),*/
             Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: FilledButton.icon(
