@@ -145,7 +145,6 @@ class ReminderViewModel extends ChangeNotifier {
 
     try {
       // delete the reminder if its for single instance
-      print(reminder.freq);
       if (reminder.freq == "Once") {
         await deleteReminder(reminderId, contactId);
       } else {

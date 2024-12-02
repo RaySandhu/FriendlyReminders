@@ -105,7 +105,11 @@ class _ReminderScreenState extends State<ReminderScreen> {
                                           contactInfo.contact.id!)
                                     },
                                     onDismiss: () => print("Dismiss"),
-                                    onReject: () => print("Reject"),
+                                    onReject: () =>
+                                        reminderVM.incrementReminder(
+                                            past[index],
+                                            past[index].id!,
+                                            contactInfo.contact.id!),
                                     backgroundColor: Colors.red[200],
                                   );
                                 },
@@ -171,21 +175,24 @@ class _ReminderScreenState extends State<ReminderScreen> {
                                       );
                                     },
                                     onAccept: () => {
+                                      // update last contacted on for contact
                                       contactVM.updateContactDate(contactInfo),
+                                      // increment all reminders to be past today's date
                                       reminderVM.incrementReminder(
                                           current[index],
                                           current[index].id!,
                                           contactInfo.contact.id!)
-                                      // update last contacted on for contact
-                                      // increment all reminders to be past today's date
                                     },
                                     onDismiss: () => {
                                       // increment all reminders to be past tomorrow's date
                                       // add a single (snooze) reminder for tomorrow
                                     },
-                                    onReject: () => {
-                                      // increment all reminders to be past today's date
-                                    },
+                                    onReject: () =>
+                                        // increment all reminders to be past tomorrow's date
+                                        reminderVM.incrementReminder(
+                                            current[index],
+                                            current[index].id!,
+                                            contactInfo.contact.id!),
                                   );
                                 },
                               ),
