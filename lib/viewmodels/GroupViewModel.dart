@@ -1,5 +1,6 @@
 import 'package:flutter/foundation.dart';
 import 'package:friendlyreminder/models/GroupModel.dart';
+import 'package:friendlyreminder/models/ContactModel.dart';
 import 'package:friendlyreminder/services/GroupService.dart';
 import 'package:flutter/material.dart';
 import 'package:friendlyreminder/screens/GroupScreen.dart';
@@ -43,9 +44,6 @@ class GroupViewModel extends ChangeNotifier {
       _isLoading = false;
       notifyListeners();
     }
-    MaterialPageRoute(
-        builder: (context) => GroupScreen() //I can't figure out how to reroute it after the group gets deleted
-      );
   }
 
     Future<int> createGroup(GroupModel group) async {
@@ -63,5 +61,21 @@ class GroupViewModel extends ChangeNotifier {
       notifyListeners();
     }
     return groupId;
+  }
+
+  Future<List<ContactModel>> getContactsinGroup(GroupModel group) async {
+    _isLoading = true;
+    _error = null;
+    notifyListeners();
+    List<ContactModel> c =[];
+    try {
+      c = await _groupService.getContactsFromGroup(group.id ?? 0);
+    } catch (e) {
+      _error = "Failed to get group: ${e.toString()}";
+    } finally {
+      _isLoading = false;
+      notifyListeners();
+    }
+    return c;
   }
 }

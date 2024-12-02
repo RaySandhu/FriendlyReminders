@@ -86,6 +86,7 @@ void deleteContact(int index) {
   @override
   Widget build(BuildContext context){
     final groupVM = Provider.of<GroupViewModel>(context, listen: false);
+    List<ContactModel> contactList = groupVM.getContactsinGroup(_group.id);
 
     return Scaffold(
       appBar: AppBar(
@@ -109,23 +110,34 @@ void deleteContact(int index) {
           child: Column(
           children: [
             Expanded(
-              child: _group.size==0  //just testing
-                  ? const Center(child: Text('No contacts found'))
-                  : ListView.builder(
-                      itemCount: _group.size,
-                      itemBuilder: (context, index) {
-                        final contact = _groupContact.id; //fix this line
-                        
-                        return ListTile(
-                            title: Text(contact.toString()), //fix this to take the contactId and return the contact name
-                            trailing: IconButton(
-                            icon: const Icon(Icons.close), 
-                            onPressed: () { deleteContact(index); },
-                        ),
-                        );
-                      },
-                    ),
-          ),
+                  child: groupVM.isLoading
+                      ? const Center(child: CircularProgressIndicator())
+                      : groupVM.error != null
+                          ? Center(child: Text('Error: ${groupVM.error}'))
+                          : groupVM.contacts.isEmpty
+                              ? const Center(child: Text('No contacts found'))
+                              : ListView.builder(
+                                  itemCount: groupVM.contacts.length,
+                                  itemBuilder: (context, index) {
+                                    final contactWithGroups =
+                                        groupVM.contacts[index];;
+                                    return ContactCard(
+                                        name: contactWithGroups.contact.name,
+                                        onTap: () {
+                                          Navigator.push(
+                                            context,
+                                            MaterialPageRoute(
+                                              builder: (context) =>
+                                                  ContactViewDetailScreen(
+                                                contactWithGroups:
+                                                    contactWithGroups,
+                                              ),
+                                            ),
+                                          );
+                                        });
+                                  },
+                                ),
+                ),
             Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: FilledButton.icon(
