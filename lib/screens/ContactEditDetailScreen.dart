@@ -333,7 +333,9 @@ class _ContactEditDetailScreenState extends State<ContactEditDetailScreen> {
                                               _contactWithGroups!.contact.id!,
                                             );
                                           } else {
-                                            _newReminders.remove(reminder);
+                                            setState(() {
+                                              _newReminders.remove(reminder);
+                                            });
                                           }
                                         },
                                       );
