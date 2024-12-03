@@ -32,7 +32,6 @@ class _ContactViewDetailScreenState extends State<ContactViewDetailScreen> {
   late TextEditingController _noteController;
   late bool isEmpty;
   late int reminderCardState = 0;
-  late bool hasReminders = false;
   bool _hasNotesChanged = false;
 
   @override
