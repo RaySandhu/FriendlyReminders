@@ -32,6 +32,7 @@ class _ContactViewDetailScreenState extends State<ContactViewDetailScreen> {
   late TextEditingController _noteController;
   late bool isEmpty;
   late int reminderCardState = 0;
+  late bool hasReminders = false;
   bool _hasNotesChanged = false;
 
   @override
@@ -79,9 +80,6 @@ class _ContactViewDetailScreenState extends State<ContactViewDetailScreen> {
     final contactVM = Provider.of<ContactsViewModel>(context, listen: false);
     final aiPromptVM = Provider.of<AIPromptViewModel>(context, listen: false);
     final reminderVM = Provider.of<ReminderViewModel>(context, listen: false);
-
-    reminderVM.loadRemindersByContact(
-        _contactWithGroups.contact.id ?? -1); // Load reminders for the contact
 
     // Ensure reminders are loaded after the first build
     WidgetsBinding.instance.addPostFrameCallback((_) {
@@ -186,89 +184,102 @@ class _ContactViewDetailScreenState extends State<ContactViewDetailScreen> {
                                                   .grey, // Set the text color to grey
                                             ),
                                       ),
-                                    if (reminderVM.usersWithActiveReminders
-                                        .contains(_contactWithGroups.contact
-                                            .id!) && reminderCardState == 0) // Checks the list of reminders' contact id for the current contact id
-                                      ContactReminderCard(
-                                        onAccept: () {
-                                          contactVM.updateContactDate(_contactWithGroups);
-
-                                          for (var reminder in reminderVM.reminders) {
-                                            if (reminder.reminderContactId == _contactWithGroups.contact.id) {
-                                              reminderVM.incrementReminder(
-                                                reminder, 
-                                                reminder.id!, 
-                                                _contactWithGroups.contact.id!);
+                                    if (reminderCardState == 0)
+                                      Card(
+                                        child: Consumer<ReminderViewModel>(
+                                          builder: (context, reminderVM, child) {
+                                            if (reminderVM.isLoading) {
+                                              return const Center(
+                                                  child: CircularProgressIndicator());
                                             }
-                                          }
 
-                                          setState(() {
-                                            reminderCardState = 1;
-                                          });
-
-                                          _contactWithGroups = widget.contactWithGroups;
-                                          print("Reminder Accepted");
-                                        },
-                                        onDismiss: () {
-                                         for (var reminder in reminderVM.reminders) {
-                                            reminderVM.incrementReminder(
-                                              reminder, 
-                                              reminder.id!, 
-                                              _contactWithGroups.contact.id!
-                                            );
-                                            
-                                            reminderVM.addReminder( 
-                                              ReminderModel(
-                                              date: DateTime.now()
-                                                .add(const Duration(days: 1)),
-                                              freq: "Single"),
-                                              _contactWithGroups.contact.id!
-                                            );
-                                          }
-
-                                          setState(() {
-                                            reminderCardState = 2;
-                                          });
-
-                                          print('Reminder dismissed!');
-
-                                        },
-                                        onReject: () {
-                                          for (var reminder in reminderVM.reminders) {
-                                            if (reminder.reminderContactId == _contactWithGroups.contact.id) {
-                                              reminderVM.incrementReminder(
-                                                reminder, 
-                                                reminder.id!, 
-                                                _contactWithGroups.contact.id!);
+                                            if (reminderVM.error != null) {
+                                              return Center(
+                                                child: Text(
+                                                  "Failed to load reminders: ${reminderVM.error}",
+                                                  style: const TextStyle(color: Colors.red),
+                                                ),
+                                              );
                                             }
-                                          }
 
-                                            setState(() {
-                                              reminderCardState = 3;
-                                            });
+                                            final reminders = reminderVM.reminders;
 
-                                          print('Reminder rejected!');
-                                        },
+                                            return(
+                                              reminders.isNotEmpty
+                                                  ? ContactReminderCard(
+                                                      onAccept: () {
+                                                        contactVM.updateContactDate(
+                                                          _contactWithGroups
+                                                        );
+
+                                                        for (var reminder in reminders) {
+                                                          reminderVM.incrementReminder(
+                                                            reminder, 
+                                                            reminder.id!, 
+                                                            _contactWithGroups.contact.id!);
+                                                        }
+
+                                                        setState(() {
+                                                          reminderCardState = 1;
+                                                        });
+                                                      },
+
+                                                      onDismiss: () {
+                                                        for (var reminder in reminders) {
+                                                          reminderVM.incrementReminder(
+                                                            reminder, 
+                                                            reminder.id!, 
+                                                            _contactWithGroups.contact.id!);
+                                                        }
+
+                                                        reminderVM.addReminder(
+                                                          ReminderModel(
+                                                            date: DateTime.now().add(
+                                                              const Duration(days: 1),
+                                                            ),
+                                                            freq: "Once",
+                                                          ),
+                                                          _contactWithGroups.contact.id!,
+                                                        );
+
+                                                        setState(() {
+                                                          reminderCardState = 2;
+                                                        });
+                                                      },
+
+                                                      onReject: () {
+                                                        for (var reminder in reminders) {
+                                                          reminderVM.incrementReminder(
+                                                            reminder, 
+                                                            reminder.id!, 
+                                                            _contactWithGroups.contact.id!);
+                                                        }
+
+                                                        setState(() {
+                                                          reminderCardState = 3;
+                                                        });
+                                                      },
+                                                    )
+                                                  : Container()
+                                            );
+                                          },
+                                        )
                                       ),
+
                                     if (reminderCardState == 2)
                                       Text(
                                         'Reminder Snoozed',
-                                        style: Theme.of(context)
-                                            .textTheme
-                                            .titleLarge
-                                            ?.copyWith(
-                                              fontWeight: FontWeight.bold,
-                                            ),
+                                        style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                                          fontWeight: FontWeight.bold,
+                                        ),
                                       ),
+                          
                                     if (reminderCardState == 3)
                                       Text(
-                                        'Reminder Dismissed',
-                                        style: Theme.of(context)
-                                            .textTheme
-                                            .titleLarge
-                                            ?.copyWith(
-                                              fontWeight: FontWeight.bold,
-                                            ),
+                                        'Reminder Rejected',
+                                        style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                                          fontWeight: FontWeight.bold,
+                                        ),
                                       ),
                                   ],
                                 ),
