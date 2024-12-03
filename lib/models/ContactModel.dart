@@ -52,7 +52,7 @@ class ContactModel {
       'ContactPhone': phone,
       'ContactEmail': email,
       'ContactNotes': notes,
-      'LatestContactDate': latestContactDate?.toLocal().toString() ?? ""
+      'LatestContactDate': latestContactDate?.toIso8601String(),
     };
   }
 
