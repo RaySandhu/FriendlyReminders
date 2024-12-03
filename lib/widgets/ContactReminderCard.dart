@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:friendlyreminder/widgets/IconButtonWithTextRow.dart';
 
 class ContactReminderCard extends StatelessWidget {
   const ContactReminderCard({
@@ -51,7 +50,7 @@ class ContactReminderCard extends StatelessWidget {
                   // Accept Button
                   FilledButton.icon(
                     onPressed: onAccept,
-                    label: const Text("Accept"),
+                    label: const Text("Done"),
                     icon: const Icon(Icons.check),
                     style: ButtonStyle(
                       backgroundColor: MaterialStateProperty.all(Colors.green),
@@ -89,7 +88,7 @@ class ContactReminderCard extends StatelessWidget {
                   ),
                   // Reject
                   FilledButton.icon(
-                    onPressed: onAccept,
+                    onPressed: onReject,
                     label: const Text("Reject"),
                     icon: const Icon(Icons.close),
                     style: ButtonStyle(
