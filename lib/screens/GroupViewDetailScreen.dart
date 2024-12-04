@@ -124,8 +124,7 @@ class _GroupViewDetailScreenState extends State<GroupViewDetailScreen> {
                                 return ContactCard(
                                   name: contact.name,
                                   onTap: () => (),
-                                  // delete: true,
-                                  // onDelete: () => (),
+                                  onDelete: () => (),
                                 );
                               },
                             ),
