@@ -117,31 +117,32 @@ class _GroupViewDetailScreenState extends State<GroupViewDetailScreen> {
                       ? const Center(child: CircularProgressIndicator())
                       : groupVM.error != null
                           ? Center(child: Text('Error: ${groupVM.error}'))
-                          : ListView.builder(
-                              itemCount: groupVM.viewGroup.length,
-                              itemBuilder: (context, index) {
-                                final contact = groupVM.viewGroup[index];
-                                return ContactCard(
-                                  name: contact.name,
-                                  onTap: () => (),
-                                  onDelete: () => (),
-                                );
-                              },
-                            ),
+                          : groupVM.contactInGroup.isEmpty
+                              ? const Center(child: Text('No contacts found'))
+                              : ListView.builder(
+                                  itemCount: groupVM.contactInGroup.length,
+                                  itemBuilder: (context, index) {
+                                    final contact =
+                                        groupVM.contactInGroup[index];
+                                    return ContactCard(
+                                      name: contact.name,
+                                      onTap: () => (),
+                                      onDelete: () =>
+                                          groupVM.removeContactToGroup(contact),
+                                    );
+                                  },
+                                ),
                 ),
                 Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: FilledButton.icon(
                     onPressed: () {
-                      print(groupVM.viewGroup);
-                      // showDeleteGroupAlert(context, () {R
-                      //   //fix the below code
-                      //   //_group
-                      //   //    .deleteGroup(_group.hashCode ?? -1); //id of group needed
-                      //   // Navigator.pop(context);
-                      //   // Navigator.pop(context);
-                      // });
-                      // MaterialPageRoute(builder: (context) => GroupScreen());
+                      showDeleteGroupAlert(context, () {
+                        // _group.deleteGroup(_group.id ?? -1); //id of group needed
+                        Navigator.pop(context);
+                        Navigator.pop(context);
+                      });
+                      MaterialPageRoute(builder: (context) => GroupScreen());
                     },
                     label: const Text("Delete Group"),
                     icon: const Icon(Icons.delete),

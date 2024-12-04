@@ -3,7 +3,7 @@ import 'package:friendlyreminder/utilities/Utils.dart';
 
 class ContactCard extends StatelessWidget {
   final String name;
-  final VoidCallback onTap;
+  final VoidCallback? onTap;
   final VoidCallback? onDelete;
 
   const ContactCard({

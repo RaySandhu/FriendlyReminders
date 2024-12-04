@@ -8,12 +8,12 @@ import 'package:friendlyreminder/screens/GroupScreen.dart';
 class GroupViewModel extends ChangeNotifier {
   final GroupService _groupService = GroupService();
   List<GroupModel> _groups = [];
-  List<ContactModel> _viewGroup = [];
+  List<ContactModel> _contactInGroup = [];
   bool _isLoading = false;
   String? _error;
 
   List<GroupModel> get groups => _groups;
-  List<ContactModel> get viewGroup => _viewGroup;
+  List<ContactModel> get contactInGroup => _contactInGroup;
   bool get isLoading => _isLoading;
   String? get error => _error;
 
@@ -69,12 +69,22 @@ class GroupViewModel extends ChangeNotifier {
     _error = null;
     notifyListeners();
     try {
-      _viewGroup = await _groupService.getContactsFromGroup(group.id ?? 0);
+      _contactInGroup = await _groupService.getContactsFromGroup(group.id ?? 0);
     } catch (e) {
       _error = "Failed to get group: ${e.toString()}";
     } finally {
       _isLoading = false;
       notifyListeners();
     }
+  }
+
+  void addContactToGroup(ContactModel contact) {
+    _contactInGroup.add(contact);
+    notifyListeners();
+  }
+
+  void removeContactToGroup(ContactModel contact) {
+    _contactInGroup.remove(contact);
+    notifyListeners();
   }
 }
