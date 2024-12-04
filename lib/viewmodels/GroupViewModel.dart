@@ -8,10 +8,12 @@ import 'package:friendlyreminder/screens/GroupScreen.dart';
 class GroupViewModel extends ChangeNotifier {
   final GroupService _groupService = GroupService();
   List<GroupModel> _groups = [];
+  List<ContactModel> _viewGroup = [];
   bool _isLoading = false;
   String? _error;
 
   List<GroupModel> get groups => _groups;
+  List<ContactModel> get viewGroup => _viewGroup;
   bool get isLoading => _isLoading;
   String? get error => _error;
 
@@ -21,7 +23,6 @@ class GroupViewModel extends ChangeNotifier {
 
     try {
       _groups = await _groupService.getAllGroups();
-      print("HERE: $_groups");
     } catch (e) {
       _error = "Failed to load groups: ${e.toString()}";
     } finally {
@@ -30,7 +31,7 @@ class GroupViewModel extends ChangeNotifier {
     }
   }
 
-    Future<void> deleteGroup(int groupId) async {
+  Future<void> deleteGroup(int groupId) async {
     _isLoading = true;
     _error = null;
     notifyListeners();
@@ -46,7 +47,7 @@ class GroupViewModel extends ChangeNotifier {
     }
   }
 
-    Future<int> createGroup(GroupModel group) async {
+  Future<int> createGroup(GroupModel group) async {
     _isLoading = true;
     _error = null;
     notifyListeners();
@@ -63,19 +64,17 @@ class GroupViewModel extends ChangeNotifier {
     return groupId;
   }
 
-  Future<List<ContactModel>> getContactsinGroup(GroupModel group) async {
+  Future<void> getContactsFromGroup(GroupModel group) async {
     _isLoading = true;
     _error = null;
     notifyListeners();
-    List<ContactModel> c =[];
     try {
-      c = await _groupService.getContactsFromGroup(group.id ?? 0);
+      _viewGroup = await _groupService.getContactsFromGroup(group.id ?? 0);
     } catch (e) {
       _error = "Failed to get group: ${e.toString()}";
     } finally {
       _isLoading = false;
       notifyListeners();
     }
-    return c;
   }
 }

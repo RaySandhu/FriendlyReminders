@@ -16,25 +16,24 @@ import 'package:friendlyreminder/services/GroupService.dart';
 import 'package:friendlyreminder/widgets/DeleteGroupPopup.dart';
 import 'package:friendlyreminder/screens/GroupScreen.dart';
 
+class GroupViewDetailScreen extends StatefulWidget {
+  final GroupModel group;
 
-class GroupViewDetailScreen extends StatefulWidget{
-  final GroupModel group; 
+  const GroupViewDetailScreen({
+    Key? key,
+    required this.group,
+  }) : super(key: key);
 
-
-const GroupViewDetailScreen({
-  Key? key,
-  required this.group,
-})
-  : super(key: key);
-
- @override
-  State<GroupViewDetailScreen> createState() =>
-      _GroupViewDetailScreenState();
+  @override
+  State<GroupViewDetailScreen> createState() => _GroupViewDetailScreenState();
 }
 
-class _GroupViewDetailScreenState extends State<GroupViewDetailScreen>{
+class _GroupViewDetailScreenState extends State<GroupViewDetailScreen> {
   late GroupModel _group;
-  final ContactModel _groupContact = ContactModel(name: '', phone: '', email: '', notes: '');
+  late GroupViewModel groupVM;
+
+  // final ContactModel _groupContact =
+  //     ContactModel(name: '', phone: '', email: '', notes: '');
   late TextEditingController _noteController;
   late bool isEmpty;
 
@@ -45,6 +44,11 @@ class _GroupViewDetailScreenState extends State<GroupViewDetailScreen>{
     _noteController =
         TextEditingController(text: _group.name); //name of the group
     isEmpty = _noteController.text.isEmpty;
+
+    Future.microtask(() {
+      groupVM = Provider.of<GroupViewModel>(context, listen: false);
+      groupVM.getContactsFromGroup(_group..id);
+    });
 
     _noteController.addListener(() {
       setState(() {
@@ -60,150 +64,102 @@ class _GroupViewDetailScreenState extends State<GroupViewDetailScreen>{
   }
 
 //the plus sign to add new contacts to the group
-    Future<void> addPersonToGroup() async {
-    final updatedGroup = await Navigator.push(
-      context,
-      MaterialPageRoute(
-        builder: (context) => GroupAddContactScreen(groupContact:
-                                                    _groupContact,),
-      ),
-    );
+  // Future<void> addPersonToGroup() async {
+  //   final updatedGroup = await Navigator.push(
+  //     context,
+  //     MaterialPageRoute(
+  //       builder: (context) => GroupAddContactScreen(
+  //         groupContact: _groupContact,
+  //       ),
+  //     ),
+  //   );
 
-    if (updatedGroup != null) {
-      setState(() {
-        _group = updatedGroup;
-      });
-    }
-  }
+  //   if (updatedGroup != null) {
+  //     setState(() {
+  //       _group = updatedGroup;
+  //     });
+  //   }
+  // }
 
- //fix the following delete operations
-void deleteContact(int index) {
+  //fix the following delete operations
+  void deleteContact(int index) {
     setState(() {
       //_group.contacts.removeAt(index); //fix this delete part
     });
   }
 
   @override
-  Widget build(BuildContext context){
-    final groupVM = Provider.of<GroupViewModel>(context, listen: false);
-   // List<ContactModel> contactList = groupVM.getContactsinGroup(_group.id);
-
-    return Scaffold(
-      appBar: AppBar(
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back),
-          onPressed: () {
-            Navigator.pop(context);
-          },
-        ),
-        title: Text(_group.name), //name of group
-        actions: [
-          IconButton(
-            icon: const Icon(Icons.add),
-            onPressed: () {
-              addPersonToGroup();
-            },
+  Widget build(BuildContext context) {
+    return Consumer<GroupViewModel>(builder: (context, groupVM, child) {
+      return Scaffold(
+          appBar: AppBar(
+            leading: IconButton(
+              icon: const Icon(Icons.arrow_back),
+              onPressed: () {
+                Navigator.pop(context);
+              },
+            ),
+            title: Text(_group.name), //name of group
+            actions: [
+              IconButton(
+                icon: const Icon(Icons.add),
+                onPressed: () {
+                  // addPersonToGroup();
+                },
+              ),
+            ],
           ),
-        ],
-      ),
-      body: SafeArea(
-          child: Column(
-          children: [
-            /*Expanded(
+          body: SafeArea(
+            child: Column(
+              children: [
+                Expanded(
                   child: groupVM.isLoading
                       ? const Center(child: CircularProgressIndicator())
                       : groupVM.error != null
                           ? Center(child: Text('Error: ${groupVM.error}'))
-                          : groupVM.contacts.isEmpty
-                              ? const Center(child: Text('No contacts found'))
-                              : ListView.builder(
-                                  itemCount: groupVM.contacts.length,
-                                  itemBuilder: (context, index) {
-                                    final contactWithGroups =
-                                        groupVM.contacts[index];;
-                                    return ContactCard(
-                                        name: contactWithGroups.contact.name,
-                                        onTap: () {
-                                          Navigator.push(
-                                            context,
-                                            MaterialPageRoute(
-                                              builder: (context) =>
-                                                  ContactViewDetailScreen(
-                                                contactWithGroups:
-                                                    contactWithGroups,
-                                              ),
-                                            ),
-                                          );
-                                        });
-                                  },
-                                ),
-                ),*/
-            Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: FilledButton.icon(
-                  onPressed: () {
-                    showDeleteGroupAlert(context, () { //fix the below code
-                      //_group
-                      //    .deleteGroup(_group.hashCode ?? -1); //id of group needed
-                      Navigator.pop(context);
-                      Navigator.pop(context);
-                    });
-                    MaterialPageRoute(
-        builder: (context) => GroupScreen()
-      );
-                  },
-                  label: const Text("Delete Group"),
-                  icon: const Icon(Icons.delete),
-                  style: ButtonStyle(
-                    backgroundColor: MaterialStateProperty.all(Colors.red),
-                    shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-                      RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(
-                            8.0), // Adjust this value to change the radius
+                          : ListView.builder(
+                              itemCount: groupVM.viewGroup.length,
+                              itemBuilder: (context, index) {
+                                final contact = groupVM.viewGroup[index];
+                                return ContactCard(
+                                  name: contact.name,
+                                  onTap: () => (),
+                                  // delete: true,
+                                  // onDelete: () => (),
+                                );
+                              },
+                            ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: FilledButton.icon(
+                    onPressed: () {
+                      print(groupVM.viewGroup);
+                      // showDeleteGroupAlert(context, () {R
+                      //   //fix the below code
+                      //   //_group
+                      //   //    .deleteGroup(_group.hashCode ?? -1); //id of group needed
+                      //   // Navigator.pop(context);
+                      //   // Navigator.pop(context);
+                      // });
+                      // MaterialPageRoute(builder: (context) => GroupScreen());
+                    },
+                    label: const Text("Delete Group"),
+                    icon: const Icon(Icons.delete),
+                    style: ButtonStyle(
+                      backgroundColor: MaterialStateProperty.all(Colors.red),
+                      shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                        RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(
+                              8.0), // Adjust this value to change the radius
+                        ),
                       ),
                     ),
                   ),
                 ),
-              ),
-          ],
-      ),
-    )
-        );
-  }
-
-}
-
-/**
- * child: Column(
-            children: [
-        Expanded(
-                  child: groupVM.isLoading
-                      ? const Center(child: CircularProgressIndicator())
-                      : groupVM.error != null
-                          ? Center(child: Text('Error: ${groupVM.error}'))
-                          : groupVM.contacts.isEmpty
-                              ? const Center(child: Text('No contacts found'))
-                              : ListView.builder(
-                                  itemCount: groupVM.contacts.length,
-                                  itemBuilder: (context, index) {
-                                    final groups =
-                                        groupVM.contacts[index];
-                                    return ContactCard(
-                                        name: groups.contact.name,
-                                        onTap: () {
-                                          Navigator.push(
-                                            context,
-                                            MaterialPageRoute(
-                                              builder: (context) =>
-                                                  GroupViewDetailScreen(
-                                                groups:
-                                                    groups,
-                                              ),
-                                            ),
-                                          );
-                                        });
-                                  },
-                                ),
-                ),
               ],
- */
+            ),
+          ));
+    });
+  }
+}
