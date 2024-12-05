@@ -30,7 +30,8 @@ void main() {
           create: (context) => AIPromptViewModel()..loadPrompts(),
         ),
         ChangeNotifierProvider(
-          create: (context) => ReminderViewModel(),
+          create: (context) =>
+              ReminderViewModel()..renderCurrentPastReminders(),
         ),
       ],
       child: const MyApp(),

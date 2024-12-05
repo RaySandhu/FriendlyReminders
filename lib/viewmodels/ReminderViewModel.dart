@@ -6,17 +6,54 @@ class ReminderViewModel extends ChangeNotifier {
   final ReminderService _reminderService = ReminderService();
 
   List<ReminderModel> _reminders = [];
-  List<ReminderModel> _filteredReminders = [];
+  List<ReminderModel> _currentReminders = [];
+  List<ReminderModel> _pastReminders = [];
+  List<int> _usersWithActiveReminders = [];
 
   bool _isLoading = false;
   String? _error;
 
-  bool _isFiltered = false;
-
-  List<ReminderModel> get reminders =>
-      _isFiltered ? _filteredReminders : _reminders;
+  List<ReminderModel> get reminders => _reminders;
+  List<ReminderModel> get currentReminders => _currentReminders;
+  List<ReminderModel> get pastReminders => _pastReminders;
+  List<int> get usersWithActiveReminders => _usersWithActiveReminders;
   bool get isLoading => _isLoading;
   String? get error => _error;
+
+  /// Load all reminders for a specific contact
+  Future<void> renderCurrentPastReminders() async {
+    _isLoading = true;
+    _error = null;
+    notifyListeners();
+    try {
+      final allReminders = await _reminderService.getAllReminders();
+      Set activeReminders = <int>{};
+
+      _currentReminders = allReminders.where((reminder) {
+        if (DateTime.now().isSameDate(reminder.date)) {
+          activeReminders.add(reminder.reminderContactId);
+          return true;
+        }
+        return false;
+      }).toList();
+
+      _pastReminders = allReminders.where((reminder) {
+        if (DateTime.now().isAfter(reminder.date) &&
+            !DateTime.now().isSameDate(reminder.date)) {
+          activeReminders.add(reminder.reminderContactId);
+          return true;
+        }
+        return false;
+      }).toList();
+
+      _usersWithActiveReminders = activeReminders.cast<int>().toList();
+    } catch (e) {
+      _error = "Failed to load reminders: ${e.toString()}";
+    } finally {
+      _isLoading = false;
+      notifyListeners();
+    }
+  }
 
   /// Load all reminders for a specific contact
   Future<void> loadRemindersByContact(int contactId) async {
@@ -25,7 +62,6 @@ class ReminderViewModel extends ChangeNotifier {
     notifyListeners();
     try {
       _reminders = await _reminderService.getRemindersByContactId(contactId);
-      _filteredReminders = [];
     } catch (e) {
       _error = "Failed to load reminders: ${e.toString()}";
     } finally {
@@ -113,20 +149,6 @@ class ReminderViewModel extends ChangeNotifier {
     }
   }
 
-  /// Filter reminders (e.g., reminders due today)
-  void filterReminders({DateTime? dueDate}) {
-    _isFiltered = dueDate != null;
-
-    if (!_isFiltered) {
-      _filteredReminders.clear();
-    } else {
-      _filteredReminders = _reminders.where((reminder) {
-        return reminder.date.toLocal().isSameDate(dueDate!);
-      }).toList();
-    }
-    notifyListeners();
-  }
-
   Future<void> incrementReminder(
       ReminderModel reminder, int reminderId, int contactId) async {
     _isLoading = true;
@@ -134,18 +156,26 @@ class ReminderViewModel extends ChangeNotifier {
     notifyListeners();
 
     try {
-      // Determine the new date based on frequency
-      final DateTime newDate =
-          _getIncrementedDate(reminder.date, reminder.freq);
+      // delete the reminder if its for single instance
+      if (reminder.freq == "Once") {
+        await deleteReminder(reminderId, contactId);
+      } else {
+        // Determine the new date based on frequency
+        DateTime newDate = reminder.date;
+        while (newDate.isBefore(DateTime.now())) {
+          newDate = _getIncrementedDate(newDate, reminder.freq);
+        }
 
-      // Create a new ReminderModel with the updated date
-      final updatedReminder = reminder.update(date: newDate);
+        // Create a new ReminderModel with the updated date
+        final updatedReminder = reminder.update(date: newDate);
 
-      // Update the reminder in the database
-      await _reminderService.updateReminder(updatedReminder, reminderId);
+        // Update the reminder in the database
+        await _reminderService.updateReminder(updatedReminder, reminderId);
+      }
 
-      // Refresh reminders for the contact
+      // Refresh reminders for the contact and reminders page
       await loadRemindersByContact(contactId);
+      await renderCurrentPastReminders();
     } catch (e) {
       _error = "Failed to increment reminder: ${e.toString()}";
     } finally {

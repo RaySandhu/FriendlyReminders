@@ -45,6 +45,11 @@ class ContactsViewModel extends ChangeNotifier {
   List<String> get selectedGroups => _selectedGroups..sort();
   List<GroupModel> get groups => _groups;
 
+  ContactWithGroupsModel? getContactById(int contactId) {
+    return (_contacts.where((contact) => contact.contact.id! == contactId))
+        .firstOrNull;
+  }
+
   Future<void> loadContacts() async {
     _isLoading = true;
     _error = null;
@@ -150,6 +155,11 @@ class ContactsViewModel extends ChangeNotifier {
       _isLoading = false;
       notifyListeners();
     }
+  }
+
+  Future<void> updateContactDate(ContactWithGroupsModel contactInfo) async {
+    final tmp = contactInfo.contact.update(latestContactDate: DateTime.now());
+    updateContact(tmp, contactInfo.groups);
   }
 
   Future<void> deleteContact(int contactId) async {

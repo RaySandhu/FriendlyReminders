@@ -18,7 +18,8 @@ class DatabaseClient {
   final String contactPhone = "ContactPhone";
   final String contactEmail = "ContactEmail";
   final String contactNotes = "ContactNotes";
-  final String contactReminders = "ContactReminders";
+  final String contactReminders = "ContactReminders"; // useless
+  final String latestContactDate = "LatestContactDate";
 
   final String reminderTbl = "Reminder";
   final String reminderId = "ReminderId";
@@ -78,7 +79,8 @@ class DatabaseClient {
           $contactPhone TEXT,
           $contactEmail TEXT,
           $contactNotes TEXT,
-          $contactReminders TEXT
+          $contactReminders TEXT,
+          $latestContactDate TEXT
         )        
         ''');
           database.execute('''
@@ -106,7 +108,7 @@ class DatabaseClient {
           FOREIGN KEY ($groupId) REFERENCES $groupTbl($groupId)
         )    
         ''');
-        database.execute('''
+          database.execute('''
         CREATE TABLE $aiPromptsTbl (
           $promptId INTEGER PRIMARY KEY AUTOINCREMENT,
           $promptText TEXT NOT NULL

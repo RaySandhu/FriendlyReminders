@@ -10,7 +10,7 @@ class ReminderService {
     final List<Map<String, dynamic>> maps =
         await db.query(_dbClient.reminderTbl);
     return List.generate(maps.length, (i) {
-      print("Reminder rows: ${maps[i].entries}");
+      // print("Reminder rows: ${maps[i].entries}");
       return ReminderModel.fromMap(maps[i]);
     });
   }

@@ -9,20 +9,17 @@ import 'package:friendlyreminder/screens/ContactEditDetailScreen.dart';
 import 'package:provider/provider.dart';
 import 'package:friendlyreminder/viewmodels/ContactViewModel.dart';
 import 'package:friendlyreminder/models/ContactWithGroupsModel.dart';
-import 'package:friendlyreminder/widgets/ContactInfoListTile.dart';
 import 'package:friendlyreminder/widgets/ContactReminderCard.dart';
 import 'package:friendlyreminder/widgets/AIPromptPopup.dart';
 import 'package:friendlyreminder/viewmodels/AIPromptViewModel.dart';
+import 'package:friendlyreminder/models/ReminderModel.dart';
 
 class ContactViewDetailScreen extends StatefulWidget {
   final ContactWithGroupsModel contactWithGroups;
   final List<AIPromptModel> aiPrompts;
 
-  const ContactViewDetailScreen({
-      Key? key, 
-      required this.contactWithGroups, 
-      required this.aiPrompts
-    })
+  const ContactViewDetailScreen(
+      {Key? key, required this.contactWithGroups, required this.aiPrompts})
       : super(key: key);
 
   @override
@@ -148,7 +145,6 @@ class _ContactViewDetailScreenState extends State<ContactViewDetailScreen> {
                                   ),
                                 ),
                               ),
-                              
                               if (_contactWithGroups.contact.name.isNotEmpty)
                                 Column(
                                   children: [
@@ -159,37 +155,127 @@ class _ContactViewDetailScreenState extends State<ContactViewDetailScreen> {
                                         style: Theme.of(context)
                                             .textTheme
                                             .headlineLarge),
-                                    if(reminderCardState == 0)
-                                      ContactReminderCard(
-                                        onAccept: () {
-                                          setState(() {
-                                            reminderCardState = 1;
-                                          });
-                                          print('Reminder accepted!');
-                                        },
-                                        onDismiss: () {
-                                          setState(() {
-                                            reminderCardState = 2;
-                                          });
-                                          print('Reminder dismissed!');
-                                        },
-                                        onReject: () {
-                                          setState(() {
-                                            reminderCardState = 3;
-                                          });
-                                          print('Reminder rejected!');
-                                        },
+                                    if (_contactWithGroups
+                                            .contact.latestContactDate !=
+                                        null)
+                                      Text(
+                                        "Last reached out on ${_contactWithGroups.contact.latestContactDate.toString().split(' ')[0]}",
+                                        overflow: TextOverflow.ellipsis,
+                                        maxLines: 1,
+                                        style: Theme.of(context)
+                                            .textTheme
+                                            .bodyMedium
+                                            ?.copyWith(
+                                              color: Colors
+                                                  .grey, // Set the text color to grey
+                                            ),
+                                      )
+                                    else
+                                      Text(
+                                        "You haven't reached out to this person yet!",
+                                        overflow: TextOverflow.ellipsis,
+                                        maxLines: 1,
+                                        style: Theme.of(context)
+                                            .textTheme
+                                            .bodyMedium
+                                            ?.copyWith(
+                                              color: Colors
+                                                  .grey, // Set the text color to grey
+                                            ),
+                                      ),
+                                    if (reminderCardState == 0)
+                                      Card(
+                                        child: Consumer<ReminderViewModel>(
+                                          builder: (context, reminderVM, child) {
+                                            if (reminderVM.isLoading) {
+                                              return const Center(
+                                                  child: CircularProgressIndicator());
+                                            }
+
+                                            if (reminderVM.error != null) {
+                                              return Center(
+                                                child: Text(
+                                                  "Failed to load reminders: ${reminderVM.error}",
+                                                  style: const TextStyle(color: Colors.red),
+                                                ),
+                                              );
+                                            }
+
+                                            final reminders = reminderVM.reminders;
+
+                                            return(
+                                              reminders.isNotEmpty
+                                                  ? ContactReminderCard(
+                                                      onAccept: () {
+                                                        contactVM.updateContactDate(
+                                                          _contactWithGroups
+                                                        );
+
+                                                        for (var reminder in reminders) {
+                                                          reminderVM.incrementReminder(
+                                                            reminder, 
+                                                            reminder.id!, 
+                                                            _contactWithGroups.contact.id!);
+                                                        }
+
+                                                        setState(() {
+                                                          reminderCardState = 1;
+                                                        });
+                                                      },
+
+                                                      onDismiss: () {
+                                                        for (var reminder in reminders) {
+                                                          reminderVM.incrementReminder(
+                                                            reminder, 
+                                                            reminder.id!, 
+                                                            _contactWithGroups.contact.id!);
+                                                        }
+
+                                                        reminderVM.addReminder(
+                                                          ReminderModel(
+                                                            date: DateTime.now().add(
+                                                              const Duration(days: 1),
+                                                            ),
+                                                            freq: "Once",
+                                                          ),
+                                                          _contactWithGroups.contact.id!,
+                                                        );
+
+                                                        setState(() {
+                                                          reminderCardState = 2;
+                                                        });
+                                                      },
+
+                                                      onReject: () {
+                                                        for (var reminder in reminders) {
+                                                          reminderVM.incrementReminder(
+                                                            reminder, 
+                                                            reminder.id!, 
+                                                            _contactWithGroups.contact.id!);
+                                                        }
+
+                                                        setState(() {
+                                                          reminderCardState = 3;
+                                                        });
+                                                      },
+                                                    )
+                                                  : Container()
+                                            );
+                                          },
+                                        )
                                       ),
 
-                                    if(reminderCardState == 2)
-                                      Text('Reminder Snoozed',
-                                      style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                                        fontWeight: FontWeight.bold,
+                                    if (reminderCardState == 2)
+                                      Text(
+                                        'Reminder Snoozed',
+                                        style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                                          fontWeight: FontWeight.bold,
+                                        ),
                                       ),
-                                    ),
-
-                                    if(reminderCardState == 3)
-                                      Text('Reminder Dismissed',
+                          
+                                    if (reminderCardState == 3)
+                                      Text(
+                                        'Reminder Rejected',
                                         style: Theme.of(context).textTheme.titleLarge?.copyWith(
                                           fontWeight: FontWeight.bold,
                                         ),
@@ -350,27 +436,29 @@ class _ContactViewDetailScreenState extends State<ContactViewDetailScreen> {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Row(
-                            children: [
-                              Text(
-                                "NOTES",
-                                style: Theme.of(context).textTheme.titleMedium,
-                              ),
-                              const Spacer(),
-                              IconButtonWithTextRow(
-                                icon: const Icon(Icons.factory), 
-                                text: 'Generate Icebreaker', 
+                          Row(children: [
+                            Text(
+                              "NOTES",
+                              style: Theme.of(context).textTheme.titleMedium,
+                            ),
+                            const Spacer(),
+                            IconButtonWithTextRow(
+                                icon: const Icon(Icons.factory),
+                                text: 'Generate Icebreaker',
                                 onPressed: () {
                                   print("Generated Icebreaker");
                                   var rng = Random();
                                   showDialog(
-                                    context: context, 
-                                    builder: (context) => AIPromptPopup(prompt: aiPromptVM.prompts[rng.nextInt(aiPromptVM.prompts.length)].promptText),
-                                    );
-                                }, 
+                                    context: context,
+                                    builder: (context) => AIPromptPopup(
+                                        prompt: aiPromptVM
+                                            .prompts[rng.nextInt(
+                                                aiPromptVM.prompts.length)]
+                                            .promptText),
+                                  );
+                                },
                                 buttonColour: Colors.blue)
-                            ]
-                          ),
+                          ]),
                           const SizedBox(height: 8),
                           Stack(
                             children: [
