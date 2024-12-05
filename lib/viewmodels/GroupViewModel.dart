@@ -32,7 +32,7 @@ class GroupViewModel extends ChangeNotifier {
   bool _isLoading = false;
   String? _error;
 
-  List<GroupModel> get groups => _groups;
+  List<GroupModel> get groups => _groups..sort();
   List<ContactModel> get contactInGroup => _contactInGroup..sort();
   bool get isLoading => _isLoading;
   String? get error => _error;

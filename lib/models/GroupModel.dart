@@ -47,7 +47,7 @@ class GroupModel implements Comparable<GroupModel> {
 
   @override
   int compareTo(GroupModel other) {
-    return name.compareTo(other.name);
+    return name.toLowerCase().compareTo(other.name.toLowerCase());
   }
 
   @override
