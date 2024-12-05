@@ -17,9 +17,9 @@ class GroupModel implements Comparable<GroupModel> {
     );
   }
 
-  update({String? name, int? size}) {
+  update({int? id, String? name, int? size}) {
     return GroupModel(
-      id: this.id, // id stays the same
+      id: id ?? this.id, // id stays the same
       name: name ?? this.name,
       size: size ?? this.size,
     );

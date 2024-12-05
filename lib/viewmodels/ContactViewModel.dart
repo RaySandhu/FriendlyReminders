@@ -111,11 +111,23 @@ class ContactsViewModel extends ChangeNotifier {
     int contactId = -1;
     try {
       contactId = await _contactService.createContact(contact);
+      final existingGroups = await _groupService.getAllGroups();
+
       for (var group in groups) {
         final groupId = await _groupService.getOrCreateGroup(group);
         await _groupService.addGroupToContact(contactId, groupId);
-        final newGroup = group.update(size: group.size! + 1);
-        await _groupService.updateGroup(newGroup);
+
+        if (existingGroups.contains(group)) {
+          final newGroup = group.update(id: groupId, size: group.size! + 1);
+          await _groupService.updateGroup(newGroup);
+        } else {
+          final newGroup = GroupModel(
+            id: groupId,
+            name: group.name,
+            size: 1,
+          );
+          await _groupService.updateGroup(newGroup);
+        }
       }
       reloadGroups();
       await loadContacts();
@@ -147,17 +159,19 @@ class ContactsViewModel extends ChangeNotifier {
           await _groupService.updateGroup(newGroup);
         }
       }
-
       // Add new groups
       for (var group in groups) {
         if (!currentGroups.contains(group)) {
           final groupId = await _groupService.getOrCreateGroup(group);
           await _groupService.addGroupToContact(contact.id!, groupId);
-          final newGroup = group.update(size: group.size! + 1);
+          final newGroup = GroupModel(
+            id: groupId,
+            name: group.name,
+            size: 1,
+          );
           await _groupService.updateGroup(newGroup);
         }
       }
-
       reloadGroups();
       await loadContacts(); // Refresh the contacts list after updating
     } catch (e) {
