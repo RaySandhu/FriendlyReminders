@@ -69,20 +69,23 @@ class _GroupViewDetailScreenState extends State<GroupViewDetailScreen> {
               },
             ),
             centerTitle: true,
-            title: const Text("Edit Group"),
+            title: Text("Edit Group",
+                style: Theme.of(context).textTheme.headlineSmall),
             actions: [
-              IconButton(
-                icon: const Icon(Icons.add),
-                onPressed: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => GroupAddContactScreen(
-                        group: _group,
-                      ),
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: FilledButton(
+                  onPressed: () => (),
+                  style: FilledButton.styleFrom(
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(5),
                     ),
-                  );
-                },
+                    padding:
+                        const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+                    minimumSize: const Size(0, 0),
+                  ),
+                  child: const Text("Save"),
+                ),
               ),
             ],
             backgroundColor: Theme.of(context).colorScheme.inversePrimary,
@@ -94,7 +97,7 @@ class _GroupViewDetailScreenState extends State<GroupViewDetailScreen> {
                 Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: Text(
-                    "NAME",
+                    "GROUP NAME",
                     style: Theme.of(context).textTheme.titleMedium,
                   ),
                 ),
@@ -110,9 +113,43 @@ class _GroupViewDetailScreenState extends State<GroupViewDetailScreen> {
                 const SizedBox(height: 8),
                 Padding(
                   padding: const EdgeInsets.fromLTRB(8, 8, 8, 0),
-                  child: Text(
-                    "CONTACTS",
-                    style: Theme.of(context).textTheme.titleMedium,
+                  child: Row(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      Text(
+                        "CONTACTS",
+                        style: Theme.of(context).textTheme.titleMedium,
+                      ),
+                      const Spacer(),
+                      FilledButton.icon(
+                        onPressed: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => GroupAddContactScreen(
+                                group: _group,
+                              ),
+                            ),
+                          );
+                        },
+                        icon: const Icon(Icons.person_add, size: 19),
+                        label: Text(
+                          "ADD",
+                          style:
+                              Theme.of(context).textTheme.titleMedium?.copyWith(
+                                    color: Colors.white,
+                                  ),
+                        ),
+                        style: FilledButton.styleFrom(
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 8, vertical: 1),
+                          minimumSize: const Size(0, 0),
+                        ),
+                      ),
+                    ],
                   ),
                 ),
                 Expanded(

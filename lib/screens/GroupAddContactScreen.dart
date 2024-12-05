@@ -70,17 +70,23 @@ class _GroupAddContactScreenState extends State<GroupAddContactScreen> {
                   )
                 : Text("Add Contacts",
                     style: Theme.of(context).textTheme.headlineSmall),
+            automaticallyImplyLeading: false,
+            leading: _isSearching
+                ? null
+                : IconButton(
+                    onPressed: () => Navigator.pop(context),
+                    icon: const Icon(Icons.arrow_back),
+                  ),
             actions: _isSearching
                 ? []
                 : [
                     IconButton(
-                        icon: Icon(Icons.search),
+                        icon: const Icon(Icons.search),
                         onPressed: () {
                           setState(() {
                             _isSearching = !_isSearching;
                           });
                         }),
-                    IconButton(icon: Icon(Icons.add), onPressed: () => ())
                   ],
             backgroundColor: Theme.of(context).colorScheme.inversePrimary,
           ),
@@ -120,7 +126,7 @@ class _GroupAddContactScreenState extends State<GroupAddContactScreen> {
                                         .contains(contactWithGroups.contact);
                                     return ContactCard(
                                       name: contactWithGroups.contact.name,
-                                      onTap: () => print(isSelected),
+                                      onTap: () => (),
                                       isSelected: isSelected,
                                       onCheck: (value) {
                                         if (isSelected) {
