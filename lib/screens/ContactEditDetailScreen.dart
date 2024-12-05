@@ -365,8 +365,8 @@ class _ContactEditDetailScreenState extends State<ContactEditDetailScreen> {
                 child: FilledButton.icon(
                   onPressed: () {
                     showDeleteContactAlert(context, () {
-                      contactVM
-                          .deleteContact(_contactWithGroups!.contact.id ?? -1);
+                      contactVM.deleteContact(_contactWithGroups!.contact,
+                          _contactWithGroups!.groups);
                       Navigator.pop(context);
                       Navigator.pop(context);
                     });

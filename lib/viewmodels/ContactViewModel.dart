@@ -114,6 +114,8 @@ class ContactsViewModel extends ChangeNotifier {
       for (var group in groups) {
         final groupId = await _groupService.getOrCreateGroup(group);
         await _groupService.addGroupToContact(contactId, groupId);
+        final newGroup = group.update(size: group.size! + 1);
+        await _groupService.updateGroup(newGroup);
       }
       reloadGroups();
       await loadContacts();
@@ -141,6 +143,8 @@ class ContactsViewModel extends ChangeNotifier {
       for (var currentGroup in currentGroups) {
         if (!groups.contains(currentGroup)) {
           await _groupService.removeGroupFromContact(contactId: contact.id!);
+          final newGroup = currentGroup.update(size: currentGroup.size! - 1);
+          await _groupService.updateGroup(newGroup);
         }
       }
 
@@ -149,6 +153,8 @@ class ContactsViewModel extends ChangeNotifier {
         if (!currentGroups.contains(group)) {
           final groupId = await _groupService.getOrCreateGroup(group);
           await _groupService.addGroupToContact(contact.id!, groupId);
+          final newGroup = group.update(size: group.size! + 1);
+          await _groupService.updateGroup(newGroup);
         }
       }
 
@@ -167,13 +173,18 @@ class ContactsViewModel extends ChangeNotifier {
     updateContact(tmp, contactInfo.groups);
   }
 
-  Future<void> deleteContact(int contactId) async {
+  Future<void> deleteContact(
+      ContactModel contact, List<GroupModel> groups) async {
     _isLoading = true;
     _error = null;
     notifyListeners();
     try {
-      await _groupService.removeGroupFromContact(contactId: contactId);
-      await _contactService.deleteContact(contactId);
+      await _groupService.removeGroupFromContact(contactId: contact.id);
+      for (var group in groups) {
+        final newGroup = group.update(size: group.size! - 1);
+        await _groupService.updateGroup(newGroup);
+      }
+      await _contactService.deleteContact(contact.id!);
       reloadGroups();
       await loadContacts(); // Refresh the contacts list after deleting
     } catch (e) {

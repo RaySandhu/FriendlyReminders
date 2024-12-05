@@ -77,7 +77,7 @@ class GroupViewModel extends ChangeNotifier {
       groupId = await _groupService.getOrCreateGroup(group);
 
       for (var contact in contacts) {
-        await _groupService.addGroupToContact(contact.id!, group.id!);
+        await _groupService.addGroupToContact(contact.id!, groupId);
       }
 
       await loadGroups();

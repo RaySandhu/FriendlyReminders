@@ -122,38 +122,47 @@ class DatabaseInitializer {
 
     batch.insert(dbClient.groupTbl, {
       dbClient.groupId: 1,
+      dbClient.groupSize: 3,
       dbClient.groupName: 'Photography 📷',
     });
     batch.insert(dbClient.groupTbl, {
       dbClient.groupId: 2,
+      dbClient.groupSize: 3,
       dbClient.groupName: 'Art 🎨',
     });
     batch.insert(dbClient.groupTbl, {
       dbClient.groupId: 3,
+      dbClient.groupSize: 3,
       dbClient.groupName: 'Dancing 💃',
     });
     batch.insert(dbClient.groupTbl, {
       dbClient.groupId: 4,
+      dbClient.groupSize: 3,
       dbClient.groupName: 'Singing 🎤',
     });
     batch.insert(dbClient.groupTbl, {
       dbClient.groupId: 5,
+      dbClient.groupSize: 3,
       dbClient.groupName: 'Writing 📝',
     });
     batch.insert(dbClient.groupTbl, {
       dbClient.groupId: 6,
+      dbClient.groupSize: 3,
       dbClient.groupName: 'Baking 🍰',
     });
     batch.insert(dbClient.groupTbl, {
       dbClient.groupId: 7,
+      dbClient.groupSize: 3,
       dbClient.groupName: 'Board games 🎲',
     });
     batch.insert(dbClient.groupTbl, {
       dbClient.groupId: 8,
+      dbClient.groupSize: 3,
       dbClient.groupName: 'Cooking 🍳',
     });
     batch.insert(dbClient.groupTbl, {
       dbClient.groupId: 9,
+      dbClient.groupSize: 3,
       dbClient.groupName: 'Video games 🎮',
     });
 

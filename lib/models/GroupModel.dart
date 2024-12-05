@@ -34,6 +34,18 @@ class GroupModel implements Comparable<GroupModel> {
   }
 
   @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
+    return other is GroupModel &&
+        other.id == id &&
+        other.name == name &&
+        other.size == size;
+  }
+
+  @override
+  int get hashCode => id.hashCode ^ name.hashCode ^ size.hashCode;
+
+  @override
   int compareTo(GroupModel other) {
     return name.compareTo(other.name);
   }
