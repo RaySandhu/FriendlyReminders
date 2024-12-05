@@ -86,7 +86,7 @@ class _ContactEditDetailScreenState extends State<ContactEditDetailScreen> {
             _contactWithGroups == null ? "Create New Contact" : "Edit Contact",
             style: Theme.of(context).textTheme.headlineSmall),
         leading: IconButton(
-          icon: Icon(Icons.arrow_back),
+          icon: const Icon(Icons.arrow_back),
           onPressed: () {
             showDiscardChangesAlert(context);
           },
@@ -148,7 +148,7 @@ class _ContactEditDetailScreenState extends State<ContactEditDetailScreen> {
                     const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
                 minimumSize: const Size(0, 0),
               ),
-              child: const Text("Done"),
+              child: Text(_contactWithGroups == null ? "Done" : "Save"),
             ),
           )
         ],

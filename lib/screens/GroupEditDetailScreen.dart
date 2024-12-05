@@ -4,17 +4,12 @@
 //back button takes you back to the main group page
 
 import 'package:flutter/material.dart';
-import 'package:friendlyreminder/models/ContactWithGroupsModel.dart';
 import 'package:provider/provider.dart';
 import 'package:friendlyreminder/models/GroupModel.dart';
-import 'package:friendlyreminder/models/ContactGroupModel.dart';
-import 'package:friendlyreminder/models/ContactModel.dart';
 import 'package:friendlyreminder/widgets/ContactCard.dart';
 import 'package:friendlyreminder/screens/GroupAddContactScreen.dart';
 import 'package:friendlyreminder/viewmodels/GroupViewModel.dart';
-import 'package:friendlyreminder/services/GroupService.dart';
 import 'package:friendlyreminder/widgets/DeleteGroupPopup.dart';
-import 'package:friendlyreminder/screens/GroupScreen.dart';
 
 class GroupViewDetailScreen extends StatefulWidget {
   final GroupModel group;
@@ -31,18 +26,16 @@ class GroupViewDetailScreen extends StatefulWidget {
 class _GroupViewDetailScreenState extends State<GroupViewDetailScreen> {
   late GroupModel _group;
   late GroupViewModel groupVM;
+  late TextEditingController _nameController;
 
-  // final ContactModel _groupContact =
-  //     ContactModel(name: '', phone: '', email: '', notes: '');
-  // late TextEditingController _nameController;
   late bool isEmpty;
 
   @override
   void initState() {
     super.initState();
     _group = widget.group;
-    // _nameController =
-    //     TextEditingController(text: _group.name); //name of the group
+    _nameController =
+        TextEditingController(text: _group.name); //name of the group
     // isEmpty = _nameController.text.isEmpty;
 
     Future.microtask(() {
@@ -74,7 +67,14 @@ class _GroupViewDetailScreenState extends State<GroupViewDetailScreen> {
                 Navigator.pop(context);
               },
             ),
-            title: Text(_group.name), //name of group
+            centerTitle: true,
+            title: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Text(_group.name),
+                IconButton(onPressed: () => (), icon: const Icon(Icons.edit))
+              ],
+            ), //name of group
             actions: [
               IconButton(
                 icon: const Icon(Icons.add),
