@@ -1,20 +1,15 @@
-//add ppl to group --> brings up contacts page + multisect
-
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:friendlyreminder/models/GroupModel.dart';
-import 'package:friendlyreminder/models/ContactGroupModel.dart';
 import 'package:friendlyreminder/widgets/ContactCard.dart';
-import 'package:friendlyreminder/screens/GroupEditDetailScreen.dart';
 import 'package:friendlyreminder/viewmodels/GroupViewModel.dart';
-import 'package:friendlyreminder/models/ContactModel.dart';
 import 'package:friendlyreminder/viewmodels/ContactViewModel.dart';
 
 class GroupAddContactScreen extends StatefulWidget {
-  final GroupModel group;
+  final GroupModel? group;
   const GroupAddContactScreen({
     Key? key,
-    required this.group,
+    this.group,
   }) : super(key: key);
 
   @override

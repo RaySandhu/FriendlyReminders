@@ -56,13 +56,18 @@ class GroupViewModel extends ChangeNotifier {
     }
   }
 
-  Future<int> createGroup(GroupModel group) async {
+  Future<int> createGroup(GroupModel group, List<ContactModel> contacts) async {
     _isLoading = true;
     _error = null;
     notifyListeners();
     int groupId = -1;
     try {
       groupId = await _groupService.getOrCreateGroup(group);
+
+      for (var contact in contacts) {
+        await _groupService.addGroupToContact(contact.id!, group.id!);
+      }
+
       await loadGroups();
     } catch (e) {
       _error = "Failed to create group: ${e.toString()}";
@@ -73,12 +78,16 @@ class GroupViewModel extends ChangeNotifier {
     return groupId;
   }
 
-  Future<void> getContactsFromGroup(GroupModel group) async {
+  Future<void> getContactsFromGroup(GroupModel? group) async {
     _isLoading = true;
     _error = null;
     notifyListeners();
     try {
-      _contactInGroup = await _groupService.getContactsFromGroup(group.id ?? 0);
+      if (group != null) {
+        _contactInGroup = await _groupService.getContactsFromGroup(group.id!);
+      } else {
+        _contactInGroup = [];
+      }
     } catch (e) {
       _error = "Failed to get group: ${e.toString()}";
     } finally {

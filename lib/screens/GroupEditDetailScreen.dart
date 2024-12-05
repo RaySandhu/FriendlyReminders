@@ -12,22 +12,22 @@ import 'package:friendlyreminder/screens/GroupAddContactScreen.dart';
 import 'package:friendlyreminder/viewmodels/GroupViewModel.dart';
 import 'package:friendlyreminder/widgets/DeleteGroupPopup.dart';
 
-class GroupViewDetailScreen extends StatefulWidget {
-  final GroupModel group;
+class GroupEditDetailScreen extends StatefulWidget {
+  final GroupModel? group;
 
-  const GroupViewDetailScreen({
+  const GroupEditDetailScreen({
     Key? key,
-    required this.group,
+    this.group,
   }) : super(key: key);
 
   @override
-  State<GroupViewDetailScreen> createState() => _GroupViewDetailScreenState();
+  State<GroupEditDetailScreen> createState() => _GroupEditDetailScreenState();
 }
 
-class _GroupViewDetailScreenState extends State<GroupViewDetailScreen> {
-  late GroupModel _group;
+class _GroupEditDetailScreenState extends State<GroupEditDetailScreen> {
+  late GroupModel? _group;
   late GroupViewModel groupVM;
-  late TextEditingController _nameController;
+  late TextEditingController _nameController = TextEditingController();
 
   late bool isEmpty;
 
@@ -35,25 +35,21 @@ class _GroupViewDetailScreenState extends State<GroupViewDetailScreen> {
   void initState() {
     super.initState();
     _group = widget.group;
-    _nameController =
-        TextEditingController(text: _group.name); //name of the group
-    // isEmpty = _nameController.text.isEmpty;
-
+    if (_group != null) {
+      _nameController = TextEditingController(text: _group!.name);
+    }
     Future.microtask(() {
       groupVM = Provider.of<GroupViewModel>(context, listen: false);
-      groupVM.getContactsFromGroup(_group..id);
+      if (_group != null) {
+        groupVM.getContactsFromGroup(_group!..id);
+      } else {
+        groupVM.getContactsFromGroup(null);
+      }
     });
-
-    // _nameController.addListener(() {
-    //   setState(() {
-    //     isEmpty = _nameController.text.isEmpty;
-    //   });
-    // });
   }
 
   @override
   void dispose() {
-    // _nameController.dispose();
     super.dispose();
   }
 
@@ -69,7 +65,7 @@ class _GroupViewDetailScreenState extends State<GroupViewDetailScreen> {
               },
             ),
             centerTitle: true,
-            title: Text("Edit Group",
+            title: Text(_group == null ? "Create Group" : "Edit Group",
                 style: Theme.of(context).textTheme.headlineSmall),
             actions: [
               Padding(
@@ -84,14 +80,24 @@ class _GroupViewDetailScreenState extends State<GroupViewDetailScreen> {
                     minimumSize: const Size(0, 0),
                   ),
                   onPressed: () {
-                    GroupModel newGroup = _group.update(
-                      name: _nameController.text,
-                      size: groupVM.contactInGroup.length,
-                    );
-                    groupVM.updateGroup(newGroup, groupVM.contactInGroup);
+                    if (_nameController.text.isNotEmpty) {
+                      if (_group == null) {
+                        GroupModel newGroup = GroupModel(
+                          name: _nameController.text,
+                          size: groupVM.contactInGroup.length,
+                        );
+                        groupVM.createGroup(newGroup, groupVM.contactInGroup);
+                      } else {
+                        GroupModel newGroup = _group!.update(
+                          name: _nameController.text,
+                          size: groupVM.contactInGroup.length,
+                        );
+                        groupVM.updateGroup(newGroup, groupVM.contactInGroup);
+                      }
+                    }
                     Navigator.pop(context);
                   },
-                  child: const Text("Save"),
+                  child: Text(_group == null ? "Done" : "Save"),
                 ),
               ),
             ],
@@ -180,31 +186,33 @@ class _GroupViewDetailScreenState extends State<GroupViewDetailScreen> {
                                   },
                                 ),
                 ),
-                Center(
-                  child: Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: FilledButton.icon(
-                      onPressed: () {
-                        showDeleteGroupAlert(context, () {
-                          groupVM.deleteGroup(_group.id ?? -1);
-                          Navigator.pop(context);
-                        });
-                      },
-                      label: const Text("Delete Group"),
-                      icon: const Icon(Icons.delete),
-                      style: ButtonStyle(
-                        backgroundColor: MaterialStateProperty.all(Colors.red),
-                        shape:
-                            MaterialStateProperty.all<RoundedRectangleBorder>(
-                          RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(
-                                8.0), // Adjust this value to change the radius
+                if (_group != null)
+                  Center(
+                    child: Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: FilledButton.icon(
+                        onPressed: () {
+                          showDeleteGroupAlert(context, () {
+                            groupVM.deleteGroup(_group?.id ?? -1);
+                            Navigator.pop(context);
+                          });
+                        },
+                        label: const Text("Delete Group"),
+                        icon: const Icon(Icons.delete),
+                        style: ButtonStyle(
+                          backgroundColor:
+                              MaterialStateProperty.all(Colors.red),
+                          shape:
+                              MaterialStateProperty.all<RoundedRectangleBorder>(
+                            RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(
+                                  8.0), // Adjust this value to change the radius
+                            ),
                           ),
                         ),
                       ),
                     ),
                   ),
-                ),
               ],
             ),
           ));

@@ -3,7 +3,6 @@ import 'package:friendlyreminder/screens/GroupEditDetailScreen.dart';
 import 'package:provider/provider.dart';
 import 'package:friendlyreminder/widgets/GroupCard.dart';
 import 'package:friendlyreminder/viewmodels/GroupViewModel.dart';
-import 'package:friendlyreminder/screens/GroupAddScreen.dart';
 
 class GroupScreen extends StatefulWidget {
   const GroupScreen({super.key});
@@ -87,7 +86,7 @@ class _GroupScreenState extends State<GroupScreen> {
                         Navigator.push(
                           context,
                           MaterialPageRoute(
-                            builder: (context) => GroupAddScreen(),
+                            builder: (context) => const GroupEditDetailScreen(),
                           ),
                         );
                       },
@@ -124,7 +123,7 @@ class _GroupScreenState extends State<GroupScreen> {
                                             context,
                                             MaterialPageRoute(
                                               builder: (context) =>
-                                                  GroupViewDetailScreen(
+                                                  GroupEditDetailScreen(
                                                 group: group,
                                               ),
                                             ),
