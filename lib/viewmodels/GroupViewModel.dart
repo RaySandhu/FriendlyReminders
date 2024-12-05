@@ -13,12 +13,7 @@ class GroupViewModel extends ChangeNotifier {
   String? _error;
 
   List<GroupModel> get groups => _groups;
-  List<ContactModel> get contactInGroup {
-    List<ContactModel> sortedContacts = List.from(_contactInGroup);
-    sortedContacts.sort((a, b) => a.name.compareTo(b.name));
-    return sortedContacts;
-  }
-
+  List<ContactModel> get contactInGroup => _contactInGroup..sort();
   bool get isLoading => _isLoading;
   String? get error => _error;
 

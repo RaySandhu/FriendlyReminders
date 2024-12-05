@@ -211,8 +211,7 @@ class _ContactEditDetailScreenState extends State<ContactEditDetailScreen> {
                             spacing: 8.0, // gap between adjacent chips
                             runSpacing: 4.0, // gap between lines
                             children: () {
-                              _selectedGroups
-                                  .sort((a, b) => a.name.compareTo(b.name));
+                              _selectedGroups.sort();
                               return _selectedGroups.map((group) {
                                 return Chip(
                                   label: Text(group.name),

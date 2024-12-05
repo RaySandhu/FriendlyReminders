@@ -1,4 +1,4 @@
-class ContactModel {
+class ContactModel implements Comparable<ContactModel> {
   final int? id;
   final String name;
   final String phone;
@@ -61,6 +61,11 @@ class ContactModel {
       phone.hashCode ^
       email.hashCode ^
       notes.hashCode;
+
+  @override
+  int compareTo(ContactModel other) {
+    return name.compareTo(other.name);
+  }
 
   @override
   String toString() {

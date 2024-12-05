@@ -1,4 +1,4 @@
-class GroupModel {
+class GroupModel implements Comparable<GroupModel> {
   final int? id;
   final String name;
   final int? size;
@@ -31,6 +31,11 @@ class GroupModel {
       'GroupName': name,
       'GroupSize': size,
     };
+  }
+
+  @override
+  int compareTo(GroupModel other) {
+    return name.compareTo(other.name);
   }
 
   @override
