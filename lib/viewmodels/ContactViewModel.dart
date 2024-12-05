@@ -14,7 +14,6 @@ class ContactsViewModel extends ChangeNotifier {
   }
 
   void reload() {
-    print("RELOAD");
     loadContacts();
   }
 

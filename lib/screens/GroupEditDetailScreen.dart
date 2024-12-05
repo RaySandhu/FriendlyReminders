@@ -75,7 +75,6 @@ class _GroupViewDetailScreenState extends State<GroupViewDetailScreen> {
               Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: FilledButton(
-                  onPressed: () => (),
                   style: FilledButton.styleFrom(
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(5),
@@ -84,6 +83,14 @@ class _GroupViewDetailScreenState extends State<GroupViewDetailScreen> {
                         const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
                     minimumSize: const Size(0, 0),
                   ),
+                  onPressed: () {
+                    GroupModel newGroup = _group.update(
+                      name: _nameController.text,
+                      size: groupVM.contactInGroup.length,
+                    );
+                    groupVM.updateGroup(newGroup, groupVM.contactInGroup);
+                    Navigator.pop(context);
+                  },
                   child: const Text("Save"),
                 ),
               ),

@@ -96,4 +96,41 @@ class GroupViewModel extends ChangeNotifier {
     _contactInGroup.remove(contact);
     notifyListeners();
   }
+
+  Future<void> updateGroup(
+      GroupModel group, List<ContactModel> contacts) async {
+    _isLoading = true;
+    _error = null;
+    notifyListeners();
+    try {
+      // Update group
+      await _groupService.updateGroup(group);
+
+      final currentContacts =
+          await _groupService.getContactsFromGroup(group.id!);
+
+      // Remove contacts
+      for (var currentContact in currentContacts) {
+        if (!contacts.contains(currentContact)) {
+          await _groupService.removeGroupFromContact(
+              contactId: currentContact.id!);
+        }
+      }
+
+      // Add new contacts
+      for (var contact in contacts) {
+        if (!currentContacts.contains(contact)) {
+          await _groupService.addGroupToContact(contact.id!, group.id!);
+        }
+      }
+
+      await loadGroups();
+      triggerReload();
+    } catch (e) {
+      _error = "Failed to update group: ${e.toString()}";
+    } finally {
+      _isLoading = false;
+      notifyListeners();
+    }
+  }
 }

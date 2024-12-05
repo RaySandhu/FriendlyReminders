@@ -58,7 +58,7 @@ class _GroupAddContactScreenState extends State<GroupAddContactScreen> {
                               contactVM.filterContacts(query: '');
                             });
                           }),
-                      contentPadding: EdgeInsets.all(10),
+                      contentPadding: const EdgeInsets.all(10),
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(15),
                       ),
