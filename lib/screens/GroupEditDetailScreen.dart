@@ -4,6 +4,7 @@
 //back button takes you back to the main group page
 
 import 'package:flutter/material.dart';
+import 'package:friendlyreminder/widgets/StyledTextField.dart';
 import 'package:provider/provider.dart';
 import 'package:friendlyreminder/models/GroupModel.dart';
 import 'package:friendlyreminder/widgets/ContactCard.dart';
@@ -68,13 +69,7 @@ class _GroupViewDetailScreenState extends State<GroupViewDetailScreen> {
               },
             ),
             centerTitle: true,
-            title: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Text(_group.name),
-                IconButton(onPressed: () => (), icon: const Icon(Icons.edit))
-              ],
-            ), //name of group
+            title: const Text("Edit Group"),
             actions: [
               IconButton(
                 icon: const Icon(Icons.add),
@@ -94,14 +89,39 @@ class _GroupViewDetailScreenState extends State<GroupViewDetailScreen> {
           ),
           body: SafeArea(
             child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Text(
+                    "NAME",
+                    style: Theme.of(context).textTheme.titleMedium,
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 16),
+                  child: StyledTextField(
+                    controller: _nameController,
+                    hintText: "Group name",
+                    prefixIcon: Icons.group,
+                    padding: false,
+                  ),
+                ),
+                const SizedBox(height: 8),
+                Padding(
+                  padding: const EdgeInsets.fromLTRB(8, 8, 8, 0),
+                  child: Text(
+                    "CONTACTS",
+                    style: Theme.of(context).textTheme.titleMedium,
+                  ),
+                ),
                 Expanded(
                   child: groupVM.isLoading
                       ? const Center(child: CircularProgressIndicator())
                       : groupVM.error != null
                           ? Center(child: Text('Error: ${groupVM.error}'))
                           : groupVM.contactInGroup.isEmpty
-                              ? const Center(child: Text('No contacts found'))
+                              ? const Center(child: Text('Add contacts'))
                               : ListView.builder(
                                   itemCount: groupVM.contactInGroup.length,
                                   itemBuilder: (context, index) {
@@ -116,23 +136,26 @@ class _GroupViewDetailScreenState extends State<GroupViewDetailScreen> {
                                   },
                                 ),
                 ),
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: FilledButton.icon(
-                    onPressed: () {
-                      showDeleteGroupAlert(context, () {
-                        groupVM.deleteGroup(_group.id ?? -1);
-                        Navigator.pop(context);
-                      });
-                    },
-                    label: const Text("Delete Group"),
-                    icon: const Icon(Icons.delete),
-                    style: ButtonStyle(
-                      backgroundColor: MaterialStateProperty.all(Colors.red),
-                      shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-                        RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(
-                              8.0), // Adjust this value to change the radius
+                Center(
+                  child: Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: FilledButton.icon(
+                      onPressed: () {
+                        showDeleteGroupAlert(context, () {
+                          groupVM.deleteGroup(_group.id ?? -1);
+                          Navigator.pop(context);
+                        });
+                      },
+                      label: const Text("Delete Group"),
+                      icon: const Icon(Icons.delete),
+                      style: ButtonStyle(
+                        backgroundColor: MaterialStateProperty.all(Colors.red),
+                        shape:
+                            MaterialStateProperty.all<RoundedRectangleBorder>(
+                          RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(
+                                8.0), // Adjust this value to change the radius
+                          ),
                         ),
                       ),
                     ),

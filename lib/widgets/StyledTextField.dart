@@ -12,6 +12,7 @@ class StyledTextField extends StatefulWidget {
   final List<TextInputFormatter>? inputFormatters;
   final int? maxLines;
   final void Function(String)? onChanged;
+  final bool padding;
 
   const StyledTextField(
       {super.key,
@@ -24,7 +25,8 @@ class StyledTextField extends StatefulWidget {
       this.textCapitalization = TextCapitalization.none,
       this.inputFormatters,
       this.maxLines = 1,
-      this.onChanged});
+      this.onChanged,
+      this.padding = true});
 
   @override
   State<StyledTextField> createState() => _StyledTextFieldState();
@@ -54,7 +56,7 @@ class _StyledTextFieldState extends State<StyledTextField> {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.all(8.0),
+      padding: EdgeInsets.all(widget.padding ? 8 : 0),
       child: Stack(
         children: [
           TextField(

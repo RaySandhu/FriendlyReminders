@@ -44,7 +44,7 @@ class _GroupScreenState extends State<GroupScreen> {
                     controller: _searchController,
                     decoration: InputDecoration(
                       prefixIcon: Icon(Icons.search),
-                      hintText: 'Search Existing Groups',
+                      hintText: 'Search',
                       suffixIcon: IconButton(
                         icon: Icon(Icons.close),
                         onPressed: () {
