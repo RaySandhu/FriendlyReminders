@@ -111,7 +111,7 @@ class ContactsViewModel extends ChangeNotifier {
         final groupId = await _groupService.getOrCreateGroup(group);
         await _groupService.addGroupToContact(contactId, groupId);
       }
-      await loadContacts(); // Refresh the contacts list after creating a new contact
+      await loadContacts();
     } catch (e) {
       _error = "Failed to create contact: ${e.toString()}";
     } finally {

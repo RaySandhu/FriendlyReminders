@@ -96,7 +96,7 @@ class DatabaseClient {
         CREATE TABLE $groupTbl (
           $groupId INTEGER PRIMARY KEY AUTOINCREMENT,
           $groupName TEXT NOT NULL,
-          $groupSize INTEGER DEFAULT 0
+          $groupSize INTEGER DEFAULT 1
         )    
         ''');
           database.execute('''

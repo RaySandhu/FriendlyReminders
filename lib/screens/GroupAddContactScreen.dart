@@ -104,7 +104,15 @@ class _GroupAddContactScreenState extends State<GroupAddContactScreen> {
                                         .contains(contactWithGroups.contact);
                                     return ContactCard(
                                       name: contactWithGroups.contact.name,
-                                      onTap: () => (),
+                                      onTap: () {
+                                        if (isSelected) {
+                                          groupVM.removeContactFromGroup(
+                                              contactWithGroups.contact);
+                                        } else {
+                                          groupVM.addContactToGroup(
+                                              contactWithGroups.contact);
+                                        }
+                                      },
                                       isSelected: isSelected,
                                       onCheck: (value) {
                                         if (isSelected) {
