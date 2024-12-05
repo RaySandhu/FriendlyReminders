@@ -13,6 +13,10 @@ class ContactsViewModel extends ChangeNotifier {
     _sharedState.addListener(reload);
   }
 
+  void reloadGroups() {
+    _sharedState.updateGroups();
+  }
+
   void reload() {
     loadContacts();
   }
@@ -90,7 +94,7 @@ class ContactsViewModel extends ChangeNotifier {
     notifyListeners();
     try {
       await _contactService.updateContact(contact.update(notes: contact.notes));
-      await loadContacts(); // Refresh the contacts list after creating a new contact
+      await loadContacts();
     } catch (e) {
       _error = "Failed to save notes: ${e.toString()}";
     } finally {
@@ -111,6 +115,7 @@ class ContactsViewModel extends ChangeNotifier {
         final groupId = await _groupService.getOrCreateGroup(group);
         await _groupService.addGroupToContact(contactId, groupId);
       }
+      reloadGroups();
       await loadContacts();
     } catch (e) {
       _error = "Failed to create contact: ${e.toString()}";
@@ -147,6 +152,7 @@ class ContactsViewModel extends ChangeNotifier {
         }
       }
 
+      reloadGroups();
       await loadContacts(); // Refresh the contacts list after updating
     } catch (e) {
       _error = "Failed to update contact: ${e.toString()}";
@@ -168,6 +174,7 @@ class ContactsViewModel extends ChangeNotifier {
     try {
       await _groupService.removeGroupFromContact(contactId: contactId);
       await _contactService.deleteContact(contactId);
+      reloadGroups();
       await loadContacts(); // Refresh the contacts list after deleting
     } catch (e) {
       _error = "Failed to delete contact: ${e.toString()}";

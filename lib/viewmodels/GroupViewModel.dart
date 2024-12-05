@@ -8,10 +8,22 @@ import 'package:friendlyreminder/viewmodels/SharedState.dart';
 class GroupViewModel extends ChangeNotifier {
   final SharedState _sharedState;
 
-  GroupViewModel(this._sharedState);
+  GroupViewModel(this._sharedState) {
+    _sharedState.addListener(reload);
+  }
 
-  void triggerReload() {
-    _sharedState.triggerReload();
+  void reloadContacts() {
+    _sharedState.updateContacts();
+  }
+
+  void reload() {
+    loadGroups();
+  }
+
+  @override
+  void dispose() {
+    _sharedState.removeListener(reload);
+    super.dispose();
   }
 
   final GroupService _groupService = GroupService();
@@ -47,7 +59,7 @@ class GroupViewModel extends ChangeNotifier {
       await _groupService.removeGroupFromContact(groupId: groupId);
       await _groupService.deleteGroup(groupId);
       await loadGroups();
-      triggerReload();
+      reloadContacts();
     } catch (e) {
       _error = "Failed to delete group: ${e.toString()}";
     } finally {
@@ -134,7 +146,7 @@ class GroupViewModel extends ChangeNotifier {
       }
 
       await loadGroups();
-      triggerReload();
+      reloadContacts();
     } catch (e) {
       _error = "Failed to update group: ${e.toString()}";
     } finally {

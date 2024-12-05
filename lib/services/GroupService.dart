@@ -68,11 +68,6 @@ class GroupService {
       _dbClient.contactId: contactId,
       _dbClient.groupId: groupId,
     });
-    // await db.rawUpdate('''
-    // UPDATE ${_dbClient.groupTbl}
-    // SET ${_dbClient.groupSize} = ${_dbClient.groupSize} + 1
-    // WHERE ${_dbClient.groupId} = $groupId
-    // ''');
   }
 
   Future<void> removeGroupFromContact({int? contactId, int? groupId}) async {
@@ -94,11 +89,6 @@ class GroupService {
       throw ArgumentError(
           'Either ${_dbClient.contactId} or ${_dbClient.groupId} must be provided');
     }
-    // await db.rawUpdate('''
-    // UPDATE ${_dbClient.groupTbl}
-    // SET ${_dbClient.groupSize} = ${_dbClient.groupSize} - 1
-    // WHERE ${_dbClient.groupId} = $groupId
-    // ''');
   }
 
   Future<void> updateGroup(GroupModel group) async {

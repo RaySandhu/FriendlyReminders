@@ -1,7 +1,11 @@
 import 'package:flutter/foundation.dart';
 
 class SharedState extends ChangeNotifier {
-  void triggerReload() {
+  void updateContacts() {
+    notifyListeners();
+  }
+
+  void updateGroups() {
     notifyListeners();
   }
 }
