@@ -3,9 +3,17 @@ import 'package:friendlyreminder/models/GroupModel.dart';
 import 'package:friendlyreminder/models/ContactModel.dart';
 import 'package:friendlyreminder/services/GroupService.dart';
 import 'package:flutter/material.dart';
-import 'package:friendlyreminder/screens/GroupScreen.dart';
+import 'package:friendlyreminder/viewmodels/SharedState.dart';
 
 class GroupViewModel extends ChangeNotifier {
+  final SharedState _sharedState;
+
+  GroupViewModel(this._sharedState);
+
+  void triggerReload() {
+    _sharedState.triggerReload();
+  }
+
   final GroupService _groupService = GroupService();
   List<GroupModel> _groups = [];
   List<ContactModel> _contactInGroup = [];
@@ -36,9 +44,10 @@ class GroupViewModel extends ChangeNotifier {
     _error = null;
     notifyListeners();
     try {
-      await _groupService.removeGroupFromContact(groupId);
+      await _groupService.removeGroupFromContact(groupId: groupId);
       await _groupService.deleteGroup(groupId);
       await loadGroups();
+      triggerReload();
     } catch (e) {
       _error = "Failed to delete group: ${e.toString()}";
     } finally {

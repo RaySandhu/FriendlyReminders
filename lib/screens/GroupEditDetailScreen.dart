@@ -121,12 +121,9 @@ class _GroupViewDetailScreenState extends State<GroupViewDetailScreen> {
                   child: FilledButton.icon(
                     onPressed: () {
                       showDeleteGroupAlert(context, () {
-                        // _group.deleteGroup(_group.id ?? -1); //id of group needed
-                        Navigator.pop(context);
+                        groupVM.deleteGroup(_group.id ?? -1);
                         Navigator.pop(context);
                       });
-                      MaterialPageRoute(
-                          builder: (context) => const GroupScreen());
                     },
                     label: const Text("Delete Group"),
                     icon: const Icon(Icons.delete),

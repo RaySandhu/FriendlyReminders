@@ -4,8 +4,26 @@ import 'package:friendlyreminder/models/GroupModel.dart';
 import 'package:friendlyreminder/models/ContactWithGroupsModel.dart';
 import 'package:friendlyreminder/services/ContactService.dart';
 import 'package:friendlyreminder/services/GroupService.dart';
+import 'package:friendlyreminder/viewmodels/SharedState.dart';
 
 class ContactsViewModel extends ChangeNotifier {
+  final SharedState _sharedState;
+
+  ContactsViewModel(this._sharedState) {
+    _sharedState.addListener(reload);
+  }
+
+  void reload() {
+    print("RELOAD");
+    loadContacts();
+  }
+
+  @override
+  void dispose() {
+    _sharedState.removeListener(reload);
+    super.dispose();
+  }
+
   final ContactService _contactService = ContactService();
   final GroupService _groupService = GroupService();
 
@@ -113,7 +131,7 @@ class ContactsViewModel extends ChangeNotifier {
       // Remove groups
       for (var currentGroup in currentGroups) {
         if (!groups.contains(currentGroup)) {
-          await _groupService.removeGroupFromContact(contact.id!);
+          await _groupService.removeGroupFromContact(contactId: contact.id!);
         }
       }
 
@@ -139,7 +157,7 @@ class ContactsViewModel extends ChangeNotifier {
     _error = null;
     notifyListeners();
     try {
-      await _groupService.removeGroupFromContact(contactId);
+      await _groupService.removeGroupFromContact(contactId: contactId);
       await _contactService.deleteContact(contactId);
       await loadContacts(); // Refresh the contacts list after deleting
     } catch (e) {

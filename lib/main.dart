@@ -5,22 +5,32 @@ import 'package:friendlyreminder/viewmodels/ContactViewModel.dart';
 import 'package:friendlyreminder/viewmodels/GroupViewModel.dart';
 import 'package:friendlyreminder/viewmodels/ReminderViewModel.dart';
 import 'package:friendlyreminder/viewmodels/AIPromptViewModel.dart';
+import 'package:friendlyreminder/viewmodels/SharedState.dart';
 
 void main() {
   runApp(
     MultiProvider(
       providers: [
-        ChangeNotifierProvider(
-          create: (context) => ContactsViewModel()..loadContacts(),
+        ChangeNotifierProvider(create: (context) => SharedState()),
+        ChangeNotifierProxyProvider<SharedState, ContactsViewModel>(
+          create: (context) =>
+              ContactsViewModel(context.read<SharedState>())..loadContacts(),
+          update: (context, sharedState, previous) =>
+              previous ?? ContactsViewModel(sharedState)
+                ..loadContacts(),
+        ),
+        ChangeNotifierProxyProvider<SharedState, GroupViewModel>(
+          create: (context) =>
+              GroupViewModel(context.read<SharedState>())..loadGroups(),
+          update: (context, sharedState, previous) =>
+              previous ?? GroupViewModel(sharedState)
+                ..loadGroups(),
         ),
         ChangeNotifierProvider(
           create: (context) => AIPromptViewModel()..loadPrompts(),
         ),
         ChangeNotifierProvider(
           create: (context) => ReminderViewModel(),
-        ),
-        ChangeNotifierProvider(
-          create: (context) => GroupViewModel()..loadGroups(),
         ),
       ],
       child: const MyApp(),

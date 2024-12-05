@@ -70,13 +70,25 @@ class GroupService {
     });
   }
 
-  Future<void> removeGroupFromContact(int contactId) async {
+  Future<void> removeGroupFromContact({int? contactId, int? groupId}) async {
     final db = await _dbClient.database;
-    await db.delete(
-      _dbClient.contactGroupTbl,
-      where: '${_dbClient.contactId} = ?',
-      whereArgs: [contactId],
-    );
+
+    if (contactId != null) {
+      await db.delete(
+        _dbClient.contactGroupTbl,
+        where: '${_dbClient.contactId} = ?',
+        whereArgs: [contactId],
+      );
+    } else if (groupId != null) {
+      await db.delete(
+        _dbClient.contactGroupTbl,
+        where: '${_dbClient.groupId} = ?',
+        whereArgs: [groupId],
+      );
+    } else {
+      throw ArgumentError(
+          'Either ${_dbClient.contactId} or ${_dbClient.groupId} must be provided');
+    }
   }
 
   Future<void> updateGroup(GroupModel group) async {
