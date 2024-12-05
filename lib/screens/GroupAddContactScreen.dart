@@ -93,23 +93,6 @@ class _GroupAddContactScreenState extends State<GroupAddContactScreen> {
           body: SafeArea(
             child: Column(
               children: [
-                Container(
-                  width: double.infinity,
-                  child: Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Wrap(
-                      spacing: 8.0, // gap between adjacent chips
-                      runSpacing: 4.0, // gap between lines
-                      children: contactVM.selectedGroups.map((group) {
-                        return Chip(
-                          label: Text(group),
-                          deleteIcon: Icon(Icons.close),
-                          onDeleted: () => contactVM.removeFilter(group),
-                        );
-                      }).toList(),
-                    ),
-                  ),
-                ),
                 Expanded(
                   child: contactVM.isLoading
                       ? const Center(child: CircularProgressIndicator())
@@ -140,6 +123,23 @@ class _GroupAddContactScreenState extends State<GroupAddContactScreen> {
                                     );
                                   },
                                 ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: FilledButton(
+                    onPressed: () {
+                      Navigator.pop(context);
+                    },
+                    style: ButtonStyle(
+                      shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                        RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(
+                              8.0), // Adjust this value to change the radius
+                        ),
+                      ),
+                    ),
+                    child: const Text("Done"),
+                  ),
                 ),
               ],
             ),
