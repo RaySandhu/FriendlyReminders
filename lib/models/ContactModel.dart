@@ -1,18 +1,17 @@
-class ContactModel {
+class ContactModel implements Comparable<ContactModel> {
   final int? id;
   final String name;
   final String phone;
   final String email;
-  // final List<String> tags;
   final String notes;
   final DateTime? latestContactDate;
+
 
   const ContactModel(
       {this.id,
       required this.name,
       required this.phone,
       required this.email,
-      // required this.tags,
       required this.notes,
       this.latestContactDate});
 
@@ -54,6 +53,31 @@ class ContactModel {
       'ContactNotes': notes,
       'LatestContactDate': latestContactDate?.toIso8601String(),
     };
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return identical(this, other) ||
+        other is ContactModel &&
+            runtimeType == other.runtimeType &&
+            id == other.id &&
+            name == other.name &&
+            phone == other.phone &&
+            email == other.email &&
+            notes == other.notes;
+  }
+
+  @override
+  int get hashCode =>
+      id.hashCode ^
+      name.hashCode ^
+      phone.hashCode ^
+      email.hashCode ^
+      notes.hashCode;
+
+  @override
+  int compareTo(ContactModel other) {
+    return name.compareTo(other.name);
   }
 
   @override

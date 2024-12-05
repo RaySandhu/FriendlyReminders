@@ -1,5 +1,6 @@
 import 'package:friendlyreminder/services/DatabaseClient.dart';
 import 'package:friendlyreminder/models/GroupModel.dart';
+import 'package:friendlyreminder/models/ContactModel.dart';
 
 class GroupService {
   final DatabaseClient _dbClient = DatabaseClient();
@@ -47,6 +48,20 @@ class GroupService {
     });
   }
 
+  Future<List<ContactModel>> getContactsFromGroup(int groupId) async {
+    final db = await _dbClient.database;
+    final List<Map<String, dynamic>> maps = await db.rawQuery('''
+    SELECT C.*
+    FROM ${_dbClient.contactGroupTbl} CG
+    JOIN ${_dbClient.groupTbl} G ON (G.${_dbClient.groupId} = CG.${_dbClient.groupId})
+    JOIN ${_dbClient.contactTbl} C ON (C.${_dbClient.contactId} = CG.${_dbClient.contactId})
+    WHERE G.${_dbClient.groupId} = $groupId
+    ''');
+    return List.generate(maps.length, (i) {
+      return ContactModel.fromMap(maps[i]);
+    });
+  }
+
   Future<void> addGroupToContact(int contactId, int groupId) async {
     final db = await _dbClient.database;
     await db.insert(_dbClient.contactGroupTbl, {
@@ -55,13 +70,25 @@ class GroupService {
     });
   }
 
-  Future<void> removeGroupFromContact(int contactId) async {
+  Future<void> removeGroupFromContact({int? contactId, int? groupId}) async {
     final db = await _dbClient.database;
-    await db.delete(
-      _dbClient.contactGroupTbl,
-      where: '${_dbClient.contactId} = ?',
-      whereArgs: [contactId],
-    );
+
+    if (contactId != null) {
+      await db.delete(
+        _dbClient.contactGroupTbl,
+        where: '${_dbClient.contactId} = ?',
+        whereArgs: [contactId],
+      );
+    } else if (groupId != null) {
+      await db.delete(
+        _dbClient.contactGroupTbl,
+        where: '${_dbClient.groupId} = ?',
+        whereArgs: [groupId],
+      );
+    } else {
+      throw ArgumentError(
+          'Either ${_dbClient.contactId} or ${_dbClient.groupId} must be provided');
+    }
   }
 
   Future<void> updateGroup(GroupModel group) async {
@@ -81,5 +108,18 @@ class GroupService {
       where: '${_dbClient.groupId} = ?',
       whereArgs: [groupId],
     );
+  }
+
+  Future<GroupModel> getGroup(int groupId) async {
+    final db = await _dbClient.database;
+    final List<Map<String, dynamic>> maps = await db.query(
+      _dbClient.contactTbl,
+      where: '${_dbClient.groupId} = ?',
+      whereArgs: [groupId],
+    );
+    if (maps.isNotEmpty) {
+      return GroupModel.fromMap(maps.first);
+    }
+    throw Exception('Group Service - Group not found');
   }
 }

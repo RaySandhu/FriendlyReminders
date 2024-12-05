@@ -52,17 +52,15 @@ class _ContactsScreenState extends State<ContactsScreen> {
                 ? TextField(
                     controller: _searchController,
                     decoration: InputDecoration(
-                      prefixIcon: Icon(Icons.search),
+                      prefixIcon: const Icon(Icons.search),
                       hintText: 'Search',
                       suffixIcon: IconButton(
-                          icon: Icon(Icons.close),
+                          icon: const Icon(Icons.close),
                           onPressed: () {
                             setState(() {
                               _isSearching = !_isSearching;
                               _searchController.clear();
-                              Provider.of<ContactsViewModel>(context,
-                                      listen: false)
-                                  .filterContacts(query: ''); // Reset filter
+                              contactVM.filterContacts(query: '');
                             });
                           }),
                       contentPadding: EdgeInsets.all(10),
