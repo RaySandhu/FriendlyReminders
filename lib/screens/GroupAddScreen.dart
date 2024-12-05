@@ -7,13 +7,14 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:friendlyreminder/models/GroupModel.dart';
 import 'package:friendlyreminder/widgets/ContactCard.dart';
-import 'package:friendlyreminder/screens/GroupViewDetailScreen.dart';
+import 'package:friendlyreminder/screens/GroupEditDetailScreen.dart';
 import 'package:friendlyreminder/viewmodels/GroupViewModel.dart';
 import 'package:friendlyreminder/screens/GroupScreen.dart';
 
-
 class GroupAddScreen extends StatefulWidget {
-  const GroupAddScreen({Key? key,});
+  const GroupAddScreen({
+    Key? key,
+  });
 
   @override
   State<GroupAddScreen> createState() => _GroupAddScreenState();
@@ -35,12 +36,9 @@ class _GroupAddScreenState extends State<GroupAddScreen> {
         const SnackBar(content: Text('Please fill in all fields')),
       );
       GroupModel newGroup = GroupModel(name: _nameController.text);
-      int groupId = await Provider.of<GroupViewModel>(context,
-                            listen: false)
-                        .createGroup(newGroup);
-      MaterialPageRoute(
-        builder: (context) => GroupScreen()
-      );
+      int groupId = await Provider.of<GroupViewModel>(context, listen: false)
+          .createGroup(newGroup);
+      MaterialPageRoute(builder: (context) => GroupScreen());
     }
   }
 
@@ -58,21 +56,19 @@ class _GroupAddScreenState extends State<GroupAddScreen> {
         title: const Text('Create New Group'),
         actions: [
           Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: FilledButton(
-              onPressed: _saveGroup,
-            style: FilledButton.styleFrom(
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(5),
+              padding: const EdgeInsets.all(8.0),
+              child: FilledButton(
+                onPressed: _saveGroup,
+                style: FilledButton.styleFrom(
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(5),
+                  ),
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+                  minimumSize: const Size(0, 0),
                 ),
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
-                minimumSize: const Size(0, 0),
-              ),
-              child: const Text("Done"),
-
-          )
-          )
+                child: const Text("Done"),
+              ))
         ],
       ),
       body: Padding(

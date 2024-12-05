@@ -34,58 +34,33 @@ class _GroupViewDetailScreenState extends State<GroupViewDetailScreen> {
 
   // final ContactModel _groupContact =
   //     ContactModel(name: '', phone: '', email: '', notes: '');
-  late TextEditingController _noteController;
+  // late TextEditingController _nameController;
   late bool isEmpty;
 
   @override
   void initState() {
     super.initState();
     _group = widget.group;
-    _noteController =
-        TextEditingController(text: _group.name); //name of the group
-    isEmpty = _noteController.text.isEmpty;
+    // _nameController =
+    //     TextEditingController(text: _group.name); //name of the group
+    // isEmpty = _nameController.text.isEmpty;
 
     Future.microtask(() {
       groupVM = Provider.of<GroupViewModel>(context, listen: false);
       groupVM.getContactsFromGroup(_group..id);
     });
 
-    _noteController.addListener(() {
-      setState(() {
-        isEmpty = _noteController.text.isEmpty;
-      });
-    });
+    // _nameController.addListener(() {
+    //   setState(() {
+    //     isEmpty = _nameController.text.isEmpty;
+    //   });
+    // });
   }
 
   @override
   void dispose() {
-    _noteController.dispose();
+    // _nameController.dispose();
     super.dispose();
-  }
-
-//the plus sign to add new contacts to the group
-  // Future<void> addPersonToGroup() async {
-  //   final updatedGroup = await Navigator.push(
-  //     context,
-  //     MaterialPageRoute(
-  //       builder: (context) => GroupAddContactScreen(
-  //         groupContact: _groupContact,
-  //       ),
-  //     ),
-  //   );
-
-  //   if (updatedGroup != null) {
-  //     setState(() {
-  //       _group = updatedGroup;
-  //     });
-  //   }
-  // }
-
-  //fix the following delete operations
-  void deleteContact(int index) {
-    setState(() {
-      //_group.contacts.removeAt(index); //fix this delete part
-    });
   }
 
   @override
@@ -104,10 +79,18 @@ class _GroupViewDetailScreenState extends State<GroupViewDetailScreen> {
               IconButton(
                 icon: const Icon(Icons.add),
                 onPressed: () {
-                  // addPersonToGroup();
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => GroupAddContactScreen(
+                        group: _group,
+                      ),
+                    ),
+                  );
                 },
               ),
             ],
+            backgroundColor: Theme.of(context).colorScheme.inversePrimary,
           ),
           body: SafeArea(
             child: Column(
@@ -127,8 +110,8 @@ class _GroupViewDetailScreenState extends State<GroupViewDetailScreen> {
                                     return ContactCard(
                                       name: contact.name,
                                       onTap: () => (),
-                                      onDelete: () =>
-                                          groupVM.removeContactToGroup(contact),
+                                      onDelete: () => groupVM
+                                          .removeContactFromGroup(contact),
                                     );
                                   },
                                 ),
@@ -142,7 +125,8 @@ class _GroupViewDetailScreenState extends State<GroupViewDetailScreen> {
                         Navigator.pop(context);
                         Navigator.pop(context);
                       });
-                      MaterialPageRoute(builder: (context) => GroupScreen());
+                      MaterialPageRoute(
+                          builder: (context) => const GroupScreen());
                     },
                     label: const Text("Delete Group"),
                     icon: const Icon(Icons.delete),

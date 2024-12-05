@@ -5,17 +5,16 @@ import 'package:provider/provider.dart';
 import 'package:friendlyreminder/models/GroupModel.dart';
 import 'package:friendlyreminder/models/ContactGroupModel.dart';
 import 'package:friendlyreminder/widgets/ContactCard.dart';
-import 'package:friendlyreminder/screens/GroupViewDetailScreen.dart';
+import 'package:friendlyreminder/screens/GroupEditDetailScreen.dart';
 import 'package:friendlyreminder/viewmodels/GroupViewModel.dart';
 import 'package:friendlyreminder/models/ContactModel.dart';
 import 'package:friendlyreminder/viewmodels/ContactViewModel.dart';
 
 class GroupAddContactScreen extends StatefulWidget {
-  final ContactModel groupContact;
-
+  final GroupModel group;
   const GroupAddContactScreen({
     Key? key,
-    required this.groupContact,
+    required this.group,
   }) : super(key: key);
 
   @override
@@ -23,10 +22,13 @@ class GroupAddContactScreen extends StatefulWidget {
 }
 
 class _GroupAddContactScreenState extends State<GroupAddContactScreen> {
-  final List<ContactModel> _selectedContacts = [];
   bool _isSearching = false;
   final TextEditingController _searchController = TextEditingController();
-  String _searchQuery = '';
+
+  @override
+  void initState() {
+    super.initState();
+  }
 
   @override
   void dispose() {
@@ -35,148 +37,109 @@ class _GroupAddContactScreenState extends State<GroupAddContactScreen> {
   }
 
   @override
-  void initState() {
-    super.initState();
-    _selectedContacts.add(widget.groupContact);
-  }
-
-  Future<void> _saveContacts() async {
-    //this will add the contacts to the group
-  }
-
-  @override
   Widget build(BuildContext context) {
-    final contactVM = Provider.of<ContactsViewModel>(context, listen: false);
-    final filteredContacts = _searchQuery.isEmpty
-        ? contactVM.contacts
-        : contactVM.contacts
-            .where((contact) => contact.contact.name
-                .toLowerCase()
-                .contains(_searchQuery.toLowerCase()))
-            .toList();
-    return Scaffold(
-      appBar: AppBar(
-        centerTitle: true,
-        title: _isSearching
-            ? TextField(
-                controller: _searchController,
-                decoration: InputDecoration(
-                  prefixIcon: Icon(Icons.search),
-                  hintText: 'Search Contacts',
-                  suffixIcon: IconButton(
-                    icon: Icon(Icons.close),
-                    onPressed: () {
-                      setState(() {
-                        _isSearching = !_isSearching;
-                        _searchController.clear();
-                        _searchQuery = '';
-                      });
-                    },
-                  ),
-                  contentPadding: EdgeInsets.all(10),
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(15),
-                  ),
-                ),
-                onChanged: (value) {
-                  setState(() {
-                    _searchQuery = value;
-                  });
-                },
-              )
-            : Text("Add Contacts"),
-        actions: _isSearching
-            ? []
-            : [
-                IconButton(
-                  icon: Icon(Icons.search),
-                  onPressed: () {
-                    setState(() {
-                      _isSearching = true;
-                    });
-                  },
-                ),
-                TextButton(
-                  onPressed: () {
-                    // Return the contacts -- add implementation
-                  },
-                  child: const Text(
-                    "Done",
-                    style: TextStyle(color: Colors.white),
-                  ),
-                ),
-                Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: FilledButton(
-                      onPressed: _saveContacts,
-                      style: FilledButton.styleFrom(
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(5),
-                        ),
-                        padding: const EdgeInsets.symmetric(
-                            horizontal: 10, vertical: 4),
-                        minimumSize: const Size(0, 0),
+    return Consumer2<ContactsViewModel, GroupViewModel>(
+      builder: (context, contactVM, groupVM, child) {
+        return Scaffold(
+          appBar: AppBar(
+            centerTitle: true,
+            title: _isSearching
+                ? TextField(
+                    controller: _searchController,
+                    decoration: InputDecoration(
+                      prefixIcon: const Icon(Icons.search),
+                      hintText: 'Search',
+                      suffixIcon: IconButton(
+                          icon: const Icon(Icons.close),
+                          onPressed: () {
+                            setState(() {
+                              _isSearching = !_isSearching;
+                              _searchController.clear();
+                              contactVM.filterContacts(query: '');
+                            });
+                          }),
+                      contentPadding: EdgeInsets.all(10),
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(15),
                       ),
-                      child: const Text("Done"),
-                    ))
-              ],
-      ),
-      body: SafeArea(
-        child: Column(
-          children: [
-            Expanded(
-              child: contactVM.isLoading
-                  ? const Center(child: CircularProgressIndicator())
-                  : contactVM.error != null
-                      ? Center(child: Text('Error: ${contactVM.error}'))
-                      : filteredContacts.isEmpty
-                          ? const Center(child: Text('No contacts found'))
-                          : ListView.builder(
-                              itemCount: filteredContacts.length,
-                              itemBuilder: (context, index) {
-                                final contact = filteredContacts[index];
-                                final isSelected =
-                                    _selectedContacts.contains(contact.contact);
-
-                                return ListTile(
-                                  leading: CircleAvatar(
-                                    child: Text(
-                                        contact.contact.name[0].toUpperCase()),
-                                  ),
-                                  title: Text(contact.contact.name),
-                                  trailing: Checkbox(
-                                    value: isSelected,
-                                    onChanged: (bool? value) {
-                                      setState(() {
-                                        if (value == true) {
-                                          _selectedContacts
-                                              .add(contact.contact);
+                    ),
+                    onChanged: (value) {
+                      Provider.of<ContactsViewModel>(context, listen: false)
+                          .filterContacts(query: value);
+                    },
+                  )
+                : Text("Add Contacts",
+                    style: Theme.of(context).textTheme.headlineSmall),
+            actions: _isSearching
+                ? []
+                : [
+                    IconButton(
+                        icon: Icon(Icons.search),
+                        onPressed: () {
+                          setState(() {
+                            _isSearching = !_isSearching;
+                          });
+                        }),
+                    IconButton(icon: Icon(Icons.add), onPressed: () => ())
+                  ],
+            backgroundColor: Theme.of(context).colorScheme.inversePrimary,
+          ),
+          body: SafeArea(
+            child: Column(
+              children: [
+                Container(
+                  width: double.infinity,
+                  child: Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Wrap(
+                      spacing: 8.0, // gap between adjacent chips
+                      runSpacing: 4.0, // gap between lines
+                      children: contactVM.selectedGroups.map((group) {
+                        return Chip(
+                          label: Text(group),
+                          deleteIcon: Icon(Icons.close),
+                          onDeleted: () => contactVM.removeFilter(group),
+                        );
+                      }).toList(),
+                    ),
+                  ),
+                ),
+                Expanded(
+                  child: contactVM.isLoading
+                      ? const Center(child: CircularProgressIndicator())
+                      : contactVM.error != null
+                          ? Center(child: Text('Error: ${contactVM.error}'))
+                          : contactVM.contacts.isEmpty
+                              ? const Center(child: Text('No contacts found'))
+                              : ListView.builder(
+                                  itemCount: contactVM.contacts.length,
+                                  itemBuilder: (context, index) {
+                                    final contactWithGroups =
+                                        contactVM.contacts[index];
+                                    final isSelected = groupVM.contactInGroup
+                                        .contains(contactWithGroups.contact);
+                                    return ContactCard(
+                                      name: contactWithGroups.contact.name,
+                                      onTap: () => print(isSelected),
+                                      isSelected: isSelected,
+                                      onCheck: (value) {
+                                        if (isSelected) {
+                                          groupVM.removeContactFromGroup(
+                                              contactWithGroups.contact);
                                         } else {
-                                          _selectedContacts
-                                              .remove(contact.contact);
+                                          groupVM.addContactToGroup(
+                                              contactWithGroups.contact);
                                         }
-                                      });
-                                      print(_selectedContacts);
-                                    },
-                                  ),
-                                  onTap: () {
-                                    // Toggle selection on tap
-                                    setState(() {
-                                      if (isSelected) {
-                                        _selectedContacts
-                                            .remove(contact.contact);
-                                      } else {
-                                        _selectedContacts.add(contact.contact);
-                                      }
-                                    });
+                                      },
+                                    );
                                   },
-                                );
-                              },
-                            ),
+                                ),
+                ),
+              ],
             ),
-          ],
-        ),
-      ),
+          ),
+        );
+      },
     );
   }
 }

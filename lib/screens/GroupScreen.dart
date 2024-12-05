@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:friendlyreminder/screens/GroupViewDetailScreen.dart';
+import 'package:friendlyreminder/screens/GroupEditDetailScreen.dart';
 import 'package:provider/provider.dart';
 import 'package:friendlyreminder/widgets/GroupCard.dart';
 import 'package:friendlyreminder/viewmodels/GroupViewModel.dart';
@@ -31,8 +31,9 @@ class _GroupScreenState extends State<GroupScreen> {
         final filteredGroups = _searchQuery.isEmpty
             ? groupVM.groups
             : groupVM.groups
-                .where((group) =>
-                    group.name.toLowerCase().contains(_searchQuery.toLowerCase()))
+                .where((group) => group.name
+                    .toLowerCase()
+                    .contains(_searchQuery.toLowerCase()))
                 .toList();
 
         return Scaffold(
@@ -115,22 +116,20 @@ class _GroupScreenState extends State<GroupScreen> {
                                   itemBuilder: (context, index) {
                                     final group = filteredGroups[index];
                                     return GroupCard(
-                                      name: group.name,
-                                      numMembers: group.size ?? 0, 
-                                      //idk why the group.size is 0 (need to check if it's incrementing properly when a tag is added to a contact)
-                                      onTap: () {
-                                        Navigator.push(
+                                        name: group.name,
+                                        numMembers: group.size ?? 0,
+                                        //idk why the group.size is 0 (need to check if it's incrementing properly when a tag is added to a contact)
+                                        onTap: () {
+                                          Navigator.push(
                                             context,
                                             MaterialPageRoute(
                                               builder: (context) =>
                                                   GroupViewDetailScreen(
-                                                group:
-                                                    group,
+                                                group: group,
                                               ),
                                             ),
                                           );
-                                      }
-                                    );
+                                        });
                                   },
                                 ),
                 ),

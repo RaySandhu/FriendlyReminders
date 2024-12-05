@@ -13,7 +13,12 @@ class GroupViewModel extends ChangeNotifier {
   String? _error;
 
   List<GroupModel> get groups => _groups;
-  List<ContactModel> get contactInGroup => _contactInGroup;
+  List<ContactModel> get contactInGroup {
+    List<ContactModel> sortedContacts = List.from(_contactInGroup);
+    sortedContacts.sort((a, b) => a.name.compareTo(b.name));
+    return sortedContacts;
+  }
+
   bool get isLoading => _isLoading;
   String? get error => _error;
 
@@ -83,7 +88,7 @@ class GroupViewModel extends ChangeNotifier {
     notifyListeners();
   }
 
-  void removeContactToGroup(ContactModel contact) {
+  void removeContactFromGroup(ContactModel contact) {
     _contactInGroup.remove(contact);
     notifyListeners();
   }

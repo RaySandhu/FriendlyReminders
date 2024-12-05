@@ -5,12 +5,16 @@ class ContactCard extends StatelessWidget {
   final String name;
   final VoidCallback? onTap;
   final VoidCallback? onDelete;
+  final void Function(bool?)? onCheck;
+  final bool? isSelected;
 
   const ContactCard({
     super.key,
     required this.name,
     required this.onTap,
     this.onDelete,
+    this.onCheck,
+    this.isSelected,
   });
 
   @override
@@ -22,18 +26,18 @@ class ContactCard extends StatelessWidget {
             ? Text(name[0].toUpperCase())
             : const Icon(Icons.person),
       ),
-      title: Row(
-        children: [
-          Text(name),
-          if (onDelete != null) ...[
-            const Spacer(),
-            IconButton(
+      title: Text(name),
+      trailing: onDelete != null
+          ? IconButton(
               onPressed: onDelete,
               icon: const Icon(Icons.close),
             )
-          ]
-        ],
-      ),
+          : onCheck != null && isSelected != null
+              ? Checkbox(
+                  value: isSelected,
+                  onChanged: onCheck,
+                )
+              : null,
       onTap: onTap,
     );
   }

@@ -3,7 +3,6 @@ class ContactModel {
   final String name;
   final String phone;
   final String email;
-  // final List<String> tags;
   final String notes;
 
   const ContactModel({
@@ -11,7 +10,6 @@ class ContactModel {
     required this.name,
     required this.phone,
     required this.email,
-    // required this.tags,
     required this.notes,
   });
 
@@ -43,6 +41,26 @@ class ContactModel {
       'ContactNotes': notes,
     };
   }
+
+  @override
+  bool operator ==(Object other) {
+    return identical(this, other) ||
+        other is ContactModel &&
+            runtimeType == other.runtimeType &&
+            id == other.id &&
+            name == other.name &&
+            phone == other.phone &&
+            email == other.email &&
+            notes == other.notes;
+  }
+
+  @override
+  int get hashCode =>
+      id.hashCode ^
+      name.hashCode ^
+      phone.hashCode ^
+      email.hashCode ^
+      notes.hashCode;
 
   @override
   String toString() {
