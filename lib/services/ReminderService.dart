@@ -69,13 +69,25 @@ class ReminderService {
   }
 
   /// Delete a specific reminder
-  Future<void> deleteReminder(int reminderId) async {
+  Future<void> deleteReminder({int? reminderId, int? contactId}) async {
     final db = await _dbClient.database;
-    await db.delete(
-      _dbClient.reminderTbl,
-      where: '${_dbClient.reminderId} = ?',
-      whereArgs: [reminderId],
-    );
+
+    if (contactId != null && reminderId == null) {
+      await db.delete(
+        _dbClient.reminderTbl,
+        where: '${_dbClient.contactId} = ?',
+        whereArgs: [contactId],
+      );
+    } else if (reminderId != null && contactId == null) {
+      await db.delete(
+        _dbClient.reminderTbl,
+        where: '${_dbClient.reminderId} = ?',
+        whereArgs: [reminderId],
+      );
+    } else {
+      throw ArgumentError(
+          'Either ${_dbClient.contactId} or ${_dbClient.reminderId} must be provided');
+    }
   }
 
   /// Delete all reminders for a specific contact
