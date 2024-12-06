@@ -139,7 +139,7 @@ class ReminderViewModel extends ChangeNotifier {
     _error = null;
     notifyListeners();
     try {
-      await _reminderService.deleteReminder(reminderId);
+      await _reminderService.deleteReminder(reminderId: reminderId);
       await loadRemindersByContact(contactId); // Refresh after deleting
     } catch (e) {
       _error = "Failed to delete reminder: ${e.toString()}";
