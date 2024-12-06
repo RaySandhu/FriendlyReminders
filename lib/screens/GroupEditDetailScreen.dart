@@ -1,10 +1,8 @@
-//can delete group members
-//can delete the group
-//can edit the name of the group
-//back button takes you back to the main group page
-
 import 'package:flutter/material.dart';
+import 'package:friendlyreminder/models/GroupWithContactsModel.dart';
 import 'package:friendlyreminder/widgets/PopupDeleteGroup.dart';
+import 'package:friendlyreminder/widgets/PopupDiscardChanges.dart';
+import 'package:friendlyreminder/widgets/PopupMissingName.dart';
 import 'package:friendlyreminder/widgets/StyledTextField.dart';
 import 'package:provider/provider.dart';
 import 'package:friendlyreminder/models/GroupModel.dart';
@@ -26,6 +24,8 @@ class GroupEditDetailScreen extends StatefulWidget {
 
 class _GroupEditDetailScreenState extends State<GroupEditDetailScreen> {
   late GroupModel? _group;
+  late GroupWithContactsModel? _originalGroup;
+  late GroupWithContactsModel? _updatedGroup;
   late GroupViewModel groupVM;
   late TextEditingController _nameController = TextEditingController();
 
@@ -53,15 +53,35 @@ class _GroupEditDetailScreenState extends State<GroupEditDetailScreen> {
     super.dispose();
   }
 
+  void updateGroupWithContacts() {
+    _updatedGroup = GroupWithContactsModel(
+      group: _nameController.text,
+      contacts: groupVM.contactInGroup,
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Consumer<GroupViewModel>(builder: (context, groupVM, child) {
+      _originalGroup = GroupWithContactsModel(
+        group: _group?.name ?? "",
+        contacts: groupVM.contactInGroup,
+      );
+      _updatedGroup = GroupWithContactsModel(
+        group: _group?.name ?? "",
+        contacts: groupVM.contactInGroup,
+      );
       return Scaffold(
           appBar: AppBar(
             leading: IconButton(
               icon: const Icon(Icons.arrow_back),
               onPressed: () {
-                Navigator.pop(context);
+                updateGroupWithContacts();
+                if (_originalGroup != _updatedGroup) {
+                  popupDiscardChanges(context);
+                } else {
+                  Navigator.pop(context);
+                }
               },
             ),
             centerTitle: true,
@@ -80,7 +100,9 @@ class _GroupEditDetailScreenState extends State<GroupEditDetailScreen> {
                     minimumSize: const Size(0, 0),
                   ),
                   onPressed: () {
-                    if (_nameController.text.isNotEmpty) {
+                    if (_nameController.text.isEmpty) {
+                      popupMissingName(context);
+                    } else {
                       if (_group == null) {
                         GroupModel newGroup = GroupModel(
                           name: _nameController.text,
@@ -94,10 +116,10 @@ class _GroupEditDetailScreenState extends State<GroupEditDetailScreen> {
                         );
                         groupVM.updateGroup(newGroup, groupVM.contactInGroup);
                       }
+                      Navigator.pop(context);
                     }
-                    Navigator.pop(context);
                   },
-                  child: Text(_group == null ? "Done" : "Save"),
+                  child: const Text("Save"),
                 ),
               ),
             ],
@@ -122,6 +144,7 @@ class _GroupEditDetailScreenState extends State<GroupEditDetailScreen> {
                       hintText: "Group name",
                       prefixIcon: Icons.group,
                       padding: false,
+                      onChanged: (_) => updateGroupWithContacts(),
                     ),
                   ),
                 ),
@@ -180,11 +203,12 @@ class _GroupEditDetailScreenState extends State<GroupEditDetailScreen> {
                                     final contact =
                                         groupVM.contactInGroup[index];
                                     return ContactCard(
-                                      name: contact.name,
-                                      onTap: () => (),
-                                      onDelete: () => groupVM
-                                          .removeContactFromGroup(contact),
-                                    );
+                                        name: contact.name,
+                                        onTap: () => (),
+                                        onDelete: () {
+                                          groupVM
+                                              .removeContactFromGroup(contact);
+                                        });
                                   },
                                 ),
                 ),

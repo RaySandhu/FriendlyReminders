@@ -82,7 +82,7 @@ class _ContactEditDetailScreenState extends State<ContactEditDetailScreen> {
       }
     });
 
-    void updateContactWithGroup() {
+    void updateContactWithGroups() {
       ContactModel newContact = ContactModel(
         name: _nameController.text,
         phone: _phoneController.text,
@@ -193,7 +193,7 @@ class _ContactEditDetailScreenState extends State<ContactEditDetailScreen> {
                         focusNode: _nameFocusNode,
                         nextFocusNode: _phoneFocusNode,
                         textCapitalization: TextCapitalization.words,
-                        onChanged: (_) => updateContactWithGroup(),
+                        onChanged: (_) => updateContactWithGroups(),
                       ),
                       StyledTextField(
                         controller: _phoneController,
@@ -203,7 +203,7 @@ class _ContactEditDetailScreenState extends State<ContactEditDetailScreen> {
                         focusNode: _phoneFocusNode,
                         nextFocusNode: _emailFocusNode,
                         inputFormatters: [PhoneNumberFormatter()],
-                        onChanged: (_) => updateContactWithGroup(),
+                        onChanged: (_) => updateContactWithGroups(),
                       ),
                       StyledTextField(
                         controller: _emailController,
@@ -212,7 +212,7 @@ class _ContactEditDetailScreenState extends State<ContactEditDetailScreen> {
                         keyboardType: TextInputType.emailAddress,
                         focusNode: _emailFocusNode,
                         nextFocusNode: _groupFocusNode,
-                        onChanged: (_) => updateContactWithGroup(),
+                        onChanged: (_) => updateContactWithGroups(),
                       ),
                       SuggestionTextField(
                         controller: _groupController,
@@ -229,7 +229,7 @@ class _ContactEditDetailScreenState extends State<ContactEditDetailScreen> {
                           setState(() {
                             _selectedGroups.add(GroupModel(name: text));
                           });
-                          updateContactWithGroup();
+                          updateContactWithGroups();
                         },
                       ),
                       if (_selectedGroups.isNotEmpty)
@@ -250,7 +250,7 @@ class _ContactEditDetailScreenState extends State<ContactEditDetailScreen> {
                                       setState(() {
                                         _selectedGroups.remove(group);
                                       });
-                                      updateContactWithGroup();
+                                      updateContactWithGroups();
                                     },
                                   );
                                 }).toList();

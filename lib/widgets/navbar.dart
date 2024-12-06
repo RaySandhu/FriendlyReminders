@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:friendlyreminder/screens/ContactScreen.dart';
-import 'package:friendlyreminder/screens/CounterScreen.dart';
 import 'package:friendlyreminder/screens/DatabaseScreen.dart';
 import 'package:friendlyreminder/screens/GroupScreen.dart';
 import 'package:friendlyreminder/screens/ReminderScreen.dart';
@@ -42,31 +41,26 @@ class _NavigationBarAppState extends State<NavigationBarApp> {
               label: 'Groups',
             ),
             // NavigationDestination(
-            //   icon: Icon(Icons.bug_report),
-            //   label: 'Testing',
+            //   icon: Icon(Icons.storage),
+            //   label: 'Database',
             // ),
-            NavigationDestination(
-              icon: Icon(Icons.storage),
-              label: 'Database',
-            ),
-            NavigationDestination(
-              icon: Icon(Icons.palette),
-              label: 'Color',
-            ),
-            NavigationDestination(
-              icon: Icon(Icons.text_fields),
-              label: 'Text',
-            ),
+            // NavigationDestination(
+            //   icon: Icon(Icons.palette),
+            //   label: 'Color',
+            // ),
+            // NavigationDestination(
+            //   icon: Icon(Icons.text_fields),
+            //   label: 'Text',
+            // ),
           ],
         ),
         body: [
           ContactsScreen(),
           ReminderScreen(),
           GroupScreen(),
-          // CounterScreen(title: 'Flutter Demo Home Page'),
-          DatabaseScreen(),
-          ColorPaletteScreen(),
-          TextThemePage(),
+          // DatabaseScreen(),
+          // ColorPaletteScreen(),
+          // TextThemePage(),
         ][currentPageIndex]);
   }
 }
