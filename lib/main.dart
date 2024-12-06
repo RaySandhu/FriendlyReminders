@@ -47,6 +47,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     final ColorScheme colorScheme = ColorScheme.fromSeed(
       seedColor: Colors.deepPurple,
+      tertiary: Colors.deepPurple.shade300,
     );
 
     return MaterialApp(
