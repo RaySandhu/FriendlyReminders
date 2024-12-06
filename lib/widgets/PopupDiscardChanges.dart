@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-void discardChangesPopup(BuildContext context) {
+void popupDiscardChanges(BuildContext context) {
   showDialog(
     context: context,
     builder: (BuildContext context) {

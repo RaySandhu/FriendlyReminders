@@ -13,7 +13,7 @@ import 'package:friendlyreminder/models/ContactModel.dart';
 import 'package:friendlyreminder/widgets/StyledTextField.dart';
 import 'package:friendlyreminder/widgets/SuggestionTextField.dart';
 import 'package:friendlyreminder/utilities/PhoneNumberFormatter.dart';
-import 'package:friendlyreminder/widgets/DiscardChangesPopup.dart';
+import 'package:friendlyreminder/widgets/PopupDiscardChanges.dart';
 import 'package:friendlyreminder/widgets/DeleteContactPopup.dart';
 
 class ContactEditDetailScreen extends StatefulWidget {
@@ -109,7 +109,7 @@ class _ContactEditDetailScreenState extends State<ContactEditDetailScreen> {
             icon: const Icon(Icons.arrow_back),
             onPressed: () {
               if (_originalContactWithGroups != _updatedContactWithGroups) {
-                discardChangesPopup(context);
+                popupDiscardChanges(context);
               } else {
                 Navigator.pop(context);
               }
