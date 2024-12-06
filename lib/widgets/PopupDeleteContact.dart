@@ -5,7 +5,7 @@ void popupDeleteContact(BuildContext context, Function onDeleted) {
     context: context,
     builder: (BuildContext context) {
       return AlertDialog(
-        title: Text('Discard contact',
+        title: Text('Delete contact',
             style: Theme.of(context).textTheme.titleLarge?.copyWith(
                   fontWeight: FontWeight.bold,
                   color: Colors.black,
@@ -17,7 +17,7 @@ void popupDeleteContact(BuildContext context, Function onDeleted) {
               Navigator.of(context).pop();
             },
             style: OutlinedButton.styleFrom(
-              side: BorderSide(color: Colors.grey.shade300),
+              side: BorderSide(color: Colors.grey.shade400),
               backgroundColor: Colors.grey.shade100,
               foregroundColor: Colors.black,
             ),

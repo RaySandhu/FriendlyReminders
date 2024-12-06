@@ -4,13 +4,13 @@
 //back button takes you back to the main group page
 
 import 'package:flutter/material.dart';
+import 'package:friendlyreminder/widgets/PopupDeleteGroup.dart';
 import 'package:friendlyreminder/widgets/StyledTextField.dart';
 import 'package:provider/provider.dart';
 import 'package:friendlyreminder/models/GroupModel.dart';
 import 'package:friendlyreminder/widgets/ContactCard.dart';
 import 'package:friendlyreminder/screens/GroupAddContactScreen.dart';
 import 'package:friendlyreminder/viewmodels/GroupViewModel.dart';
-import 'package:friendlyreminder/widgets/DeleteGroupPopup.dart';
 
 class GroupEditDetailScreen extends StatefulWidget {
   final GroupModel? group;
@@ -194,8 +194,8 @@ class _GroupEditDetailScreenState extends State<GroupEditDetailScreen> {
                       padding: const EdgeInsets.all(8.0),
                       child: FilledButton.icon(
                         onPressed: () {
-                          showDeleteGroupAlert(context, () {
-                            groupVM.deleteGroup(_group?.id ?? -1);
+                          popupDeleteGroup(context, () {
+                            groupVM.deleteGroup(_group!.id!);
                             Navigator.pop(context);
                           });
                         },

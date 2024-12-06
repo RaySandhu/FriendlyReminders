@@ -1,16 +1,16 @@
 import 'package:flutter/material.dart';
 
-void popupDiscardChanges(BuildContext context) {
+void popupDeleteGroup(BuildContext context, Function onDeleted) {
   showDialog(
     context: context,
     builder: (BuildContext context) {
       return AlertDialog(
-        title: Text('Discard changes',
+        title: Text('Delete group',
             style: Theme.of(context).textTheme.titleLarge?.copyWith(
                   fontWeight: FontWeight.bold,
                   color: Colors.black,
                 )),
-        content: const Text('Are you sure you want to discard your changes?'),
+        content: const Text('Are you sure you want to delete this group?'),
         actions: <Widget>[
           OutlinedButton(
             onPressed: () {
@@ -34,14 +34,14 @@ void popupDiscardChanges(BuildContext context) {
               backgroundColor: Colors.red,
             ),
             child: const Text(
-              'Discard',
+              'Delete',
               style: TextStyle(
                 color: Colors.white,
                 fontWeight: FontWeight.bold,
               ),
             ),
             onPressed: () {
-              Navigator.of(context).pop();
+              onDeleted();
               Navigator.of(context).pop();
             },
           ),

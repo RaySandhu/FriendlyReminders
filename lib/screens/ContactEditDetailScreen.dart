@@ -15,7 +15,6 @@ import 'package:friendlyreminder/widgets/StyledTextField.dart';
 import 'package:friendlyreminder/widgets/SuggestionTextField.dart';
 import 'package:friendlyreminder/utilities/PhoneNumberFormatter.dart';
 import 'package:friendlyreminder/widgets/PopupDiscardChanges.dart';
-import 'package:friendlyreminder/widgets/DeleteContactPopup.dart';
 
 class ContactEditDetailScreen extends StatefulWidget {
   final ContactWithGroupsModel? contactWithGroups;
