@@ -90,7 +90,7 @@ class _ContactsScreenState extends State<ContactsScreen> {
                               child: Transform.scale(
                                 scale: 4, // Adjust scale dynamically
                                 child: Image.asset(
-                                  '/images/FriendlyRemindersLogo.png',
+                                  'assets/images/FriendlyRemindersLogo.png',
                                   fit: BoxFit.contain,
                                   height: 200,
                                 ),
