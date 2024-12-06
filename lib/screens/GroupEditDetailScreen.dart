@@ -114,13 +114,15 @@ class _GroupEditDetailScreenState extends State<GroupEditDetailScreen> {
                     style: Theme.of(context).textTheme.titleMedium,
                   ),
                 ),
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 16),
-                  child: StyledTextField(
-                    controller: _nameController,
-                    hintText: "Group name",
-                    prefixIcon: Icons.group,
-                    padding: false,
+                Center(
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 16),
+                    child: StyledTextField(
+                      controller: _nameController,
+                      hintText: "Group name",
+                      prefixIcon: Icons.group,
+                      padding: false,
+                    ),
                   ),
                 ),
                 const SizedBox(height: 8),

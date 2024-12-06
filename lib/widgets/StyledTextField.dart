@@ -83,6 +83,7 @@ class _StyledTextFieldState extends State<StyledTextField> {
                       icon: Icon(Icons.close, color: Colors.transparent),
                       onPressed: null,
                     ),
+              // labelText: widget.hintText,
               hintText: widget.hintText,
               border: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(15),
