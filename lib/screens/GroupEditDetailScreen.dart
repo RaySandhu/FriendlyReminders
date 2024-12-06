@@ -245,6 +245,7 @@ class _GroupEditDetailScreenState extends State<GroupEditDetailScreen> {
                               onDeleted: () {
                                 groupVM.deleteGroup(_group!.id!);
                                 Navigator.pop(context);
+                                Navigator.pop(context);
                               });
                         },
                         label: const Text("Delete Group"),

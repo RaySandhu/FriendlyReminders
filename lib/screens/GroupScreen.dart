@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:friendlyreminder/screens/GroupEditDetailScreen.dart';
+import 'package:friendlyreminder/screens/GroupViewDetailScreen.dart';
 import 'package:provider/provider.dart';
 import 'package:friendlyreminder/widgets/GroupCard.dart';
 import 'package:friendlyreminder/viewmodels/GroupViewModel.dart';
@@ -137,7 +138,7 @@ class _GroupScreenState extends State<GroupScreen> {
                                             context,
                                             MaterialPageRoute(
                                               builder: (context) =>
-                                                  GroupEditDetailScreen(
+                                                  GroupViewDetailScreen(
                                                 group: group,
                                               ),
                                             ),
