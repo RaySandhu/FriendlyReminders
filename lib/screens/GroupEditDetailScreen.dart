@@ -85,8 +85,13 @@ class _GroupEditDetailScreenState extends State<GroupEditDetailScreen> {
               },
             ),
             centerTitle: true,
-            title: Text(_group == null ? "Create Group" : "Edit Group",
-                style: Theme.of(context).textTheme.headlineSmall),
+            title: Text(
+              _group == null ? "Create Group" : "Edit Group",
+              style: Theme.of(context).textTheme.headlineSmall?.copyWith(
+                    fontWeight: FontWeight.bold,
+                    color: Colors.white,
+                  ),
+            ),
             actions: [
               Padding(
                 padding: const EdgeInsets.all(8.0),
@@ -126,7 +131,18 @@ class _GroupEditDetailScreenState extends State<GroupEditDetailScreen> {
                 ),
               ),
             ],
-            backgroundColor: Theme.of(context).colorScheme.inversePrimary,
+            flexibleSpace: Container(
+              decoration: BoxDecoration(
+                gradient: RadialGradient(
+                  colors: [
+                    Theme.of(context).colorScheme.inversePrimary,
+                    Theme.of(context).colorScheme.primary,
+                  ],
+                  center: Alignment.center, // Center of the AppBar
+                  radius: 5.0, // Adjust the radius for the spread
+                ),
+              ),
+            ),
           ),
           body: SafeArea(
             child: Column(
