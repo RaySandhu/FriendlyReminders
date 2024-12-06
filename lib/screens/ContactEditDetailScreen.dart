@@ -4,6 +4,7 @@ import 'package:flutter/widgets.dart';
 import 'package:friendlyreminder/models/ContactWithGroupsModel.dart';
 import 'package:friendlyreminder/models/ReminderModel.dart';
 import 'package:friendlyreminder/viewmodels/ReminderViewModel.dart';
+import 'package:friendlyreminder/widgets/PopupMissingName.dart';
 import 'package:friendlyreminder/widgets/ReminderDialog.dart';
 import 'package:provider/provider.dart';
 import 'package:friendlyreminder/viewmodels/ContactViewModel.dart';
@@ -25,7 +26,8 @@ class ContactEditDetailScreen extends StatefulWidget {
 }
 
 class _ContactEditDetailScreenState extends State<ContactEditDetailScreen> {
-  late ContactWithGroupsModel? _contactWithGroups;
+  late ContactWithGroupsModel? _originalContactWithGroups;
+  late ContactWithGroupsModel? _updatedContactWithGroups;
 
   late TextEditingController _nameController = TextEditingController();
   late TextEditingController _phoneController = TextEditingController();
@@ -46,17 +48,18 @@ class _ContactEditDetailScreenState extends State<ContactEditDetailScreen> {
   @override
   void initState() {
     super.initState();
-    _contactWithGroups = widget.contactWithGroups;
-    if (_contactWithGroups != null) {
+    _originalContactWithGroups = widget.contactWithGroups;
+    _updatedContactWithGroups = widget.contactWithGroups;
+    if (_originalContactWithGroups != null) {
       _nameController =
-          TextEditingController(text: _contactWithGroups!.contact.name);
-      _phoneController =
-          TextEditingController(text: _contactWithGroups!.contact.phone);
-      _emailController =
-          TextEditingController(text: _contactWithGroups!.contact.email);
-      _noteController =
-          TextEditingController(text: _contactWithGroups!.contact.notes);
-      _selectedGroups = _contactWithGroups!.groups;
+          TextEditingController(text: _originalContactWithGroups!.contact.name);
+      _phoneController = TextEditingController(
+          text: _originalContactWithGroups!.contact.phone);
+      _emailController = TextEditingController(
+          text: _originalContactWithGroups!.contact.email);
+      _noteController = TextEditingController(
+          text: _originalContactWithGroups!.contact.notes);
+      _selectedGroups = _originalContactWithGroups!.groups;
     }
   }
 
@@ -72,25 +75,40 @@ class _ContactEditDetailScreenState extends State<ContactEditDetailScreen> {
 
     // Ensure reminders are loaded after the first build
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      if (_contactWithGroups != null &&
-          _contactWithGroups!.contact.id != null) {
-        reminderVM.loadRemindersByContact(_contactWithGroups!.contact.id!);
+      if (_originalContactWithGroups != null &&
+          _originalContactWithGroups!.contact.id != null) {
+        reminderVM
+            .loadRemindersByContact(_originalContactWithGroups!.contact.id!);
       }
     });
+
+    void updateContactWithGroup() {
+      ContactModel newContact = ContactModel(
+        name: _nameController.text,
+        phone: _phoneController.text,
+        email: _emailController.text,
+        notes: _noteController.text,
+      );
+
+      _updatedContactWithGroups = ContactWithGroupsModel(
+        contact: newContact,
+        groups: _selectedGroups,
+      );
+    }
 
     return Consumer<ContactsViewModel>(builder: (context, contactVM, child) {
       return Scaffold(
         appBar: AppBar(
           centerTitle: true,
           title: Text(
-              _contactWithGroups == null
+              _originalContactWithGroups == null
                   ? "Create New Contact"
                   : "Edit Contact",
               style: Theme.of(context).textTheme.headlineSmall),
           leading: IconButton(
             icon: const Icon(Icons.arrow_back),
             onPressed: () {
-              if (_nameController.text.isNotEmpty) {
+              if (_originalContactWithGroups != _updatedContactWithGroups) {
                 discardChangesPopup(context);
               } else {
                 Navigator.pop(context);
@@ -102,9 +120,11 @@ class _ContactEditDetailScreenState extends State<ContactEditDetailScreen> {
               padding: const EdgeInsets.all(8.0),
               child: FilledButton(
                 onPressed: () async {
-                  if (_nameController.text.isNotEmpty) {
+                  if (_nameController.text.isEmpty) {
+                    popupMissingName(context);
+                  } else {
                     int contactId;
-                    if (_contactWithGroups == null) {
+                    if (_originalContactWithGroups == null) {
                       ContactModel newContact = ContactModel(
                           name: _nameController.text,
                           phone: _phoneController.text,
@@ -114,13 +134,13 @@ class _ContactEditDetailScreenState extends State<ContactEditDetailScreen> {
                       contactId = await contactVM.createContact(
                           newContact, _selectedGroups);
                     } else {
-                      ContactModel newContact = _contactWithGroups!.contact
-                          .update(
+                      ContactModel newContact =
+                          _originalContactWithGroups!.contact.update(
                               name: _nameController.text,
                               phone: _phoneController.text,
                               email: _emailController.text,
                               notes: _noteController.text);
-                      _contactWithGroups = _contactWithGroups!
+                      _originalContactWithGroups = _originalContactWithGroups!
                           .update(contact: newContact, groups: _selectedGroups);
                       contactVM.updateContact(newContact, _selectedGroups);
                       contactId = newContact.id!;
@@ -138,10 +158,10 @@ class _ContactEditDetailScreenState extends State<ContactEditDetailScreen> {
                     _newReminders.clear();
                     reminderVM.reminders.clear();
 
-                    if (_contactWithGroups == null) {
+                    if (_originalContactWithGroups == null) {
                       Navigator.pop(context);
                     } else {
-                      Navigator.pop(context, _contactWithGroups);
+                      Navigator.pop(context, _originalContactWithGroups);
                     }
                   }
                 },
@@ -173,6 +193,7 @@ class _ContactEditDetailScreenState extends State<ContactEditDetailScreen> {
                         focusNode: _nameFocusNode,
                         nextFocusNode: _phoneFocusNode,
                         textCapitalization: TextCapitalization.words,
+                        onChanged: (_) => updateContactWithGroup(),
                       ),
                       StyledTextField(
                         controller: _phoneController,
@@ -182,6 +203,7 @@ class _ContactEditDetailScreenState extends State<ContactEditDetailScreen> {
                         focusNode: _phoneFocusNode,
                         nextFocusNode: _emailFocusNode,
                         inputFormatters: [PhoneNumberFormatter()],
+                        onChanged: (_) => updateContactWithGroup(),
                       ),
                       StyledTextField(
                         controller: _emailController,
@@ -190,6 +212,7 @@ class _ContactEditDetailScreenState extends State<ContactEditDetailScreen> {
                         keyboardType: TextInputType.emailAddress,
                         focusNode: _emailFocusNode,
                         nextFocusNode: _groupFocusNode,
+                        onChanged: (_) => updateContactWithGroup(),
                       ),
                       SuggestionTextField(
                         controller: _groupController,
@@ -206,6 +229,7 @@ class _ContactEditDetailScreenState extends State<ContactEditDetailScreen> {
                           setState(() {
                             _selectedGroups.add(GroupModel(name: text));
                           });
+                          updateContactWithGroup();
                         },
                       ),
                       if (_selectedGroups.isNotEmpty)
@@ -226,6 +250,7 @@ class _ContactEditDetailScreenState extends State<ContactEditDetailScreen> {
                                       setState(() {
                                         _selectedGroups.remove(group);
                                       });
+                                      updateContactWithGroup();
                                     },
                                   );
                                 }).toList();
@@ -337,7 +362,8 @@ class _ContactEditDetailScreenState extends State<ContactEditDetailScreen> {
                                             if (reminder.id != null) {
                                               await reminderVM.deleteReminder(
                                                 reminder.id!,
-                                                _contactWithGroups!.contact.id!,
+                                                _originalContactWithGroups!
+                                                    .contact.id!,
                                               );
                                             } else {
                                               setState(() {
@@ -367,14 +393,15 @@ class _ContactEditDetailScreenState extends State<ContactEditDetailScreen> {
                   ),
                 ),
               ),
-              if (_contactWithGroups != null)
+              if (_originalContactWithGroups != null)
                 Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: FilledButton.icon(
                     onPressed: () {
                       showDeleteContactAlert(context, () {
-                        contactVM.deleteContact(_contactWithGroups!.contact,
-                            _contactWithGroups!.groups);
+                        contactVM.deleteContact(
+                            _originalContactWithGroups!.contact,
+                            _originalContactWithGroups!.groups);
                         Navigator.pop(context);
                         Navigator.pop(context);
                       });
