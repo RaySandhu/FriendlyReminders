@@ -55,6 +55,7 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
         // This is the theme of your application.
+        fontFamily: 'Rubik',
         textTheme: TextTheme(
           //   displayLarge: TextStyle(fontSize: 32, fontWeight: FontWeight.bold),
           //   displayMedium: TextStyle(fontSize: 28, fontWeight: FontWeight.bold),
@@ -62,8 +63,8 @@ class MyApp extends StatelessWidget {
           //   headlineLarge: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
           //   headlineMedium: TextStyle(fontSize: 20),
           //   headlineSmall: TextStyle(fontSize: 18),
-          //   titleLarge: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-          titleMedium: TextStyle(fontSize: 16, color: colorScheme.primary),
+          //   titleLarge: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),        fontFamily: 'Montserrat',
+          titleMedium: TextStyle(fontSize: 16, color: Colors.amber),
           //   titleSmall: TextStyle(fontSize: 12),
           //   bodyLarge: TextStyle(fontSize: 16),
           //   bodyMedium: TextStyle(fontSize: 14),
