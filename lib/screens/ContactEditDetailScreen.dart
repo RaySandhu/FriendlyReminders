@@ -4,6 +4,7 @@ import 'package:flutter/widgets.dart';
 import 'package:friendlyreminder/models/ContactWithGroupsModel.dart';
 import 'package:friendlyreminder/models/ReminderModel.dart';
 import 'package:friendlyreminder/viewmodels/ReminderViewModel.dart';
+import 'package:friendlyreminder/widgets/PopupDeleteContact.dart';
 import 'package:friendlyreminder/widgets/PopupMissingName.dart';
 import 'package:friendlyreminder/widgets/ReminderDialog.dart';
 import 'package:provider/provider.dart';
@@ -398,7 +399,7 @@ class _ContactEditDetailScreenState extends State<ContactEditDetailScreen> {
                   padding: const EdgeInsets.all(8.0),
                   child: FilledButton.icon(
                     onPressed: () {
-                      showDeleteContactAlert(context, () {
+                      popupDeleteContact(context, () {
                         contactVM.deleteContact(
                             _originalContactWithGroups!.contact,
                             _originalContactWithGroups!.groups);
