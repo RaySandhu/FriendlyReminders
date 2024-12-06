@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:friendlyreminder/models/GroupWithContactsModel.dart';
-import 'package:friendlyreminder/widgets/PopupDeleteGroup.dart';
+import 'package:friendlyreminder/widgets/PopupDelete.dart';
 import 'package:friendlyreminder/widgets/PopupDiscardChanges.dart';
-import 'package:friendlyreminder/widgets/PopupMissingName.dart';
+import 'package:friendlyreminder/widgets/PopupMessage.dart';
 import 'package:friendlyreminder/widgets/StyledTextField.dart';
 import 'package:provider/provider.dart';
 import 'package:friendlyreminder/models/GroupModel.dart';
@@ -101,7 +101,10 @@ class _GroupEditDetailScreenState extends State<GroupEditDetailScreen> {
                   ),
                   onPressed: () {
                     if (_nameController.text.isEmpty) {
-                      popupMissingName(context);
+                      popupMessage(
+                          context: context,
+                          title: "Missing name",
+                          message: "Please enter a name for the group.");
                     } else {
                       if (_group == null) {
                         GroupModel newGroup = GroupModel(
@@ -218,10 +221,15 @@ class _GroupEditDetailScreenState extends State<GroupEditDetailScreen> {
                       padding: const EdgeInsets.all(8.0),
                       child: FilledButton.icon(
                         onPressed: () {
-                          popupDeleteGroup(context, () {
-                            groupVM.deleteGroup(_group!.id!);
-                            Navigator.pop(context);
-                          });
+                          popupDelete(
+                              context: context,
+                              title: "Delete group",
+                              message:
+                                  "Are you sure you want to delete this group?",
+                              onDeleted: () {
+                                groupVM.deleteGroup(_group!.id!);
+                                Navigator.pop(context);
+                              });
                         },
                         label: const Text("Delete Group"),
                         icon: const Icon(Icons.delete),

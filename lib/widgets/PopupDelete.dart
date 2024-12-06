@@ -1,16 +1,20 @@
 import 'package:flutter/material.dart';
 
-void popupDeleteGroup(BuildContext context, Function onDeleted) {
+void popupDelete(
+    {required BuildContext context,
+    required String title,
+    required String message,
+    required Function onDeleted}) {
   showDialog(
     context: context,
     builder: (BuildContext context) {
       return AlertDialog(
-        title: Text('Delete group',
+        title: Text(title,
             style: Theme.of(context).textTheme.titleLarge?.copyWith(
                   fontWeight: FontWeight.bold,
                   color: Colors.black,
                 )),
-        content: const Text('Are you sure you want to delete this group?'),
+        content: Text(message),
         actions: <Widget>[
           OutlinedButton(
             onPressed: () {

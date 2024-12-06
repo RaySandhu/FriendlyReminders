@@ -1,16 +1,19 @@
 import 'package:flutter/material.dart';
 
-void popupMissingName(BuildContext context) {
+void popupMessage(
+    {required BuildContext context,
+    required String title,
+    required String message}) {
   showDialog(
     context: context,
     builder: (BuildContext context) {
       return AlertDialog(
-        title: Text('Missing name',
+        title: Text(title,
             style: Theme.of(context).textTheme.titleLarge?.copyWith(
                   fontWeight: FontWeight.bold,
                   color: Colors.black,
                 )),
-        content: const Text('Please enter a name for the contact.'),
+        content: Text(message),
         actions: <Widget>[
           FilledButton(
             child: const Text(

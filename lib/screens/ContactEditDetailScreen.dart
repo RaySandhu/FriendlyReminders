@@ -4,8 +4,8 @@ import 'package:flutter/widgets.dart';
 import 'package:friendlyreminder/models/ContactWithGroupsModel.dart';
 import 'package:friendlyreminder/models/ReminderModel.dart';
 import 'package:friendlyreminder/viewmodels/ReminderViewModel.dart';
-import 'package:friendlyreminder/widgets/PopupDeleteContact.dart';
-import 'package:friendlyreminder/widgets/PopupMissingName.dart';
+import 'package:friendlyreminder/widgets/PopupDelete.dart';
+import 'package:friendlyreminder/widgets/PopupMessage.dart';
 import 'package:friendlyreminder/widgets/ReminderDialog.dart';
 import 'package:provider/provider.dart';
 import 'package:friendlyreminder/viewmodels/ContactViewModel.dart';
@@ -121,7 +121,10 @@ class _ContactEditDetailScreenState extends State<ContactEditDetailScreen> {
               child: FilledButton(
                 onPressed: () async {
                   if (_nameController.text.isEmpty) {
-                    popupMissingName(context);
+                    popupMessage(
+                        context: context,
+                        title: "Missing name",
+                        message: "Please enter a name for the contact.");
                   } else {
                     int contactId;
                     if (_originalContactWithGroups == null) {
@@ -398,13 +401,18 @@ class _ContactEditDetailScreenState extends State<ContactEditDetailScreen> {
                   padding: const EdgeInsets.all(8.0),
                   child: FilledButton.icon(
                     onPressed: () {
-                      popupDeleteContact(context, () {
-                        contactVM.deleteContact(
-                            _originalContactWithGroups!.contact,
-                            _originalContactWithGroups!.groups);
-                        Navigator.pop(context);
-                        Navigator.pop(context);
-                      });
+                      popupDelete(
+                          context: context,
+                          title: "Delete contact",
+                          message:
+                              "Are you sure you want to delete this contact?",
+                          onDeleted: () {
+                            contactVM.deleteContact(
+                                _originalContactWithGroups!.contact,
+                                _originalContactWithGroups!.groups);
+                            Navigator.pop(context);
+                            Navigator.pop(context);
+                          });
                     },
                     label: const Text("Delete Contact"),
                     icon: const Icon(Icons.delete),
