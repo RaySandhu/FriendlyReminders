@@ -88,7 +88,11 @@ class _ContactEditDetailScreenState extends State<ContactEditDetailScreen> {
         leading: IconButton(
           icon: const Icon(Icons.arrow_back),
           onPressed: () {
-            showDiscardChangesAlert(context);
+            if (_nameController.text.isNotEmpty) {
+              discardChangesPopup(context);
+            } else {
+              Navigator.pop(context);
+            }
           },
         ),
         actions: [
