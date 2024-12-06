@@ -29,9 +29,23 @@ class _ReminderScreenState extends State<ReminderScreen> {
             centerTitle: true,
             title: Text(
               "Reminders",
-              style: Theme.of(context).textTheme.headlineSmall,
+              style: Theme.of(context).textTheme.headlineSmall?.copyWith(
+                    fontWeight: FontWeight.bold,
+                    color: Colors.white,
+                  ),
             ),
-            backgroundColor: Theme.of(context).colorScheme.inversePrimary,
+            flexibleSpace: Container(
+              decoration: BoxDecoration(
+                gradient: RadialGradient(
+                  colors: [
+                    Theme.of(context).colorScheme.inversePrimary,
+                    Theme.of(context).colorScheme.primary,
+                  ],
+                  center: Alignment.center, // Center of the AppBar
+                  radius: 5.0, // Adjust the radius for the spread
+                ),
+              ),
+            ),
           ),
           body: reminderVM.isLoading
               ? const Center(child: CircularProgressIndicator())

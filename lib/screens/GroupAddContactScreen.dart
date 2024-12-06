@@ -63,8 +63,13 @@ class _GroupAddContactScreenState extends State<GroupAddContactScreen> {
                           .filterContacts(query: value);
                     },
                   )
-                : Text("Add Contacts",
-                    style: Theme.of(context).textTheme.headlineSmall),
+                : Text(
+                    "Add Contacts",
+                    style: Theme.of(context).textTheme.headlineSmall?.copyWith(
+                          fontWeight: FontWeight.bold,
+                          color: Colors.white,
+                        ),
+                  ),
             automaticallyImplyLeading: false,
             leading: _isSearching
                 ? null
@@ -83,7 +88,18 @@ class _GroupAddContactScreenState extends State<GroupAddContactScreen> {
                           });
                         }),
                   ],
-            backgroundColor: Theme.of(context).colorScheme.inversePrimary,
+            flexibleSpace: Container(
+              decoration: BoxDecoration(
+                gradient: RadialGradient(
+                  colors: [
+                    Theme.of(context).colorScheme.inversePrimary,
+                    Theme.of(context).colorScheme.primary,
+                  ],
+                  center: Alignment.center, // Center of the AppBar
+                  radius: 5.0, // Adjust the radius for the spread
+                ),
+              ),
+            ),
           ),
           body: SafeArea(
             child: Column(
