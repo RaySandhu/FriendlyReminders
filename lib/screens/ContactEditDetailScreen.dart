@@ -180,27 +180,27 @@ class _ContactEditDetailScreenState extends State<ContactEditDetailScreen> {
               ),
             )
           ],
-        flexibleSpace: Container(
-          decoration: BoxDecoration(
-            gradient: RadialGradient(
-              colors: [
-                Theme.of(context).colorScheme.inversePrimary,
-                Theme.of(context).colorScheme.primary,
-              ],
-              center: Alignment.center, // Center of the AppBar
-              radius: 5.0, // Adjust the radius for the spread
+          flexibleSpace: Container(
+            decoration: BoxDecoration(
+              gradient: RadialGradient(
+                colors: [
+                  Theme.of(context).colorScheme.inversePrimary,
+                  Theme.of(context).colorScheme.primary,
+                ],
+                center: Alignment.center, // Center of the AppBar
+                radius: 5.0, // Adjust the radius for the spread
+              ),
             ),
           ),
         ),
-      ),
         body: SafeArea(
           child: Column(
             children: [
-                child: SingleChildScrollView(
               Expanded(
+                child: SingleChildScrollView(
                   child: Column(
-                      StyledTextField(
                     children: [
+                      StyledTextField(
                         controller: _nameController,
                         hintText: "Name",
                         prefixIcon: Icons.person,
