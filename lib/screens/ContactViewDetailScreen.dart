@@ -284,37 +284,60 @@ class _ContactViewDetailScreenState extends State<ContactViewDetailScreen> {
                                       )),
                                     if (reminderCardState == 2)
                                       Padding(
-                                        padding: const EdgeInsets.fromLTRB(8.0, 12.0, 8.0, 12.0), // Add bottom padding for spacing
+                                        padding: const EdgeInsets.fromLTRB(
+                                            8.0,
+                                            12.0,
+                                            8.0,
+                                            12.0), // Add bottom padding for spacing
                                         child: Text(
                                           'Reminder Snoozed',
-                                          style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                                                fontWeight: FontWeight.bold,
-                                                color: Theme.of(context).colorScheme.onPrimaryFixedVariant,
-                                                shadows: [
-                                                  Shadow(
-                                                    blurRadius: 3.0, // Blur the shadow
-                                                    color: Colors.amber.withOpacity(0.4), // Subtle shadow color
-                                                  ),
-                                                ],
-                                                                                    ),
-                                              
+                                          style: Theme.of(context)
+                                              .textTheme
+                                              .titleMedium
+                                              ?.copyWith(
+                                            fontWeight: FontWeight.bold,
+                                            color: Theme.of(context)
+                                                .colorScheme
+                                                .primary,
+                                            shadows: [
+                                              Shadow(
+                                                blurRadius:
+                                                    3.0, // Blur the shadow
+                                                color: Colors.deepPurple
+                                                    .withOpacity(
+                                                        0.4), // Subtle shadow color
+                                              ),
+                                            ],
+                                          ),
                                         ),
                                       ),
                                     if (reminderCardState == 3)
                                       Padding(
-                                        padding: const EdgeInsets.fromLTRB(8.0, 12.0, 8.0, 12.0), // Add bottom padding for spacing
+                                        padding: const EdgeInsets.fromLTRB(
+                                            8.0,
+                                            12.0,
+                                            8.0,
+                                            12.0), // Add bottom padding for spacing
                                         child: Text(
                                           'Reminder Rejected',
-                                          style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                                                fontWeight: FontWeight.bold,
-                                                color: Theme.of(context).colorScheme.onPrimaryFixedVariant,
-                                                shadows: [
-                                                  Shadow(
-                                                    blurRadius: 3.0, // Blur the shadow
-                                                    color: Colors.red.withOpacity(0.4), // Subtle shadow color
-                                                  ),
-                                                ],
+                                          style: Theme.of(context)
+                                              .textTheme
+                                              .titleMedium
+                                              ?.copyWith(
+                                            fontWeight: FontWeight.bold,
+                                            color: Theme.of(context)
+                                                .colorScheme
+                                                .primary,
+                                            shadows: [
+                                              Shadow(
+                                                blurRadius:
+                                                    3.0, // Blur the shadow
+                                                color: Colors.deepPurple
+                                                    .withOpacity(
+                                                        0.4), // Subtle shadow color
                                               ),
+                                            ],
+                                          ),
                                         ),
                                       ),
                                   ],
@@ -348,8 +371,7 @@ class _ContactViewDetailScreenState extends State<ContactViewDetailScreen> {
                           width: double.infinity,
                           child: Padding(
                             padding: const EdgeInsets.symmetric(
-                                      horizontal: 12.0,
-                                      vertical: 8.0),
+                                horizontal: 12.0, vertical: 8.0),
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
@@ -490,7 +512,10 @@ class _ContactViewDetailScreenState extends State<ContactViewDetailScreen> {
                             ),
                             const Spacer(),
                             IconButtonWithTextRow(
-                                icon: const Icon(Icons.smart_toy, color: Colors.white,),
+                                icon: const Icon(
+                                  Icons.smart_toy,
+                                  color: Colors.white,
+                                ),
                                 text: 'Generate Icebreaker',
                                 onPressed: () {
                                   print("Generated Icebreaker");
@@ -504,7 +529,8 @@ class _ContactViewDetailScreenState extends State<ContactViewDetailScreen> {
                                             .promptText),
                                   );
                                 },
-                                buttonColour: Theme.of(context).colorScheme.onPrimaryFixedVariant)
+                                buttonColour:
+                                    Theme.of(context).colorScheme.primary)
                           ]),
                           const SizedBox(height: 8),
                           Stack(
