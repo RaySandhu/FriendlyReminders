@@ -79,36 +79,25 @@ class _StyledTextFieldState extends State<StyledTextField> {
             },
             onChanged: widget.onChanged,
             decoration: InputDecoration(
-              prefixIcon: Icon(widget.prefixIcon, color: Colors.transparent),
+              prefixIcon: Icon(
+                widget.prefixIcon,
+              ),
               suffixIcon: isEmpty
                   ? null
-                  : const IconButton(
-                      icon: Icon(Icons.close, color: Colors.transparent),
-                      onPressed: null,
+                  : IconButton(
+                      icon: const Icon(
+                        Icons.close,
+                      ),
+                      onPressed:
+                          !isEmpty ? () => widget.controller.clear() : null,
                     ),
               // labelText: widget.hintText,
               hintText: widget.hintText,
               border: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(15),
               ),
-              contentPadding: EdgeInsets.all(10),
+              contentPadding: const EdgeInsets.all(10),
             ),
-          ),
-          Row(
-            children: [
-              Padding(
-                padding: const EdgeInsets.fromLTRB(12, 0, 0, 0),
-                child: Icon(widget.prefixIcon),
-              ),
-              const Spacer(),
-              IconButton(
-                icon: Icon(
-                  Icons.close,
-                  color: !isEmpty ? Colors.grey : Colors.transparent,
-                ),
-                onPressed: !isEmpty ? () => widget.controller.clear() : null,
-              ),
-            ],
           ),
         ],
       ),
