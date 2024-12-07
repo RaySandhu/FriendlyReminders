@@ -44,10 +44,10 @@ class _NavigationBarAppState extends State<NavigationBarApp> {
             //   icon: Icon(Icons.storage),
             //   label: 'Database',
             // ),
-            NavigationDestination(
-              icon: Icon(Icons.palette),
-              label: 'Color',
-            ),
+            // NavigationDestination(
+            //   icon: Icon(Icons.palette),
+            //   label: 'Color',
+            // ),
             // NavigationDestination(
             //   icon: Icon(Icons.text_fields),
             //   label: 'Text',
@@ -59,7 +59,7 @@ class _NavigationBarAppState extends State<NavigationBarApp> {
           ReminderScreen(),
           GroupScreen(),
           // DatabaseScreen(),
-          ColorPaletteScreen(),
+          // ColorPaletteScreen(),
           // TextThemePage(),
         ][currentPageIndex]);
   }
