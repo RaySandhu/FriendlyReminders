@@ -1,6 +1,7 @@
 import 'dart:math';
 import 'dart:ui';
 import 'package:flutter/material.dart';
+import 'package:friendlyreminder/screens/GroupViewDetailScreen.dart';
 import 'package:friendlyreminder/viewmodels/ReminderViewModel.dart';
 import 'package:friendlyreminder/widgets/ContactInfoListTile.dart';
 import 'package:friendlyreminder/models/AIPromptModel.dart';
@@ -354,8 +355,14 @@ class _ContactViewDetailScreenState extends State<ContactViewDetailScreen> {
                                     return ActionChip(
                                       label: Text(group.name),
                                       onPressed: () {
-                                        // TODO: Click leads to clicked group screen
-                                        print("Group: ${group.name}");
+                                        Navigator.push(
+                                          context,
+                                          MaterialPageRoute(
+                                            builder: (context) =>
+                                                GroupViewDetailScreen(
+                                                    group: group),
+                                          ),
+                                        );
                                       },
                                     );
                                   }).toList(),
