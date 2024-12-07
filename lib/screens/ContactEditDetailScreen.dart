@@ -32,7 +32,7 @@ class _ContactEditDetailScreenState extends State<ContactEditDetailScreen> {
   late TextEditingController _nameController = TextEditingController();
   late TextEditingController _phoneController = TextEditingController();
   late TextEditingController _emailController = TextEditingController();
-  final TextEditingController _groupController = TextEditingController();
+  late TextEditingController _groupController = TextEditingController();
   late TextEditingController _noteController = TextEditingController();
 
   final FocusNode _nameFocusNode = FocusNode();
@@ -228,26 +228,94 @@ class _ContactEditDetailScreenState extends State<ContactEditDetailScreen> {
                         nextFocusNode: _groupFocusNode,
                         onChanged: (_) => updateContactWithGroups(),
                       ),
-                      SuggestionTextField(
-                        controller: _groupController,
-                        hintText: "Groups",
-                        prefixIcon: Icons.people,
-                        focusNode: _groupFocusNode,
-                        allSuggestions: contactVM.groups
-                            .map((group) => group.name)
-                            .toList(),
-                        excludedSuggestions:
-                            _selectedGroups.map((group) => group.name).toList(),
-                        newText: "group",
-                        onSelect: (text) {
+                      Autocomplete<String>(
+                        optionsBuilder: (TextEditingValue textEditingValue) {
+                          List<String> excludedGroups = _selectedGroups
+                              .map((group) => group.name)
+                              .toList();
+
+                          var filteredGroups = contactVM
+                              .getAllUniqueGroups(contactVM.contacts)
+                              .where((String interest) {
+                            return interest.toLowerCase().contains(
+                                    textEditingValue.text.toLowerCase()) &&
+                                !excludedGroups.contains(
+                                  interest,
+                                );
+                          }).followedBy([""]);
+                          // if (textEditingValue.text == '') {
+                          //   return const Iterable<String>.empty();
+                          // }
+                          return filteredGroups;
+                        },
+                        onSelected: (String selection) {
                           setState(() {
-                            _selectedGroups.add(GroupModel(name: text));
+                            _selectedGroups.add(GroupModel(name: selection));
                           });
                           updateContactWithGroups();
+                          _groupController.clear();
+                        },
+                        fieldViewBuilder: (BuildContext context,
+                            TextEditingController textEditingController,
+                            FocusNode focusNode,
+                            VoidCallback onFieldSubmitted) {
+                          _groupController = textEditingController;
+                          return StyledTextField(
+                            controller: textEditingController,
+                            hintText: "Groups",
+                            prefixIcon: Icons.group,
+                            focusNode: focusNode,
+                          );
+                        },
+                        optionsViewBuilder: (BuildContext context,
+                            AutocompleteOnSelected<String> onSelected,
+                            Iterable<String> options) {
+                          return Align(
+                            alignment: Alignment.topLeft,
+                            child: Material(
+                              child: Column(children: [
+                                ListView.builder(
+                                  padding: EdgeInsets.zero,
+                                  shrinkWrap: true,
+                                  itemCount: options.length - 1,
+                                  itemBuilder:
+                                      (BuildContext context, int index) {
+                                    final option = options.elementAt(index);
+                                    return ListTile(
+                                      title: Text(option),
+                                      onTap: () {
+                                        onSelected(option);
+                                      },
+                                    );
+                                  },
+                                ),
+                                ListTile(
+                                  leading: Icon(
+                                    Icons.add,
+                                    color:
+                                        Theme.of(context).colorScheme.primary,
+                                  ),
+                                  title: Text(
+                                    _groupController.text.isEmpty
+                                        ? "Create new group"
+                                        : "Create \"${_groupController.text}\" group",
+                                    style: TextStyle(
+                                      color:
+                                          Theme.of(context).colorScheme.primary,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                  onTap: () {
+                                    onSelected(_groupController.text);
+                                  },
+                                ),
+                              ]),
+                            ),
+                          );
                         },
                       ),
                       if (_selectedGroups.isNotEmpty)
-                        Container(
+                        SizedBox(
                           width: double.infinity,
                           child: Padding(
                             padding: const EdgeInsets.all(8.0),

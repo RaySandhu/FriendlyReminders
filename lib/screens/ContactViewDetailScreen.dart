@@ -110,7 +110,6 @@ class _ContactViewDetailScreenState extends State<ContactViewDetailScreen> {
                         Container(
                           height: 130,
                           decoration: const BoxDecoration(
-                            color: Colors.blue,
                             borderRadius: BorderRadius.only(
                               topLeft: Radius.circular(15),
                               topRight: Radius.circular(15),

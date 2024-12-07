@@ -13,20 +13,22 @@ class StyledTextField extends StatefulWidget {
   final int? maxLines;
   final void Function(String)? onChanged;
   final bool padding;
-
-  const StyledTextField(
-      {super.key,
-      required this.controller,
-      required this.hintText,
-      required this.prefixIcon,
-      this.keyboardType = TextInputType.text,
-      this.focusNode,
-      this.nextFocusNode,
-      this.textCapitalization = TextCapitalization.none,
-      this.inputFormatters,
-      this.maxLines = 1,
-      this.onChanged,
-      this.padding = true});
+  final void Function(String)? onSubmitted;
+  const StyledTextField({
+    super.key,
+    required this.controller,
+    required this.hintText,
+    required this.prefixIcon,
+    this.keyboardType = TextInputType.text,
+    this.focusNode,
+    this.nextFocusNode,
+    this.textCapitalization = TextCapitalization.none,
+    this.inputFormatters,
+    this.maxLines = 1,
+    this.onChanged,
+    this.padding = true,
+    this.onSubmitted,
+  });
 
   @override
   State<StyledTextField> createState() => _StyledTextFieldState();
@@ -70,6 +72,7 @@ class _StyledTextFieldState extends State<StyledTextField> {
                 : TextInputAction.done,
             inputFormatters: widget.inputFormatters,
             onSubmitted: (value) {
+              widget.onSubmitted;
               if (widget.nextFocusNode != null) {
                 FocusScope.of(context).requestFocus(widget.nextFocusNode);
               }
