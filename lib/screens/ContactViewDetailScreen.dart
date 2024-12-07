@@ -289,7 +289,7 @@ class _ContactViewDetailScreenState extends State<ContactViewDetailScreen> {
                                           'Reminder Snoozed',
                                           style: Theme.of(context).textTheme.titleMedium?.copyWith(
                                                 fontWeight: FontWeight.bold,
-                                                color: Colors.amber,
+                                                color: Theme.of(context).colorScheme.onPrimaryFixedVariant,
                                                 shadows: [
                                                   Shadow(
                                                     blurRadius: 3.0, // Blur the shadow
@@ -307,7 +307,7 @@ class _ContactViewDetailScreenState extends State<ContactViewDetailScreen> {
                                           'Reminder Rejected',
                                           style: Theme.of(context).textTheme.titleMedium?.copyWith(
                                                 fontWeight: FontWeight.bold,
-                                                color: Colors.red,
+                                                color: Theme.of(context).colorScheme.onPrimaryFixedVariant,
                                                 shadows: [
                                                   Shadow(
                                                     blurRadius: 3.0, // Blur the shadow
@@ -504,7 +504,7 @@ class _ContactViewDetailScreenState extends State<ContactViewDetailScreen> {
                                             .promptText),
                                   );
                                 },
-                                buttonColour: const Color.fromARGB(255, 255, 193, 7))
+                                buttonColour: Theme.of(context).colorScheme.onPrimaryFixedVariant)
                           ]),
                           const SizedBox(height: 8),
                           Stack(
