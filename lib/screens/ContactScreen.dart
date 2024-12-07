@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:animated_text_kit/animated_text_kit.dart';
 import 'package:flutter/material.dart';
 import 'package:friendlyreminder/screens/ContactViewDetailScreen.dart';
@@ -25,6 +27,11 @@ class _ContactsScreenState extends State<ContactsScreen> {
   void initState() {
     super.initState();
     _scrollController.addListener(_scrollListener);
+
+    // Automatically collapse SliverAppBar after 5 seconds
+    Timer(Duration(seconds: 2), () {
+      _collapseSliverAppBar();
+    });
   }
 
   @override
@@ -32,6 +39,17 @@ class _ContactsScreenState extends State<ContactsScreen> {
     _scrollController.removeListener(_scrollListener);
     _scrollController.dispose();
     super.dispose();
+  }
+
+  // Programmatically collapse SliverAppBar
+  void _collapseSliverAppBar() {
+    if (_scrollController.hasClients) {
+      _scrollController.animateTo(
+        120.0, // Scroll offset to collapse the SliverAppBar
+        duration: Duration(milliseconds: 500), // Smooth scroll duration
+        curve: Curves.easeInOut,
+      );
+    }
   }
 
   void _scrollListener() {
@@ -108,19 +126,13 @@ class _ContactsScreenState extends State<ContactsScreen> {
                               opacity: collapseRatio.clamp(
                                   0.6, 1.0), // Opacity based on collapse ratio
                               child: collapseRatio >= 0.6
-                                  ? AnimatedTextKit(
-                                      animatedTexts: [
-                                        TyperAnimatedText(
-                                          'Friendly Reminders',
-                                          textStyle: const TextStyle(
-                                            fontSize: 30.0,
-                                            fontWeight: FontWeight.w700,
-                                            color: Colors.white,
-                                          ),
-                                          speed:
-                                              const Duration(milliseconds: 100),
-                                        ),
-                                      ],
+                                  ? const Text(
+                                      'Friendly Reminders',
+                                      style: TextStyle(
+                                        fontSize: 30.0,
+                                        fontWeight: FontWeight.w700,
+                                        color: Colors.white,
+                                      ),
                                     )
                                   : const SizedBox.shrink(),
                             ),
