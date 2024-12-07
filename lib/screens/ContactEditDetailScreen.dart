@@ -97,97 +97,133 @@ class _ContactEditDetailScreenState extends State<ContactEditDetailScreen> {
 
     return Consumer<ContactsViewModel>(builder: (context, contactVM, child) {
       return Scaffold(
-        appBar: AppBar(
-          centerTitle: true,
-          title: Text(
-              _originalContactWithGroups == null
-                  ? "Create New Contact"
-                  : "Edit Contact",
-              style: Theme.of(context).textTheme.headlineSmall),
-          leading: IconButton(
-            icon: const Icon(Icons.arrow_back),
-            onPressed: () {
-              if (_originalContactWithGroups != _updatedContactWithGroups) {
-                popupDiscardChanges(context);
-              } else {
-                Navigator.pop(context);
-              }
-            },
-          ),
-          actions: [
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: FilledButton(
-                onPressed: () async {
-                  if (_nameController.text.isEmpty) {
-                    popupMessage(
-                        context: context,
-                        title: "Missing name",
-                        message: "Please enter a name for the contact.");
-                  } else {
-                    int contactId;
-                    if (_originalContactWithGroups == null) {
-                      ContactModel newContact = ContactModel(
-                          name: _nameController.text,
-                          phone: _phoneController.text,
-                          email: _emailController.text,
-                          notes: _noteController.text);
-
-                      contactId = await contactVM.createContact(
-                          newContact, _selectedGroups);
-                    } else {
-                      ContactModel newContact =
-                          _originalContactWithGroups!.contact.update(
-                              name: _nameController.text,
-                              phone: _phoneController.text,
-                              email: _emailController.text,
-                              notes: _noteController.text);
-                      _originalContactWithGroups = _originalContactWithGroups!
-                          .update(contact: newContact, groups: _selectedGroups);
-                      contactVM.updateContact(newContact, _selectedGroups);
-                      contactId = newContact.id!;
-                    }
-                    if (_newReminders.isNotEmpty && contactId != -1) {
-                      for (var reminder in _newReminders) {
-                        // only create new reminders for newly added reminders
-                        reminderVM.addReminder(reminder, contactId);
-                      }
-                    }
-                    _nameController.clear();
-                    _phoneController.clear();
-                    _emailController.clear();
-                    _noteController.clear();
-                    _newReminders.clear();
-                    reminderVM.reminders.clear();
-
-                    if (_originalContactWithGroups == null) {
-                      Navigator.pop(context);
-                    } else {
-                      Navigator.pop(context, _originalContactWithGroups);
-                    }
-                  }
-                },
-                style: FilledButton.styleFrom(
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(5),
-                  ),
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
-                  minimumSize: const Size(0, 0),
-                ),
-                child: const Text("Save"),
-              ),
-            )
-          ],
-          flexibleSpace: Container(
+        appBar: PreferredSize(
+          preferredSize:
+              const Size.fromHeight(kToolbarHeight), // Standard AppBar height
+          child: Container(
             decoration: BoxDecoration(
               gradient: RadialGradient(
                 colors: [
                   Theme.of(context).colorScheme.inversePrimary,
                   Theme.of(context).colorScheme.primary,
                 ],
-                center: Alignment.center, // Center of the AppBar
+                center: Alignment.center,
                 radius: 5.0, // Adjust the radius for the spread
+              ),
+            ),
+            child: SafeArea(
+              child: Stack(
+                children: [
+                  // Title on the left
+                  Align(
+                    alignment: Alignment.centerLeft,
+                    child: Row(
+                      children: [
+                        IconButton(
+                          icon:
+                              const Icon(Icons.arrow_back, color: Colors.white),
+                          onPressed: () {
+                            if (_originalContactWithGroups !=
+                                _updatedContactWithGroups) {
+                              popupDiscardChanges(context);
+                            } else {
+                              Navigator.pop(context);
+                            }
+                          },
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.only(left: 8.0),
+                          child: Text(
+                            _originalContactWithGroups == null
+                                ? "Create New Contact"
+                                : "Edit Contact",
+                            style: Theme.of(context)
+                                .textTheme
+                                .headlineSmall
+                                ?.copyWith(
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.white,
+                                ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  // Save button on the right
+                  Align(
+                    alignment: Alignment.centerRight,
+                    child: Padding(
+                      padding: const EdgeInsets.only(right: 8.0),
+                      child: FilledButton(
+                        onPressed: () async {
+                          if (_nameController.text.isEmpty) {
+                            popupMessage(
+                              context: context,
+                              title: "Missing name",
+                              message: "Please enter a name for the contact.",
+                            );
+                          } else {
+                            int contactId;
+                            if (_originalContactWithGroups == null) {
+                              ContactModel newContact = ContactModel(
+                                name: _nameController.text,
+                                phone: _phoneController.text,
+                                email: _emailController.text,
+                                notes: _noteController.text,
+                              );
+
+                              contactId = await contactVM.createContact(
+                                  newContact, _selectedGroups);
+                            } else {
+                              ContactModel newContact =
+                                  _originalContactWithGroups!.contact.update(
+                                name: _nameController.text,
+                                phone: _phoneController.text,
+                                email: _emailController.text,
+                                notes: _noteController.text,
+                              );
+                              _originalContactWithGroups =
+                                  _originalContactWithGroups!.update(
+                                      contact: newContact,
+                                      groups: _selectedGroups);
+                              contactVM.updateContact(
+                                  newContact, _selectedGroups);
+                              contactId = newContact.id!;
+                            }
+                            if (_newReminders.isNotEmpty && contactId != -1) {
+                              for (var reminder in _newReminders) {
+                                // only create new reminders for newly added reminders
+                                reminderVM.addReminder(reminder, contactId);
+                              }
+                            }
+                            _nameController.clear();
+                            _phoneController.clear();
+                            _emailController.clear();
+                            _noteController.clear();
+                            _newReminders.clear();
+                            reminderVM.reminders.clear();
+
+                            if (_originalContactWithGroups == null) {
+                              Navigator.pop(context);
+                            } else {
+                              Navigator.pop(
+                                  context, _originalContactWithGroups);
+                            }
+                          }
+                        },
+                        style: FilledButton.styleFrom(
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(5),
+                          ),
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 10, vertical: 4),
+                          minimumSize: const Size(0, 0),
+                        ),
+                        child: const Text("Save"),
+                      ),
+                    ),
+                  ),
+                ],
               ),
             ),
           ),
@@ -399,7 +435,7 @@ class _ContactEditDetailScreenState extends State<ContactEditDetailScreen> {
                                       ),
                                       IconButton(
                                         icon: const Icon(Icons.add_circle,
-                                            color: Colors.blue),
+                                            color: Colors.deepPurple),
                                         onPressed: () => showReminderModal(
                                             context: context,
                                             onReminderSet: handleReminderSet),

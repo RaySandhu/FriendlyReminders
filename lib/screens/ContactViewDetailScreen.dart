@@ -90,7 +90,9 @@ class _ContactViewDetailScreenState extends State<ContactViewDetailScreen> {
     return Scaffold(
       appBar: AppBar(actions: [
         IconButton(
-          icon: const Icon(Icons.edit),
+          icon: const Icon(
+            Icons.edit,
+          ),
           onPressed: () {
             navigateToContactEditDetail();
           },

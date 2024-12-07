@@ -64,7 +64,7 @@ class MyApp extends StatelessWidget {
           //   headlineMedium: TextStyle(fontSize: 20),
           //   headlineSmall: TextStyle(fontSize: 18),
           //   titleLarge: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),        fontFamily: 'Montserrat',
-          titleMedium: TextStyle(fontSize: 16, color: Colors.amber),
+          titleMedium: TextStyle(fontSize: 16, color: Colors.deepPurple),
           //   titleSmall: TextStyle(fontSize: 12),
           //   bodyLarge: TextStyle(fontSize: 16),
           //   bodyMedium: TextStyle(fontSize: 14),

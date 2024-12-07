@@ -97,8 +97,7 @@ class _ContactsScreenState extends State<ContactsScreen> {
                             ),
                           ),
                         ),
-                        // Scaling logo
-// Fixed-size logo
+                        // Fixed-size logo
                         Align(
                           alignment: Alignment.center,
                           child: Padding(
@@ -155,15 +154,18 @@ class _ContactsScreenState extends State<ContactsScreen> {
                 SliverToBoxAdapter(
                   child: Column(
                     children: [
+                      // Header row with "Filter by Groups" and "CLEAR" button
                       Container(
                         width: double.infinity,
                         color: Theme.of(context).colorScheme.primaryContainer,
-                        child: Row(
-                          children: [
-                            Padding(
-                              padding: const EdgeInsets.symmetric(
-                                  horizontal: 8.0, vertical: 4),
-                              child: Text(
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 8.0, vertical: 4),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment
+                                .spaceBetween, // Ensure spacing between elements
+                            children: [
+                              Text(
                                 "Filter by Groups",
                                 style: TextStyle(
                                   fontSize: 16,
@@ -171,61 +173,88 @@ class _ContactsScreenState extends State<ContactsScreen> {
                                   color: Theme.of(context).colorScheme.primary,
                                 ),
                               ),
-                            ),
-                          ],
+                              FilterChip(
+                                tooltip: "Clear all filters",
+                                label: Row(
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: [
+                                    Icon(Icons.delete,
+                                        size: 16, color: Colors.white),
+                                    const SizedBox(width: 4),
+                                    const Text(
+                                      "CLEAR",
+                                      style: TextStyle(fontSize: 12),
+                                    ),
+                                  ],
+                                ),
+                                labelStyle: const TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.white,
+                                ),
+                                backgroundColor: Colors.red,
+                                onSelected: (bool selected) {
+                                  contactVM.clearFilters();
+                                },
+                                side: BorderSide(
+                                    color: Colors.red.shade700, width: 1.5),
+                                pressElevation: 6,
+                                padding: const EdgeInsets.symmetric(
+                                    horizontal: 8, vertical: 4),
+                              ),
+                            ],
+                          ),
                         ),
                       ),
+
+                      // Group filter chips
                       Container(
                         width: double.infinity,
                         color: Theme.of(context).colorScheme.primaryContainer,
                         child: Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: Wrap(
-                              spacing: 8.0,
-                              runSpacing: 6.0,
-                              children: [
-                                ...contactVM
-                                    .getAllUniqueGroups(contactVM.contacts)
-                                    .map((group) {
-                                  return FilterChip(
-                                    label: Text(group),
-                                    side: BorderSide.none,
-                                    showCheckmark: false,
-                                    selected: contactVM.selectedGroups
-                                        .contains(group),
-                                    onSelected: (bool selected) {
-                                      contactVM.toggleGroupFilter(group);
-                                    },
-                                    selectedColor: Colors.blue.shade100,
-                                  );
-                                }).toList(),
-                                FilterChip(
-                                  tooltip: "Clear all filters",
-                                  label: const Row(
-                                    mainAxisSize: MainAxisSize.min,
-                                    children: [
-                                      Icon(Icons.delete,
-                                          size: 18, color: Colors.white),
-                                      const SizedBox(width: 4),
-                                      const Text("CLEAR"),
-                                    ],
-                                  ),
-                                  labelStyle: const TextStyle(
-                                    fontWeight: FontWeight.bold,
-                                    color: Colors.white,
-                                  ),
-                                  backgroundColor: Colors.red,
-                                  onSelected: (bool selected) {
-                                    contactVM.clearFilters();
-                                  },
-                                  side: BorderSide(
-                                      color: Colors.red.shade700, width: 2),
-                                  pressElevation: 8,
-                                ),
-                              ],
-                            )),
+                          padding: const EdgeInsets.all(8.0),
+                          child: Wrap(
+                            spacing: 8.0,
+                            runSpacing: 6.0,
+                            children: contactVM
+                                .getAllUniqueGroups(contactVM.contacts)
+                                .map((group) {
+                              return FilterChip(
+                                label: Text(group),
+                                side: BorderSide.none,
+                                showCheckmark: false,
+                                selected:
+                                    contactVM.selectedGroups.contains(group),
+                                onSelected: (bool selected) {
+                                  contactVM.toggleGroupFilter(group);
+                                },
+                                selectedColor: Colors.blue.shade100,
+                              );
+                            }).toList(),
+                          ),
+                        ),
                       ),
                     ],
+                  ),
+                ),
+              if (contactVM.selectedGroups.isNotEmpty)
+                SliverToBoxAdapter(
+                  child: Container(
+                    width: double.infinity,
+                    color: Theme.of(context).colorScheme.surfaceVariant,
+                    child: Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Wrap(
+                        spacing: 8.0,
+                        runSpacing: 4.0,
+                        children: contactVM.selectedGroups.map((group) {
+                          return Chip(
+                            label: Text(group),
+                            deleteIcon: const Icon(Icons.close),
+                            onDeleted: () => contactVM.removeFilter(group),
+                          );
+                        }).toList(),
+                      ),
+                    ),
                   ),
                 ),
               SliverList(
