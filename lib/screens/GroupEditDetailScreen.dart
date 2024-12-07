@@ -100,12 +100,27 @@ class _GroupEditDetailScreenState extends State<GroupEditDetailScreen> {
                 padding: const EdgeInsets.all(8.0),
                 child: FilledButton(
                   style: FilledButton.styleFrom(
+                    backgroundColor:
+                        Colors.white, // White background for a clean look
+                    foregroundColor: Theme.of(context)
+                        .colorScheme
+                        .primary, // Slightly dark text for readability
                     shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(12),
+                      borderRadius:
+                          BorderRadius.circular(10), // Soft rounded corners
+                      side: BorderSide(
+                        color: Theme.of(context).colorScheme.primary,
+                        width: 1, // Border thickness
+                      ),
                     ),
-                    padding:
-                        const EdgeInsets.symmetric(horizontal: 12, vertical: 12),
-                    minimumSize: const Size(0, 0),
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 12, // Comfortable horizontal padding
+                      vertical: 8, // Moderate vertical padding
+                    ),
+                    minimumSize:
+                        const Size(40, 40), // Minimum size for accessibility
+                    elevation: 3, // Subtle elevation for a shadow effect
+                    shadowColor: Colors.black.withOpacity(0.6), // Soft shadow
                   ),
                   onPressed: () {
                     if (_nameController.text.isEmpty) {
@@ -130,8 +145,29 @@ class _GroupEditDetailScreenState extends State<GroupEditDetailScreen> {
                       Navigator.pop(context);
                     }
                   },
-                  
-                  child: const Text("Save"),
+                  child: Row(
+                    mainAxisSize: MainAxisSize
+                        .min, // Ensures the button doesn't expand unnecessarily
+                    mainAxisAlignment: MainAxisAlignment
+                        .center, // Centers content within the button
+                    children: [
+                      Icon(
+                        Icons.check, // Checkmark icon
+                        size: 20, // Icon size
+                        color: Theme.of(context).colorScheme.primary,
+                      ),
+                      const SizedBox(
+                          width:
+                              8), // Adds some spacing between the icon and the text
+                      const Text(
+                        "Save",
+                        style: TextStyle(
+                          fontSize: 18, // Slightly larger text
+                          fontWeight: FontWeight.bold, // Bold text for emphasis
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
               ),
             ],
