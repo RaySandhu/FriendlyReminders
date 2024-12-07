@@ -22,7 +22,7 @@ void popupDiscardChanges(BuildContext context) {
               foregroundColor: Colors.black,
             ),
             child: const Text(
-              "Cancel",
+              "Continue Editing",
               style: TextStyle(
                 color: Colors.black,
                 fontWeight: FontWeight.bold,

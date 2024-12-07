@@ -96,14 +96,14 @@ class _ReminderScreenState extends State<ReminderScreen> {
                       : ListView(
                           children: [
                             if (past.isNotEmpty) ...[
-                              const Padding(
-                                padding: EdgeInsets.all(8.0),
+                               Padding(
+                                padding: EdgeInsets.fromLTRB(8.0, 16.0, 8.0, 12.0),
                                 child: Text(
                                   "Past Reminders",
-                                  style: TextStyle(
-                                    fontSize: 18,
-                                    fontWeight: FontWeight.bold,
-                                  ),
+                                  style: 
+                                    Theme.of(context).textTheme.titleMedium?.copyWith(
+                                      fontWeight: FontWeight.bold, fontSize: 18.0,
+                                    ), 
                                 ),
                               ),
                               ListView.builder(
@@ -176,20 +176,21 @@ class _ReminderScreenState extends State<ReminderScreen> {
                                             past[index],
                                             past[index].id!,
                                             contactInfo.contact.id!),
-                                    backgroundColor: Colors.red[200],
+                                    backgroundColor: const Color.fromARGB(255, 248, 197, 197),
                                   );
                                 },
                               ),
                             ],
                             if (current.isNotEmpty) ...[
-                              const Padding(
-                                padding: EdgeInsets.all(8.0),
+                              Padding(
+                                padding: EdgeInsets.fromLTRB(8.0, 20.0, 8.0, 12.0),
                                 child: Text(
                                   "Current Reminders",
-                                  style: TextStyle(
-                                    fontSize: 18,
-                                    fontWeight: FontWeight.bold,
-                                  ),
+                                  style: 
+                                    Theme.of(context).textTheme.titleMedium?.copyWith(
+                                      fontWeight: FontWeight.bold, fontSize: 18.0,
+                                    ), 
+                                  
                                 ),
                               ),
                               ListView.builder(

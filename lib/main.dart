@@ -55,7 +55,6 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
         // This is the theme of your application.
-        fontFamily: 'Rubik',
         textTheme: TextTheme(
           //   displayLarge: TextStyle(fontSize: 32, fontWeight: FontWeight.bold),
           //   displayMedium: TextStyle(fontSize: 28, fontWeight: FontWeight.bold),

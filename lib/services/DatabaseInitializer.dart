@@ -336,6 +336,18 @@ class DatabaseInitializer {
       dbClient.reminderDate: "2024-11-22 00:00:00.000",
       dbClient.reminderFreq: "Weekly"
     });
+    
+    batch.insert(dbClient.reminderTbl, {
+      dbClient.contactId: 3,
+      dbClient.reminderDate: "2024-12-07 00:00:00.000",
+      dbClient.reminderFreq: "Weekly"
+    });
+    
+    batch.insert(dbClient.reminderTbl, {
+      dbClient.contactId: 7,
+      dbClient.reminderDate: "2024-12-07 00:00:00.000",
+      dbClient.reminderFreq: "Weekly"
+    });
 // AI Prompts
     batch.insert(dbClient.aiPromptsTbl, {
       dbClient.promptId: 1,
