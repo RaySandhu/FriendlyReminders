@@ -12,7 +12,6 @@ import 'package:friendlyreminder/viewmodels/ContactViewModel.dart';
 import 'package:friendlyreminder/models/GroupModel.dart';
 import 'package:friendlyreminder/models/ContactModel.dart';
 import 'package:friendlyreminder/widgets/StyledTextField.dart';
-import 'package:friendlyreminder/widgets/SuggestionTextField.dart';
 import 'package:friendlyreminder/utilities/PhoneNumberFormatter.dart';
 import 'package:friendlyreminder/widgets/PopupDiscardChanges.dart';
 
@@ -243,9 +242,10 @@ class _ContactEditDetailScreenState extends State<ContactEditDetailScreen> {
                                   interest,
                                 );
                           }).followedBy([""]);
-                          // if (textEditingValue.text == '') {
-                          //   return const Iterable<String>.empty();
-                          // }
+                          if (textEditingValue.text == '' &&
+                              _selectedGroups.isNotEmpty) {
+                            return const Iterable<String>.empty();
+                          }
                           return filteredGroups;
                         },
                         onSelected: (String selection) {
