@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:friendlyreminder/screens/ContactViewDetailScreen.dart';
 import 'package:friendlyreminder/screens/GroupEditDetailScreen.dart';
+import 'package:friendlyreminder/viewmodels/AIPromptViewModel.dart';
+import 'package:friendlyreminder/viewmodels/ContactViewModel.dart';
 import 'package:provider/provider.dart';
 import 'package:friendlyreminder/models/GroupModel.dart';
 import 'package:friendlyreminder/widgets/ContactCard.dart';
@@ -42,7 +45,9 @@ class _GroupViewDetailScreenState extends State<GroupViewDetailScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Consumer<GroupViewModel>(builder: (context, groupVM, child) {
+    final aiPromptVM = Provider.of<AIPromptViewModel>(context, listen: false);
+    return Consumer2<GroupViewModel, ContactsViewModel>(
+        builder: (context, groupVM, contactVM, child) {
       return Scaffold(
           appBar: AppBar(
             centerTitle: true,
@@ -98,7 +103,20 @@ class _GroupViewDetailScreenState extends State<GroupViewDetailScreen> {
                                         groupVM.contactInGroup[index];
                                     return ContactCard(
                                       name: contact.name,
-                                      onTap: () => (),
+                                      onTap: () {
+                                        final contactInfo = contactVM
+                                            .getContactById(contact.id!);
+                                        Navigator.push(
+                                          context,
+                                          MaterialPageRoute(
+                                            builder: (context) =>
+                                                ContactViewDetailScreen(
+                                              contactWithGroups: contactInfo!,
+                                              aiPrompts: aiPromptVM.prompts,
+                                            ),
+                                          ),
+                                        );
+                                      },
                                     );
                                   },
                                 ),
