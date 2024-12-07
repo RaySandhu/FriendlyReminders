@@ -42,94 +42,107 @@ class _GroupViewDetailScreenState extends State<GroupViewDetailScreen> {
   void dispose() {
     super.dispose();
   }
-
-  @override
-  Widget build(BuildContext context) {
-    final aiPromptVM = Provider.of<AIPromptViewModel>(context, listen: false);
-    return Consumer2<GroupViewModel, ContactsViewModel>(
-        builder: (context, groupVM, contactVM, child) {
-      return Scaffold(
-          appBar: AppBar(
-            centerTitle: true,
-            title: Text(
-              _group!.name,
-              style: Theme.of(context).textTheme.headlineSmall?.copyWith(
-                    fontWeight: FontWeight.bold,
-                    color: Colors.white,
-                  ),
-            ),
-            leading: IconButton(
-              icon: const Icon(Icons.arrow_back, color: Colors.white),
-              onPressed: () {
-                Navigator.pop(context);
-              },
-            ),
-            actions: [
-              IconButton(
-                icon: const Icon(Icons.edit, color: Colors.white),
-                onPressed: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) =>
-                          GroupEditDetailScreen(group: _group),
-                    ),
-                  );
-                },
-              )
-            ],
-            flexibleSpace: Container(
-              decoration: BoxDecoration(
-                gradient: RadialGradient(
-                  colors: [
-                    Theme.of(context).colorScheme.inversePrimary,
-                    Theme.of(context).colorScheme.primary,
-                  ],
-                  center: Alignment.center, // Center of the AppBar
-                  radius: 5.0, // Adjust the radius for the spread
-                ),
+@override
+Widget build(BuildContext context) {
+  final aiPromptVM = Provider.of<AIPromptViewModel>(context, listen: false);
+  return Consumer2<GroupViewModel, ContactsViewModel>(
+      builder: (context, groupVM, contactVM, child) {
+    return Scaffold(
+      appBar: AppBar(
+        centerTitle: true,
+        title: Text(
+          _group!.name,
+          style: Theme.of(context).textTheme.headlineSmall?.copyWith(
+                fontWeight: FontWeight.bold,
+                color: Colors.white,
               ),
+        ),
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back, color: Colors.white),
+          onPressed: () {
+            Navigator.pop(context);
+          },
+        ),
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.edit, color: Colors.white),
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => GroupEditDetailScreen(group: _group),
+                ),
+              );
+            },
+          )
+        ],
+        flexibleSpace: Container(
+          decoration: BoxDecoration(
+            gradient: RadialGradient(
+              colors: [
+                Theme.of(context).colorScheme.inversePrimary,
+                Theme.of(context).colorScheme.primary,
+              ],
+              center: Alignment.center, // Center of the AppBar
+              radius: 5.0, // Adjust the radius for the spread
             ),
           ),
-          body: SafeArea(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Expanded(
-                  child: groupVM.isLoading
-                      ? const Center(child: CircularProgressIndicator())
-                      : groupVM.error != null
-                          ? Center(child: Text('Error: ${groupVM.error}'))
-                          : groupVM.contactInGroup.isEmpty
-                              ? const Center(child: Text('Add contacts'))
-                              : ListView.builder(
-                                  itemCount: groupVM.contactInGroup.length,
-                                  itemBuilder: (context, index) {
-                                    final contact =
-                                        groupVM.contactInGroup[index];
-                                    return ContactCard(
-                                      name: contact.name,
-                                      onTap: () {
-                                        final contactInfo = contactVM
-                                            .getContactById(contact.id!);
-                                        Navigator.push(
-                                          context,
-                                          MaterialPageRoute(
-                                            builder: (context) =>
-                                                ContactViewDetailScreen(
-                                              contactWithGroups: contactInfo!,
-                                              aiPrompts: aiPromptVM.prompts,
-                                            ),
-                                          ),
-                                        );
-                                      },
-                                    );
-                                  },
-                                ),
-                ),
-              ],
+        ),
+      ),
+      body: SafeArea(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Padding(
+              padding: const EdgeInsets.fromLTRB(8.0, 12.0, 8.0, 8.0), // Padding for the header text
+              child: Center(
+              child: Text(
+                'Your contacts that enjoy ${_group!.name}', // Display group name
+                style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                      fontWeight: FontWeight.w600,
+                    ),
+                    textAlign: TextAlign.center
+              ),),
             ),
-          ));
-    });
-  }
+            const Divider(), // Horizontal line separator
+            Expanded(
+              child: groupVM.isLoading
+                  ? const Center(child: CircularProgressIndicator())
+                  : groupVM.error != null
+                      ? Center(child: Text('Error: ${groupVM.error}'))
+                      : groupVM.contactInGroup.isEmpty
+                          ? const Center(child: Text('Add contacts'))
+                          : Padding(
+                              padding: const EdgeInsets.only(top: 8.0), // Add top padding to the list
+                              child: ListView.builder(
+                                itemCount: groupVM.contactInGroup.length,
+                                itemBuilder: (context, index) {
+                                  final contact = groupVM.contactInGroup[index];
+                                  return ContactCard(
+                                    name: contact.name,
+                                    onTap: () {
+                                      final contactInfo = contactVM.getContactById(contact.id!);
+                                      Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                          builder: (context) =>
+                                              ContactViewDetailScreen(
+                                            contactWithGroups: contactInfo!,
+                                            aiPrompts: aiPromptVM.prompts,
+                                          ),
+                                        ),
+                                      );
+                                    },
+                                  );
+                                },
+                              ),
+                            ),
+            ),
+          ],
+        ),
+      ),
+    );
+  });
+}
+
 }

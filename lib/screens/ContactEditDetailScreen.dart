@@ -213,10 +213,10 @@ class _ContactEditDetailScreenState extends State<ContactEditDetailScreen> {
                         },
                         style: FilledButton.styleFrom(
                           shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(5),
+                            borderRadius: BorderRadius.circular(12),
                           ),
                           padding: const EdgeInsets.symmetric(
-                              horizontal: 10, vertical: 4),
+                              horizontal: 12, vertical: 12),
                           minimumSize: const Size(0, 0),
                         ),
                         child: const Text("Save"),

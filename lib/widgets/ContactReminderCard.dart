@@ -26,7 +26,7 @@ class ContactReminderCard extends StatelessWidget {
           ),
         ),
         child: Padding(
-          padding: const EdgeInsets.all(8.0),
+          padding: const EdgeInsets.all(12.0),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             mainAxisSize:
@@ -36,7 +36,7 @@ class ContactReminderCard extends StatelessWidget {
               Center(
                 child: Text(
                   "Time to Reach Out!",
-                  style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                  style: Theme.of(context).textTheme.bodyLarge?.copyWith(
                         fontWeight: FontWeight.bold,
                       ),
                   textAlign: TextAlign.center,
@@ -66,6 +66,7 @@ class ContactReminderCard extends StatelessWidget {
                           MaterialStateProperty.all<Size>(const Size(0, 32)),
                     ),
                   ),
+        SizedBox(width: 2), // Add spacing between the buttons
 
                   // Dismiss Button
                   FilledButton.icon(
@@ -86,6 +87,8 @@ class ContactReminderCard extends StatelessWidget {
                           MaterialStateProperty.all<Size>(const Size(0, 32)),
                     ),
                   ),
+                          SizedBox(width: 2), // Add spacing between the buttons
+
                   // Reject
                   FilledButton.icon(
                     onPressed: onReject,

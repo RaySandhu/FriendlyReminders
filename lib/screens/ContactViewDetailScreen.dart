@@ -332,7 +332,9 @@ class _ContactViewDetailScreenState extends State<ContactViewDetailScreen> {
                             child: Container(
                           width: double.infinity,
                           child: Padding(
-                            padding: const EdgeInsets.all(8.0),
+                            padding: const EdgeInsets.symmetric(
+                                      horizontal: 12.0,
+                                      vertical: 8.0),
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
@@ -431,7 +433,7 @@ class _ContactViewDetailScreenState extends State<ContactViewDetailScreen> {
                               if (reminders.isNotEmpty)
                                 Padding(
                                   padding: const EdgeInsets.symmetric(
-                                      horizontal: 16.0,
+                                      //horizontal: 8.0,
                                       vertical: 8.0), // Add spacing
                                   child: Wrap(
                                     spacing: 8.0, // Gap between chips
@@ -473,7 +475,7 @@ class _ContactViewDetailScreenState extends State<ContactViewDetailScreen> {
                             ),
                             const Spacer(),
                             IconButtonWithTextRow(
-                                icon: const Icon(Icons.smart_toy),
+                                icon: const Icon(Icons.smart_toy, color: Colors.white,),
                                 text: 'Generate Icebreaker',
                                 onPressed: () {
                                   print("Generated Icebreaker");
@@ -487,7 +489,7 @@ class _ContactViewDetailScreenState extends State<ContactViewDetailScreen> {
                                             .promptText),
                                   );
                                 },
-                                buttonColour: Colors.blue)
+                                buttonColour: const Color.fromARGB(255, 255, 193, 7))
                           ]),
                           const SizedBox(height: 8),
                           Stack(

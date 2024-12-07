@@ -101,10 +101,10 @@ class _GroupEditDetailScreenState extends State<GroupEditDetailScreen> {
                 child: FilledButton(
                   style: FilledButton.styleFrom(
                     shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(5),
+                      borderRadius: BorderRadius.circular(12),
                     ),
                     padding:
-                        const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+                        const EdgeInsets.symmetric(horizontal: 12, vertical: 12),
                     minimumSize: const Size(0, 0),
                   ),
                   onPressed: () {
@@ -130,6 +130,7 @@ class _GroupEditDetailScreenState extends State<GroupEditDetailScreen> {
                       Navigator.pop(context);
                     }
                   },
+                  
                   child: const Text("Save"),
                 ),
               ),
@@ -172,7 +173,7 @@ class _GroupEditDetailScreenState extends State<GroupEditDetailScreen> {
                 ),
                 const SizedBox(height: 8),
                 Padding(
-                  padding: const EdgeInsets.fromLTRB(8, 8, 8, 0),
+                  padding: const EdgeInsets.fromLTRB(8, 16, 8, 0),
                   child: Row(
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
