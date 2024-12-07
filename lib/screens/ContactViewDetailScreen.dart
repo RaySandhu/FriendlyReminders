@@ -462,7 +462,7 @@ class _ContactViewDetailScreenState extends State<ContactViewDetailScreen> {
                             ),
                             const Spacer(),
                             IconButtonWithTextRow(
-                                icon: const Icon(Icons.factory),
+                                icon: const Icon(Icons.smart_toy),
                                 text: 'Generate Icebreaker',
                                 onPressed: () {
                                   print("Generated Icebreaker");
