@@ -394,65 +394,61 @@ class _ContactViewDetailScreenState extends State<ContactViewDetailScreen> {
 
                         final reminders = reminderVM.reminders;
 
-                        return Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Container(
-                              width: double.infinity,
-                              padding: const EdgeInsets.only(left: 16.0),
-                              margin: const EdgeInsets.only(bottom: 10),
-                              child: Row(
-                                children: [
-                                  const Icon(Icons.schedule,
-                                      color: Colors.grey),
-                                  const SizedBox(
-                                    width: 8,
-                                    height: 40,
-                                  ),
-                                  Text(
-                                    "REMINDERS",
-                                    style: Theme.of(context)
-                                        .textTheme
-                                        .titleMedium
-                                        ?.copyWith(
-                                          fontSize: 18,
-                                          fontWeight: FontWeight.bold,
-                                        ),
-                                  ),
-                                  if (reminders.isEmpty)
-                                    const Padding(
-                                      padding: EdgeInsets.only(left: 8.0),
-                                      child: Text(
-                                        "No reminders",
-                                        style: TextStyle(
-                                          fontSize: 14,
-                                          color: Colors.grey,
-                                        ),
-                                      ),
+                        return Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Container(
+                                width: double.infinity,
+                                margin: const EdgeInsets.only(bottom: 10),
+                                child: Row(
+                                  children: [
+                                    Text(
+                                      "REMINDERS",
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .titleMedium
+                                          ?.copyWith(
+                                            fontSize: 18,
+                                            fontWeight: FontWeight.bold,
+                                          ),
                                     ),
-                                ],
-                              ),
-                            ),
-                            if (reminders.isNotEmpty)
-                              Padding(
-                                padding: const EdgeInsets.symmetric(
-                                    horizontal: 16.0,
-                                    vertical: 8.0), // Add spacing
-                                child: Wrap(
-                                  spacing: 8.0, // Gap between chips
-                                  runSpacing: 4.0, // Gap between rows
-                                  children: reminders.map((reminder) {
-                                    return Chip(
-                                      label: Text(
-                                        "${reminder.freq == "Once" ? "Single" : reminder.freq} reminder on ${reminder.date.toString().split(" ")[0]}",
-                                        overflow: TextOverflow
-                                            .ellipsis, // Handle long labels
+                                    if (reminders.isEmpty)
+                                      const Padding(
+                                        padding: EdgeInsets.only(left: 8.0),
+                                        child: Text(
+                                          "No reminders",
+                                          style: TextStyle(
+                                            fontSize: 14,
+                                            color: Colors.grey,
+                                          ),
+                                        ),
                                       ),
-                                    );
-                                  }).toList(),
+                                  ],
                                 ),
                               ),
-                          ],
+                              if (reminders.isNotEmpty)
+                                Padding(
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 16.0,
+                                      vertical: 8.0), // Add spacing
+                                  child: Wrap(
+                                    spacing: 8.0, // Gap between chips
+                                    runSpacing: 4.0, // Gap between rows
+                                    children: reminders.map((reminder) {
+                                      return Chip(
+                                        label: Text(
+                                          "${reminder.freq == "Once" ? "Single" : reminder.freq} reminder on ${reminder.date.toString().split(" ")[0]}",
+                                          overflow: TextOverflow
+                                              .ellipsis, // Handle long labels
+                                        ),
+                                      );
+                                    }).toList(),
+                                  ),
+                                ),
+                            ],
+                          ),
                         );
                       },
                     ),
@@ -467,7 +463,13 @@ class _ContactViewDetailScreenState extends State<ContactViewDetailScreen> {
                           Row(children: [
                             Text(
                               "NOTES",
-                              style: Theme.of(context).textTheme.titleMedium,
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .titleMedium
+                                  ?.copyWith(
+                                    fontSize: 18,
+                                    fontWeight: FontWeight.bold,
+                                  ),
                             ),
                             const Spacer(),
                             IconButtonWithTextRow(
