@@ -12,108 +12,143 @@ class ContactReminderCard extends StatelessWidget {
   final VoidCallback onDismiss;
   final VoidCallback onReject;
 
-  @override
-  Widget build(BuildContext context) {
-    return ListTile(
-      title: Card(
-        color: Theme.of(context).colorScheme.primaryContainer,
-        elevation: 0,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(12),
-          side: BorderSide(
-            color: Colors.grey.shade300,
-            width: 1,
-          ),
-        ),
-        child: Padding(
-          padding: const EdgeInsets.all(12.0),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            mainAxisSize:
-                MainAxisSize.min, // Ensures the Column takes minimum height
-            children: [
-              // Title Text
-              Center(
-                child: Text(
-                  "Time to Reach Out!",
-                  style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                        fontWeight: FontWeight.bold,
-                      ),
-                  textAlign: TextAlign.center,
-                ),
-              ),
-              const SizedBox(height: 8), // Spacing between text and buttons
-              // Button Row
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: [
-                  // Accept Button
-                  FilledButton.icon(
-                    onPressed: onAccept,
-                    label: const Text("Done"),
-                    icon: const Icon(Icons.check),
-                    style: ButtonStyle(
-                      backgroundColor: MaterialStateProperty.all(Colors.green),
-                      shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-                        RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(8),
-                        ),
-                      ),
-                      padding: MaterialStateProperty.all<EdgeInsetsGeometry>(
-                        const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
-                      ),
-                      minimumSize:
-                          MaterialStateProperty.all<Size>(const Size(0, 32)),
-                    ),
-                  ),
-        SizedBox(width: 2), // Add spacing between the buttons
-
-                  // Dismiss Button
-                  FilledButton.icon(
-                    onPressed: onDismiss,
-                    label: const Text("Dismiss"),
-                    icon: const Icon(Icons.schedule),
-                    style: ButtonStyle(
-                      backgroundColor: MaterialStateProperty.all(Colors.amber),
-                      shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-                        RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(8),
-                        ),
-                      ),
-                      padding: MaterialStateProperty.all<EdgeInsetsGeometry>(
-                        const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
-                      ),
-                      minimumSize:
-                          MaterialStateProperty.all<Size>(const Size(0, 32)),
-                    ),
-                  ),
-                          SizedBox(width: 2), // Add spacing between the buttons
-
-                  // Reject
-                  FilledButton.icon(
-                    onPressed: onReject,
-                    label: const Text("Reject"),
-                    icon: const Icon(Icons.close),
-                    style: ButtonStyle(
-                      backgroundColor: MaterialStateProperty.all(Colors.red),
-                      shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-                        RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(8),
-                        ),
-                      ),
-                      padding: MaterialStateProperty.all<EdgeInsetsGeometry>(
-                        const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
-                      ),
-                      minimumSize:
-                          MaterialStateProperty.all<Size>(const Size(0, 32)),
-                    ),
-                  ),
-                ],
-              ),
-            ],
-          ),
+@override
+Widget build(BuildContext context) {
+  return ListTile(
+    title: Card(
+      color: Theme.of(context).colorScheme.primaryContainer,
+      elevation: 4, // Subtle shadow to give depth
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(12),
+        side: BorderSide(
+          color: const Color.fromARGB(255, 247, 135, 135),
+          width: 2,
         ),
       ),
-    );
-  }
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 12.0, vertical: 16.0), // Adjusted padding for smaller screens
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            // Title Text
+            Center(
+  child: Text(
+    "Time to Reach Out!",
+    style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+          fontWeight: FontWeight.w700, // Bolder weight
+          fontSize: 20, // Larger font size
+          color: Colors.black, // Contrasting text color
+          letterSpacing: 1.2, // Increase letter spacing for a clean look
+          shadows: [
+            Shadow(
+              blurRadius: 3.0, // Blur the shadow
+              color: Colors.black.withOpacity(0.4), // Subtle shadow color
+              //offset: Offset(2, 2), // Slightly offset shadow
+            ),
+          ],
+        ),
+    textAlign: TextAlign.center,
+  ),
+)
+,
+            const SizedBox(height: 12), // Adjusted spacing for smaller screens
+
+            // Button Row
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly, // Evenly space buttons
+              children: [
+                // Accept Button
+                Expanded(
+                  child: Padding(
+                    padding: const EdgeInsets.only(right: 8.0),
+                    child: Material(
+                      color: Colors.green, // Green background
+                      borderRadius: BorderRadius.circular(8),
+                      child: InkWell(
+                        borderRadius: BorderRadius.circular(8),
+                        onTap: onAccept,
+                        child: Container(
+                          width: 48, // Adjust width for button size
+                          height: 32, // Adjust height for button size (smaller)
+                          alignment: Alignment.center, // Center the icon
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(8), // Rounded corners
+                          ),
+                          child: Icon(
+                            Icons.check,
+                            color: Colors.white,
+                            size: 20, // Adjust the icon size to fit the smaller button
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+                // Dismiss Button
+                Expanded(
+                  child: Padding(
+                    padding: const EdgeInsets.only(right: 8.0),
+                    child: Material(
+                      color: Colors.amber,
+                      borderRadius: BorderRadius.circular(8),
+                      child: InkWell(
+                        borderRadius: BorderRadius.circular(8),
+                        onTap: onDismiss,
+                        child: Container(
+                          width: 48, // Adjust width for button size
+                          height: 32, // Adjust height for button size (smaller)
+                          alignment: Alignment.center, // Center the icon
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(8), // Rounded corners
+                          ),
+                          child: Icon(
+                            Icons.schedule,
+                            color: Colors.white,
+                            size: 20, // Adjust the icon size to fit the smaller button
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+
+                
+                // Reject Button
+                Expanded(
+                  child: Padding(
+                    padding: const EdgeInsets.only(right: 8.0),
+                    child: Material(
+                      color: Colors.red, 
+                      borderRadius: BorderRadius.circular(8),
+                      child: InkWell(
+                        borderRadius: BorderRadius.circular(8),
+                        onTap: onReject,
+                        child: Container(
+                          width: 48, // Adjust width for button size
+                          height: 32, // Adjust height for button size (smaller)
+                          alignment: Alignment.center, // Center the icon
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(8), // Rounded corners
+                          ),
+                          child: Icon(
+                            Icons.close,
+                            color: Colors.white,
+                            size: 20, // Adjust the icon size to fit the smaller button
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+
+              ],
+            ),
+          ],
+        ),
+      ),
+    ),
+  );
+}
+
 }

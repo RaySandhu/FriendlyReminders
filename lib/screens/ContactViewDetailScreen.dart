@@ -283,24 +283,39 @@ class _ContactViewDetailScreenState extends State<ContactViewDetailScreen> {
                                         },
                                       )),
                                     if (reminderCardState == 2)
-                                      Text(
-                                        'Reminder Snoozed',
-                                        style: Theme.of(context)
-                                            .textTheme
-                                            .titleLarge
-                                            ?.copyWith(
-                                              fontWeight: FontWeight.bold,
-                                            ),
+                                      Padding(
+                                        padding: const EdgeInsets.fromLTRB(8.0, 12.0, 8.0, 12.0), // Add bottom padding for spacing
+                                        child: Text(
+                                          'Reminder Snoozed',
+                                          style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                                                fontWeight: FontWeight.bold,
+                                                color: Colors.amber,
+                                                shadows: [
+                                                  Shadow(
+                                                    blurRadius: 3.0, // Blur the shadow
+                                                    color: Colors.amber.withOpacity(0.4), // Subtle shadow color
+                                                  ),
+                                                ],
+                                                                                    ),
+                                              
+                                        ),
                                       ),
                                     if (reminderCardState == 3)
-                                      Text(
-                                        'Reminder Rejected',
-                                        style: Theme.of(context)
-                                            .textTheme
-                                            .titleLarge
-                                            ?.copyWith(
-                                              fontWeight: FontWeight.bold,
-                                            ),
+                                      Padding(
+                                        padding: const EdgeInsets.fromLTRB(8.0, 12.0, 8.0, 12.0), // Add bottom padding for spacing
+                                        child: Text(
+                                          'Reminder Rejected',
+                                          style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                                                fontWeight: FontWeight.bold,
+                                                color: Colors.red,
+                                                shadows: [
+                                                  Shadow(
+                                                    blurRadius: 3.0, // Blur the shadow
+                                                    color: Colors.red.withOpacity(0.4), // Subtle shadow color
+                                                  ),
+                                                ],
+                                              ),
+                                        ),
                                       ),
                                   ],
                                 ),
