@@ -435,7 +435,7 @@ class _ContactEditDetailScreenState extends State<ContactEditDetailScreen> {
                                       ),
                                       IconButton(
                                         icon: const Icon(Icons.add_circle,
-                                            color: Colors.blue),
+                                            color: Colors.deepPurple),
                                         onPressed: () => showReminderModal(
                                             context: context,
                                             onReminderSet: handleReminderSet),
