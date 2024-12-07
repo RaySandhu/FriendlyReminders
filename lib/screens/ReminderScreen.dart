@@ -25,24 +25,64 @@ class _ReminderScreenState extends State<ReminderScreen> {
         // print("Past: ${past.toString()},\n Current: ${current.toString()}");
 
         return Scaffold(
-          appBar: AppBar(
-            centerTitle: true,
-            title: Text(
-              "Reminders",
-              style: Theme.of(context).textTheme.headlineSmall?.copyWith(
-                    fontWeight: FontWeight.bold,
-                    color: Colors.white,
-                  ),
-            ),
-            flexibleSpace: Container(
+          appBar: PreferredSize(
+            preferredSize:
+                const Size.fromHeight(kToolbarHeight), // Standard AppBar height
+            child: Container(
               decoration: BoxDecoration(
                 gradient: RadialGradient(
                   colors: [
                     Theme.of(context).colorScheme.inversePrimary,
                     Theme.of(context).colorScheme.primary,
                   ],
-                  center: Alignment.center, // Center of the AppBar
+                  center: Alignment.center,
                   radius: 5.0, // Adjust the radius for the spread
+                ),
+              ),
+              child: SafeArea(
+                child: Stack(
+                  children: [
+                    // Title on the left
+                    Align(
+                      alignment: Alignment.centerLeft,
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                        child: Text(
+                          "Reminders",
+                          style: TextStyle(
+                            fontSize: 20.0,
+                            fontWeight: FontWeight.w700,
+                            color: Colors.white,
+                          ),
+                        ),
+                      ),
+                    ),
+                    // Logo in the center
+                    Align(
+                      alignment: Alignment.center,
+                      child: Padding(
+                        padding: const EdgeInsets.only(top: 24.0),
+                        child: Container(
+                          height: 50, // Set a fixed height for the logo
+                          child: Transform.scale(
+                            scale: 4, // Adjust scale dynamically
+                            child: Image.asset(
+                              'assets/images/FriendlyRemindersLogo.png',
+                              fit: BoxFit.contain,
+                              height: 200,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                    // Placeholder for future icons on the right
+                    Align(
+                      alignment: Alignment.centerRight,
+                      child: SizedBox(
+                        width: 40, // Placeholder size
+                      ),
+                    ),
+                  ],
                 ),
               ),
             ),

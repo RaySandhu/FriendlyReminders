@@ -36,67 +36,98 @@ class _GroupAddContactScreenState extends State<GroupAddContactScreen> {
     return Consumer2<ContactsViewModel, GroupViewModel>(
       builder: (context, contactVM, groupVM, child) {
         return Scaffold(
-          appBar: AppBar(
-            centerTitle: true,
-            title: _isSearching
-                ? TextField(
-                    controller: _searchController,
-                    decoration: InputDecoration(
-                      prefixIcon: const Icon(Icons.search),
-                      hintText: 'Search',
-                      suffixIcon: IconButton(
-                          icon: const Icon(Icons.close),
-                          onPressed: () {
-                            setState(() {
-                              _isSearching = !_isSearching;
-                              _searchController.clear();
-                              contactVM.filterContacts(query: '');
-                            });
-                          }),
-                      contentPadding: const EdgeInsets.all(10),
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(15),
-                      ),
-                    ),
-                    onChanged: (value) {
-                      Provider.of<ContactsViewModel>(context, listen: false)
-                          .filterContacts(query: value);
-                    },
-                  )
-                : Text(
-                    "Add Contacts",
-                    style: Theme.of(context).textTheme.headlineSmall?.copyWith(
-                          fontWeight: FontWeight.bold,
-                          color: Colors.white,
-                        ),
-                  ),
-            automaticallyImplyLeading: false,
-            leading: _isSearching
-                ? null
-                : IconButton(
-                    onPressed: () => Navigator.pop(context),
-                    icon: const Icon(Icons.arrow_back),
-                  ),
-            actions: _isSearching
-                ? []
-                : [
-                    IconButton(
-                        icon: const Icon(Icons.search),
-                        onPressed: () {
-                          setState(() {
-                            _isSearching = !_isSearching;
-                          });
-                        }),
-                  ],
-            flexibleSpace: Container(
+          appBar: PreferredSize(
+            preferredSize:
+                const Size.fromHeight(kToolbarHeight), // Standard AppBar height
+            child: Container(
               decoration: BoxDecoration(
                 gradient: RadialGradient(
                   colors: [
                     Theme.of(context).colorScheme.inversePrimary,
                     Theme.of(context).colorScheme.primary,
                   ],
-                  center: Alignment.center, // Center of the AppBar
+                  center: Alignment.center,
                   radius: 5.0, // Adjust the radius for the spread
+                ),
+              ),
+              child: SafeArea(
+                child: Stack(
+                  children: [
+                    // Title or Search bar on the left
+                    Align(
+                      alignment: Alignment.centerLeft,
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                        child: _isSearching
+                            ? SizedBox(
+                                height: 40.0,
+                                child: TextField(
+                                  controller: _searchController,
+                                  decoration: InputDecoration(
+                                    prefixIcon: const Icon(Icons.search),
+                                    hintText: 'Search',
+                                    suffixIcon: IconButton(
+                                      icon: const Icon(Icons.close),
+                                      onPressed: () {
+                                        setState(() {
+                                          _isSearching = !_isSearching;
+                                          _searchController.clear();
+                                          contactVM.filterContacts(query: '');
+                                        });
+                                      },
+                                    ),
+                                    contentPadding: const EdgeInsets.all(10),
+                                    border: OutlineInputBorder(
+                                      borderRadius: BorderRadius.circular(15),
+                                    ),
+                                  ),
+                                  onChanged: (value) {
+                                    Provider.of<ContactsViewModel>(context,
+                                            listen: false)
+                                        .filterContacts(query: value);
+                                  },
+                                ),
+                              )
+                            : Row(
+                                children: [
+                                  IconButton(
+                                    icon: const Icon(Icons.arrow_back,
+                                        color: Colors.white),
+                                    onPressed: () {
+                                      Navigator.pop(context);
+                                    },
+                                  ),
+                                  Text(
+                                    "Add Contacts",
+                                    style: Theme.of(context)
+                                        .textTheme
+                                        .headlineSmall
+                                        ?.copyWith(
+                                          fontWeight: FontWeight.bold,
+                                          color: Colors.white,
+                                        ),
+                                  ),
+                                ],
+                              ),
+                      ),
+                    ),
+                    // Search icon on the right
+                    if (!_isSearching)
+                      Align(
+                        alignment: Alignment.centerRight,
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                          child: IconButton(
+                            icon: const Icon(Icons.search, color: Colors.white),
+                            onPressed: () {
+                              setState(() {
+                                _isSearching = !_isSearching;
+                              });
+                            },
+                          ),
+                        ),
+                      ),
+                  ],
                 ),
               ),
             ),

@@ -37,74 +37,128 @@ class _GroupScreenState extends State<GroupScreen> {
                 .toList();
 
         return Scaffold(
-          appBar: AppBar(
-            centerTitle: true,
-            title: _isSearching
-                ? TextField(
-                    controller: _searchController,
-                    decoration: InputDecoration(
-                      prefixIcon: Icon(Icons.search),
-                      hintText: 'Search',
-                      suffixIcon: IconButton(
-                        icon: Icon(Icons.close),
-                        onPressed: () {
-                          setState(() {
-                            _isSearching = !_isSearching;
-                            _searchController.clear();
-                            _searchQuery = '';
-                          });
-                        },
-                      ),
-                      contentPadding: EdgeInsets.all(10),
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(15),
-                      ),
-                    ),
-                    onChanged: (value) {
-                      setState(() {
-                        _searchQuery = value;
-                      });
-                    },
-                  )
-                : Text(
-                    "Groups",
-                    style: Theme.of(context).textTheme.headlineSmall?.copyWith(
-                          fontWeight: FontWeight.bold,
-                          color: Colors.white,
-                        ),
-                  ),
-            actions: _isSearching
-                ? []
-                : [
-                    IconButton(
-                      icon: Icon(Icons.search),
-                      onPressed: () {
-                        setState(() {
-                          _isSearching = true;
-                        });
-                      },
-                    ),
-                    IconButton(
-                      icon: Icon(Icons.add),
-                      onPressed: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => const GroupEditDetailScreen(),
-                          ),
-                        );
-                      },
-                    ),
-                  ],
-            flexibleSpace: Container(
+          appBar: PreferredSize(
+            preferredSize:
+                const Size.fromHeight(kToolbarHeight), // Standard AppBar height
+            child: Container(
               decoration: BoxDecoration(
                 gradient: RadialGradient(
                   colors: [
                     Theme.of(context).colorScheme.inversePrimary,
                     Theme.of(context).colorScheme.primary,
                   ],
-                  center: Alignment.center, // Center of the AppBar
+                  center: Alignment.center,
                   radius: 5.0, // Adjust the radius for the spread
+                ),
+              ),
+              child: SafeArea(
+                child: Stack(
+                  children: [
+                    // Title or Search bar on the left
+                    Align(
+                      alignment: Alignment.centerLeft,
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                        child: _isSearching
+                            ? SizedBox(
+                                height: 40.0,
+                                child: TextField(
+                                  controller: _searchController,
+                                  decoration: InputDecoration(
+                                    prefixIcon: const Icon(Icons.search),
+                                    hintText: 'Search',
+                                    suffixIcon: IconButton(
+                                      icon: const Icon(Icons.close),
+                                      onPressed: () {
+                                        setState(() {
+                                          _isSearching = !_isSearching;
+                                          _searchController.clear();
+                                          _searchQuery = '';
+                                        });
+                                      },
+                                    ),
+                                    contentPadding: const EdgeInsets.all(10),
+                                    border: OutlineInputBorder(
+                                      borderRadius: BorderRadius.circular(15),
+                                    ),
+                                  ),
+                                  onChanged: (value) {
+                                    setState(() {
+                                      _searchQuery = value;
+                                    });
+                                  },
+                                ),
+                              )
+                            : Row(
+                                children: [
+                                  Text(
+                                    "Groups",
+                                    style: Theme.of(context)
+                                        .textTheme
+                                        .headlineSmall
+                                        ?.copyWith(
+                                          fontWeight: FontWeight.bold,
+                                          color: Colors.white,
+                                        ),
+                                  ),
+                                ],
+                              ),
+                      ),
+                    ),
+                    if (!_isSearching)
+                      Align(
+                        alignment: Alignment.center,
+                        child: Padding(
+                          padding: const EdgeInsets.only(top: 24.0),
+                          child: Container(
+                            height: 50, // Set a fixed height for the logo
+                            child: Transform.scale(
+                              scale: 4, // Adjust scale dynamically
+                              child: Image.asset(
+                                'assets/images/FriendlyRemindersLogo.png',
+                                fit: BoxFit.contain,
+                                height: 200,
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
+                    // Search and Add icons on the right
+                    if (!_isSearching)
+                      Align(
+                        alignment: Alignment.centerRight,
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                          child: Row(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              IconButton(
+                                icon: const Icon(Icons.search,
+                                    color: Colors.white),
+                                onPressed: () {
+                                  setState(() {
+                                    _isSearching = true;
+                                  });
+                                },
+                              ),
+                              IconButton(
+                                icon:
+                                    const Icon(Icons.add, color: Colors.white),
+                                onPressed: () {
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) =>
+                                          const GroupEditDetailScreen(),
+                                    ),
+                                  );
+                                },
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                  ],
                 ),
               ),
             ),
