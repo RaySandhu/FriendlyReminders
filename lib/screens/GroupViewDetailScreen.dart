@@ -58,9 +58,15 @@ class _GroupViewDetailScreenState extends State<GroupViewDetailScreen> {
                     color: Colors.white,
                   ),
             ),
+            leading: IconButton(
+              icon: const Icon(Icons.arrow_back, color: Colors.white),
+              onPressed: () {
+                Navigator.pop(context);
+              },
+            ),
             actions: [
               IconButton(
-                icon: const Icon(Icons.edit),
+                icon: const Icon(Icons.edit, color: Colors.white),
                 onPressed: () {
                   Navigator.push(
                     context,
