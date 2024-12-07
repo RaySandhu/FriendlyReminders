@@ -92,7 +92,6 @@ class _ContactViewDetailScreenState extends State<ContactViewDetailScreen> {
         IconButton(
           icon: const Icon(
             Icons.edit,
-            color: Colors.white,
           ),
           onPressed: () {
             navigateToContactEditDetail();
